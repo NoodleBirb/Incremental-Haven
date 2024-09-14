@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class StoreMapInArray : MonoBehaviour
+public class StoreTileMap : MonoBehaviour
 {
-    Dictionary<Vector2Int, GameObject> map;
+    public Dictionary<Vector2Int, GameObject> map;
+    public static event Action OnMapInitialized;
     
     void Start()
     {
@@ -15,5 +17,7 @@ public class StoreMapInArray : MonoBehaviour
             map.Add(new Vector2Int((int)child.position.x, (int)child.position.z), child.gameObject);
             Debug.Log(child.position.x);
         }
+
+        OnMapInitialized?.Invoke();
     }
 }
