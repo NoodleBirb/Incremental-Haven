@@ -76,8 +76,8 @@ public class Pathfinding : MonoBehaviour
                     }
                 }
                 // If we have, check if this is a more efficient path to said tile
-                else if (CalcGCost(currentTile, goalTile) + GetDistance(currentTile, neighbor) < CalcGCost(neighbor, goalTile)) {
-                    nodeDict[neighbor] = new Node(neighbor, nodeDict[currentTile]);
+                else if (CalcGCost(currentTile, startTile) + GetDistance(currentTile, neighbor) < CalcGCost(neighbor, startTile)) {
+                    nodeDict[neighbor].ChangeParentNode(nodeDict[currentTile]);
                 }
             }
         }
@@ -88,18 +88,18 @@ public class Pathfinding : MonoBehaviour
         return GetDistance(tile, startTile) + GetDistance(tile, goalTile);
     }
 
-    int CalcGCost (GameObject tile, GameObject goalTile) {
-        return GetDistance(tile, goalTile);
+    int CalcGCost (GameObject tile, GameObject startTile) {
+        return GetDistance(tile, startTile);
     }
 
     int GetDistance (GameObject tile1, GameObject tile2) {
-        int dstX = Mathf.Abs((int)(tile1.transform.position.x - tile2.transform.position.x));
-        int dstY = Mathf.Abs((int)(tile1.transform.position.y - tile2.transform.position.y));
+        int dstX = (int)Mathf.Abs(tile1.transform.position.x - tile2.transform.position.x);
+        int dstZ = (int)Mathf.Abs(tile1.transform.position.z - tile2.transform.position.z);
 
-        if (dstX > dstY) {
-            return 14* dstY + 10 * (dstY- dstX);
+        if (dstX > dstZ) {
+            return 140 * dstZ + 100 * (dstX- dstZ);
         }
-        return 14 * dstX + 10 * (dstY - dstX);
+        return 140 * dstX + 100 * (dstZ - dstX);
     }
 
     List<GameObject> GetActualPath(Node finalNode) {
