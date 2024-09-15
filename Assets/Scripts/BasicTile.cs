@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BasicTile : MonoBehaviour
 {
-    List<GameObject> neighbors;
+    public List<GameObject> neighbors;
     Vector2Int pos;
     // Start is called before the first frame update
     void Start()
