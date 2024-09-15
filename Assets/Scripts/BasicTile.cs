@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 public class BasicTile : MonoBehaviour
@@ -10,7 +11,8 @@ public class BasicTile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StoreTileMap.OnMapInitialized += HandleMapInitialized;
+        if (StoreTileMap.isMapInitialized) AccessMap();
+        else StoreTileMap.OnMapInitialized += HandleMapInitialized;
 
         pos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
@@ -26,44 +28,30 @@ public class BasicTile : MonoBehaviour
 
         neighbors = new List<GameObject>();
 
-        
         if (map.ContainsKey(pos + new Vector2Int(1, 0)) && map[pos + new Vector2Int(1, 0)].GetComponentInChildren<objectSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(1, 0)]);
-            Debug.Log("something is happening");
         }
         if (map.ContainsKey(pos + new Vector2Int(1, 1)) && map[pos + new Vector2Int(1, 1)].GetComponentInChildren<objectSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(1, 1)]);
-            Debug.Log("something is happening");
         }
         if (map.ContainsKey(pos + new Vector2Int(0, 1)) && map[pos + new Vector2Int(0, 1)].GetComponentInChildren<objectSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(0, 1)]);
-            Debug.Log("something is happening");
         }
         if (map.ContainsKey(pos + new Vector2Int(-1, 1)) && map[pos + new Vector2Int(-1, 1)].GetComponentInChildren<objectSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(-1, 1)]);
-            Debug.Log("something is happening");
         }
         if (map.ContainsKey(pos + new Vector2Int(-1, 0)) && map[pos + new Vector2Int(-1, 0)].GetComponentInChildren<objectSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(-1, 0)]);
-            Debug.Log("something is happening");
         }
         if (map.ContainsKey(pos + new Vector2Int(-1, -1)) && map[pos + new Vector2Int(-1, -1)].GetComponentInChildren<objectSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(-1, -1)]);
-            Debug.Log("something is happening");
         }
         if (map.ContainsKey(pos + new Vector2Int(0, -1)) && map[pos + new Vector2Int(0, -1)].GetComponentInChildren<objectSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(0, -1)]);
-            Debug.Log("something is happening");
         }
         if (map.ContainsKey(pos + new Vector2Int(1, -1)) && map[pos + new Vector2Int(1, -1)].GetComponentInChildren<objectSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(1, -1)]);
-            Debug.Log("something is happening");
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

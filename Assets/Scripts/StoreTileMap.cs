@@ -7,6 +7,7 @@ public class StoreTileMap : MonoBehaviour
 {
     public Dictionary<Vector2Int, GameObject> map;
     public static event Action OnMapInitialized;
+    public static bool isMapInitialized = false;
     
     void Start()
     {
@@ -15,9 +16,9 @@ public class StoreTileMap : MonoBehaviour
 
         foreach (Transform child in transform) {
             map.Add(new Vector2Int((int)child.position.x, (int)child.position.z), child.gameObject);
-            Debug.Log(child.position.x);
         }
 
+        isMapInitialized = true;
         OnMapInitialized?.Invoke();
     }
 }

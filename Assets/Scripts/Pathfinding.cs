@@ -6,20 +6,21 @@ using UnityEngine;
 
 public class Pathfinding : MonoBehaviour
 {
+    // Helper Class
     private class Node {
         private Node parentNode;
-        private GameObject thisTile;
+        private readonly GameObject tile;
 
         public Node (GameObject tile, Node parentNode) {
             this.parentNode = parentNode;
-            this.thisTile = tile;
+            this.tile = tile;
         }
 
         public Node GetParentNode() {
             return parentNode;
         }
         public GameObject GetTile() {
-            return thisTile;
+            return tile;
         }
         public void ChangeParentNode(Node newNode) {
             parentNode = newNode;
@@ -59,13 +60,14 @@ public class Pathfinding : MonoBehaviour
 
             // If you've reached the goal, no reason to continue. Returns the path.
             if (currentTile == goalTile) {
-                
                 return GetActualPath(nodeDict[goalTile]);
             }
 
             // Check every neighbor of the currentTile to see if they can find a good path.
             foreach (GameObject neighbor in currentTile.GetComponent<BasicTile>().neighbors) {
                 if (closedList.Contains(neighbor)) continue;
+                
+                // Checks if we've used this tile before
                 if (!openList.Contains(neighbor)) {
                     openList.Add(neighbor);
                     nodeDict.Add(neighbor, new Node(neighbor, nodeDict[currentTile]));
@@ -73,12 +75,13 @@ public class Pathfinding : MonoBehaviour
                         lowestDistNode = nodeDict[neighbor];
                     }
                 }
+                // If we have, check if this is a more efficient path to said tile
                 else if (CalcGCost(currentTile, goalTile) + GetDistance(currentTile, neighbor) < CalcGCost(neighbor, goalTile)) {
                     nodeDict[neighbor] = new Node(neighbor, nodeDict[currentTile]);
                 }
             }
         }
-        return GetActualPath(lowestDistNode); //placeholder
+        return GetActualPath(lowestDistNode); // closest path to the destination if you can't reach the destination.
     }
     
     int CalcFCost (GameObject tile, GameObject startTile, GameObject goalTile) {
@@ -105,7 +108,7 @@ public class Pathfinding : MonoBehaviour
             retList.Add(finalNode.GetTile());
             finalNode = finalNode.GetParentNode();
         }
+        retList.Reverse();
         return retList;
     }
-
 }
