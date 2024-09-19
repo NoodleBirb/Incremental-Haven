@@ -97,7 +97,7 @@ public class Pathfinding : MonoBehaviour
         int dstZ = (int)Mathf.Abs(tile1.transform.position.z - tile2.transform.position.z);
 
         if (dstX > dstZ) {
-            return 140 * dstZ + 100 * (dstX- dstZ);
+            return 140 * dstZ + 100 * (dstX - dstZ);
         }
         return 140 * dstX + 100 * (dstZ - dstX);
     }

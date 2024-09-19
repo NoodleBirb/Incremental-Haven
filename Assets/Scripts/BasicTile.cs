@@ -25,6 +25,7 @@ public class BasicTile : MonoBehaviour
 
     void AccessMap() {
         Dictionary<Vector2Int, GameObject> map = GetComponentInParent<StoreTileMap>().map;
+        Debug.Log("i got it!");
 
         neighbors = new List<GameObject>();
 
