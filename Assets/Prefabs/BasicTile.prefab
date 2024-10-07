@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7753697543486731193}
   - component: {fileID: -8694207676372605662}
   - component: {fileID: 3224736310781616659}
+  - component: {fileID: 3543438520414324129}
   m_Layer: 0
   m_Name: BasicTile
   m_TagString: Untagged
@@ -89,6 +90,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b96da22c4d6d274cb655f623170cdc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  neighbors: []
+  pos: {x: 0, y: 0}
+--- !u!114 &3543438520414324129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712826664804932984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd2154d715d4f44b8d592a15abc0776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkable: 1
+  heldObject: {fileID: 2516472864106599739}
+  guiHeight: 0
+  guiPos: {x: -1, y: -1}
 --- !u!1 &3249819346114822974
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,7 +120,6 @@ GameObject:
   - component: {fileID: 4212936784843127788}
   - component: {fileID: 4648296103583215030}
   - component: {fileID: 3477467378274869400}
-  - component: {fileID: 4856496191291054413}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -196,19 +214,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &4856496191291054413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3249819346114822974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f49aeef603d8994f9f2fa868ab44abd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  topObject: {fileID: 0}
 --- !u!1001 &693022147569720668
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -274,6 +279,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48ab51885eeed9549ad1b90489edc0da, type: 3}
+--- !u!1 &2516472864106599739 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3130658441532852327, guid: 48ab51885eeed9549ad1b90489edc0da, type: 3}
+  m_PrefabInstance: {fileID: 693022147569720668}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5785049757565103498 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6473568094550733014, guid: 48ab51885eeed9549ad1b90489edc0da, type: 3}

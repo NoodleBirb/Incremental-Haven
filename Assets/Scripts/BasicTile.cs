@@ -7,7 +7,7 @@ using UnityEngine;
 public class BasicTile : MonoBehaviour
 {
     public List<GameObject> neighbors;
-    Vector2Int pos;
+    public Vector2Int pos;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,28 +28,28 @@ public class BasicTile : MonoBehaviour
 
         neighbors = new List<GameObject>();
 
-        if (map.ContainsKey(pos + new Vector2Int(1, 0)) && map[pos + new Vector2Int(1, 0)].GetComponentInChildren<ObjectSettings>().walkable) {
+        if (map.ContainsKey(pos + new Vector2Int(1, 0)) && map[pos + new Vector2Int(1, 0)].GetComponentInChildren<TileSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(1, 0)]);
         }
-        if (map.ContainsKey(pos + new Vector2Int(1, 1)) && map[pos + new Vector2Int(1, 1)].GetComponentInChildren<ObjectSettings>().walkable) {
+        if (map.ContainsKey(pos + new Vector2Int(1, 1)) && map[pos + new Vector2Int(1, 1)].GetComponentInChildren<TileSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(1, 1)]);
         }
-        if (map.ContainsKey(pos + new Vector2Int(0, 1)) && map[pos + new Vector2Int(0, 1)].GetComponentInChildren<ObjectSettings>().walkable) {
+        if (map.ContainsKey(pos + new Vector2Int(0, 1)) && map[pos + new Vector2Int(0, 1)].GetComponentInChildren<TileSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(0, 1)]);
         }
-        if (map.ContainsKey(pos + new Vector2Int(-1, 1)) && map[pos + new Vector2Int(-1, 1)].GetComponentInChildren<ObjectSettings>().walkable) {
+        if (map.ContainsKey(pos + new Vector2Int(-1, 1)) && map[pos + new Vector2Int(-1, 1)].GetComponentInChildren<TileSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(-1, 1)]);
         }
-        if (map.ContainsKey(pos + new Vector2Int(-1, 0)) && map[pos + new Vector2Int(-1, 0)].GetComponentInChildren<ObjectSettings>().walkable) {
+        if (map.ContainsKey(pos + new Vector2Int(-1, 0)) && map[pos + new Vector2Int(-1, 0)].GetComponentInChildren<TileSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(-1, 0)]);
         }
-        if (map.ContainsKey(pos + new Vector2Int(-1, -1)) && map[pos + new Vector2Int(-1, -1)].GetComponentInChildren<ObjectSettings>().walkable) {
+        if (map.ContainsKey(pos + new Vector2Int(-1, -1)) && map[pos + new Vector2Int(-1, -1)].GetComponentInChildren<TileSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(-1, -1)]);
         }
-        if (map.ContainsKey(pos + new Vector2Int(0, -1)) && map[pos + new Vector2Int(0, -1)].GetComponentInChildren<ObjectSettings>().walkable) {
+        if (map.ContainsKey(pos + new Vector2Int(0, -1)) && map[pos + new Vector2Int(0, -1)].GetComponentInChildren<TileSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(0, -1)]);
         }
-        if (map.ContainsKey(pos + new Vector2Int(1, -1)) && map[pos + new Vector2Int(1, -1)].GetComponentInChildren<ObjectSettings>().walkable) {
+        if (map.ContainsKey(pos + new Vector2Int(1, -1)) && map[pos + new Vector2Int(1, -1)].GetComponentInChildren<TileSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(1, -1)]);
         }
     }

@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NothingObject : MonoBehaviour
+public class NothingObject : MonoBehaviour, InteractableObject
 {
-    List<string> text = new();
+    int guiHeight;
     
     void Start() {
-        text.Add("Move Towards");
+        guiHeight = 0;
     }
-    void MoveTo() {
-        
+
+    public void CreateOptions(int previousHeight) {
+
+    }
+
+    public int GetGUIHeight() {
+        return guiHeight;
     }
 
 }
