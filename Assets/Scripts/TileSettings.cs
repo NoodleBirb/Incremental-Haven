@@ -26,14 +26,14 @@ public class TileSettings : MonoBehaviour
     public void GuiOptions (Vector2 clickPos, int latestClick) {
         guiPos = clickPos;
 
-        if (walkable  && GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y, totalGUIWidth, personalGUIHeight), "Walk Towards") && latestClick == 0) {
+        if (GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y, totalGUIWidth, personalGUIHeight), "Walk Towards") && latestClick == 0) {
             Vector2Int pos = GetComponent<BasicTile>().pos;
             GameObject.Find("Player").GetComponent<PlayerMovement>().GuiMovement(pos);
             GameObject.Find("Player").GetComponent<PlayerMovement>().openGUI = false;
         }
         if (heldObject != null) {
             InteractableObject interactable = heldObject.GetComponent<InteractableObject>();
-            interactable?.CreateOptions(personalGUIHeight);
+            interactable?.CreateOptions(personalGUIHeight, clickPos, totalGUIWidth);
         }
     }
 }

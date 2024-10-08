@@ -1,9 +1,8 @@
-
-using System.Collections.Generic;
+using UnityEngine;
 
 public interface InteractableObject {
 
-    void CreateOptions(int previousHeight);
+    void CreateOptions(int previousHeight, Vector2 clickPos, int totalGUIWidth);
 
     int GetGUIHeight();
 }
