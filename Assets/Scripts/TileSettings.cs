@@ -16,15 +16,19 @@ public class TileSettings : MonoBehaviour
     readonly int personalGUIHeight = 50;
     public readonly int totalGUIWidth = 250;
     public Vector2 guiPos = new(-1, -1);
+    public Rect fullRectSize;
 
     void Start() {
+        guiHeight = personalGUIHeight;
         if (heldObject != null) {
-            guiHeight = personalGUIHeight + heldObject.GetComponent<InteractableObject>().GetGUIHeight();
+            guiHeight += heldObject.GetComponent<InteractableObject>().GetGUIHeight();
         }
+        fullRectSize = new(1000000, 1000000, totalGUIWidth, guiHeight);
     }
     
     public void GuiOptions (Vector2 clickPos, int latestClick) {
         guiPos = clickPos;
+        fullRectSize = new(clickPos.x, Screen.height - clickPos.y, totalGUIWidth, guiHeight);
 
         if (GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y, totalGUIWidth, personalGUIHeight), "Walk Towards") && latestClick == 0) {
             Vector2Int pos = GetComponent<BasicTile>().pos;

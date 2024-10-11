@@ -57,29 +57,16 @@ public class PlayerMovement : MonoBehaviour
 
             // cast ray
             if (Physics.Raycast (ray, out RaycastHit hit)) {
+                Vector2 rectMousePos = new(clickPos.x, Screen.height - clickPos.y);
+                if (InsideGUIBox(rectMousePos)) {
+                    return;
+                }
                 if (mouseInput == 0) {
-                    
-                    if (openGUI) {
-                        TileSettings guiTileSettings = guiTile.GetComponent<TileSettings>();
-                        if (clickPos.x > guiTileSettings.guiPos.x && clickPos.x < guiTileSettings.guiPos.x + guiTileSettings.totalGUIWidth  && clickPos.y < guiTileSettings.guiPos.y && clickPos.y > guiTileSettings.guiPos.y - guiTileSettings.guiHeight) {
-                            Debug.Log("im definitely working as intended.");
-                            return;
-                        }
-                    }
                     openGUI = false;
                     if (Vector3.Distance(transform.position, hit.point) < 1) return;
-                    
-                    
                     BeginMovement(GetActualRayTile(hit));
                 }
                 else if (mouseInput == 1) {
-                    
-                    if (openGUI) {
-                        TileSettings guiTileSettings = guiTile.GetComponent<TileSettings>();
-                        if (clickPos.x > guiTileSettings.guiPos.x && clickPos.x < guiTileSettings.guiPos.x + guiTileSettings.totalGUIWidth  && clickPos.y < guiTileSettings.guiPos.y && clickPos.y > guiTileSettings.guiPos.y - guiTileSettings.guiHeight) {
-                            return;
-                        }
-                    }
                     ReadyGUI(hit);
                 }
             }
@@ -121,8 +108,7 @@ public class PlayerMovement : MonoBehaviour
     // Movement code particular to when the user clicks on a GUI for movement.
     public void GuiMovement (Vector2Int tilePos) {
         Vector2Int playerPos = new(technicalPos.x, technicalPos.y);
-                
-                
+
         // Pathfind to the point found by the ray.
         movementPath = GetComponent<Pathfinding>().GetAStarPath(map[playerPos], map[tilePos]);
         if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) > 0.00001f){
@@ -157,5 +143,24 @@ public class PlayerMovement : MonoBehaviour
         if (openGUI) {
             guiTile.GetComponent<TileSettings>().GuiOptions(guiPos, latestClick);
         }
+    }
+
+    bool InsideGUIBox(Vector2 rectMousePos) {
+        Skills skills = GetComponent<Skills>();
+        if (skills.skillListRect.Contains(rectMousePos)) {
+            return true;
+        }
+        if (openGUI) {
+            TileSettings guiTileSettings = guiTile.GetComponent<TileSettings>();
+            if (guiTileSettings.fullRectSize.Contains(rectMousePos)) {
+                return true;
+            }
+        }
+        if (skills.showSkillList && skills.windowRect.Contains(rectMousePos)) {
+            Debug.Log("this should be working");
+            return true;
+        }
+
+        return false;
     }
 }

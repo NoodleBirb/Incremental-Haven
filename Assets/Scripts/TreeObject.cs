@@ -12,9 +12,12 @@ public class TreeObject : MonoBehaviour, InteractableObject
 
     public void CreateOptions(int previousHeight, Vector2 clickPos, int totalGUIWidth) {
         if (GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y + previousHeight, totalGUIWidth, personalGUIHeight), "Chop Tree")) {
-            Debug.Log("I am a tree");
+            Vector2Int pos = GetComponentInParent<BasicTile>().pos;
+            GameObject Player = GameObject.Find("Player");
+            Player.GetComponent<PlayerMovement>().GuiMovement(pos);
+            Player.GetComponent<PlayerMovement>().openGUI = false;
+            Player.GetComponent<Skills>().skillList["Woodcutting"] += 20;
         }
-
     }
 
     public int GetGUIHeight() {
