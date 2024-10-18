@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -63,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 if (mouseInput == 0) {
                     openGUI = false;
-                    if (Vector3.Distance(transform.position, hit.point) < 1) return;
+                    //if (Vector3.Distance(transform.position, hit.point) < 1) return;
                     BeginMovement(GetActualRayTile(hit));
                 }
                 else if (mouseInput == 1) {
@@ -82,8 +83,9 @@ public class PlayerMovement : MonoBehaviour
         if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) > 0.00001f){
             movementPath.Insert(0, map[new(technicalPos.x, technicalPos.y)]);
         }
-                
-        technicalPos = new((int)movementPath[0].transform.position.x, (int)movementPath[0].transform.position.z);
+        if (movementPath.Count > 0){       
+            technicalPos = new((int)movementPath[0].transform.position.x, (int)movementPath[0].transform.position.z);
+        }
     }
 
     // Readies the next piece of the path.

@@ -14,9 +14,11 @@ public class TreeObject : MonoBehaviour, InteractableObject
         if (GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y + previousHeight, totalGUIWidth, personalGUIHeight), "Chop Tree")) {
             Vector2Int pos = GetComponentInParent<BasicTile>().pos;
             GameObject Player = GameObject.Find("Player");
-            Player.GetComponent<PlayerMovement>().GuiMovement(pos);
+            if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
+                Player.GetComponent<PlayerMovement>().GuiMovement(pos);
+            }
             Player.GetComponent<PlayerMovement>().openGUI = false;
-            Player.GetComponent<Skills>().skillList["Woodcutting"] += 20;
+            Player.GetComponent<Skills>().skillList["Woodcutting"].IncreaseEXP(20);
         }
     }
 
