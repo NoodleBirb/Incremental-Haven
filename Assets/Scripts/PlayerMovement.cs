@@ -7,8 +7,8 @@ using UnityEngine.UIElements;
 public class PlayerMovement : MonoBehaviour
 {
     Dictionary<Vector2Int, GameObject> map;
-    List<GameObject> movementPath;
-    bool readyToMove = false;
+    public List<GameObject> movementPath;
+    bool readyToMove;
     Vector2Int technicalPos;
     public float speed;
     public bool openGUI;
