@@ -13031,6 +13031,7 @@ GameObject:
   - component: {fileID: 1535957163}
   - component: {fileID: 1535957164}
   - component: {fileID: 1535957165}
+  - component: {fileID: 1535957166}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -13066,6 +13067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 411f5e0f75496514189e24a2fd9b8ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementPath: []
   speed: 5
   openGUI: 0
 --- !u!114 &1535957164
@@ -13100,6 +13102,38 @@ MonoBehaviour:
     y: 247
     width: 200
     height: 100
+  skillListRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+--- !u!114 &1535957166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535957161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffde7a9699e960c43a309e6af709b5ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showInventory: 0
+  scrollPosition: {x: 0, y: 0}
+  windowRect:
+    serializedVersion: 2
+    x: 172
+    y: 236
+    width: 200
+    height: 100
+  inventoryRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
 --- !u!1001 &1539500881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18820,13 +18854,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109227118}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
   m_LocalPosition: {x: 0, y: 4.3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!114 &2109227122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18839,7 +18873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd0ee8c910812243acc7c1b8561e199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1535957162}
+  target: {fileID: 1030397670}
   distance: 5
   xSpeed: 120
   ySpeed: 120

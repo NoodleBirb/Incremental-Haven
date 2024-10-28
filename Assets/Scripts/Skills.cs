@@ -19,14 +19,16 @@ public class Skills : MonoBehaviour
     }
 
     void OnGUI() {
-        if (!showSkillList && GUI.Button(skillListRect, "Show Skills")) {
-            showSkillList = true;
-        }
-        if (showSkillList) {
-            windowRect = GUI.Window(0, windowRect, SkillWindow, "My Window");
-        }
-        if (showSkillList && GUI.Button(skillListRect, "Show Skills")) {
-            showSkillList = false;
+        if (!GetComponent<Inventory>().showInventory) {
+            if (!showSkillList && GUI.Button(skillListRect, "Show Skills")) {
+                showSkillList = true;
+            }
+            if (showSkillList) {
+                windowRect = GUI.Window(0, windowRect, SkillWindow, "My Window");
+            }
+            if (showSkillList && GUI.Button(skillListRect, "Show Skills")) {
+                showSkillList = false;
+            }
         }
     }
 

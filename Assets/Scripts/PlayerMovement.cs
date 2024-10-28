@@ -30,24 +30,27 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        if (readyToMove && Input.GetMouseButtonDown(0)) {
-            latestClick = 0;
-            clickPos = new(Input.mousePosition.x, Input.mousePosition.y);
-          
-            SendRay(0);
-        }
-        if (readyToMove && Input.GetMouseButtonUp(1)) {
-            latestClick = 1;
-            clickPos = new(Input.mousePosition.x, Input.mousePosition.y); 
-            SendRay(1);
-        }
-        // Checks if a movement path is currently being run through.
-        if (movementPath != null && movementPath.Count > 0) {
-            transform.position = Vector3.MoveTowards(transform.position, new(technicalPos.x, 0, technicalPos.y), speed * Time.deltaTime);
-            if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) < 0.00001f){
-                ReadyNextMovement();
+        if (!GetComponent<Inventory>().showInventory) {
+            // Left click movement
+            if (readyToMove && Input.GetMouseButtonDown(0)) {
+                latestClick = 0;
+                clickPos = new(Input.mousePosition.x, Input.mousePosition.y);
+                SendRay(0);
             }
-            
+            // Right click gui creation
+            if (readyToMove && Input.GetMouseButtonUp(1)) {
+                latestClick = 1;
+                clickPos = new(Input.mousePosition.x, Input.mousePosition.y); 
+                SendRay(1);
+            }
+            // Checks if a movement path is currently being run through.
+            if (movementPath != null && movementPath.Count > 0) {
+                transform.position = Vector3.MoveTowards(transform.position, new(technicalPos.x, 0, technicalPos.y), speed * Time.deltaTime);
+                if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) < 0.00001f){
+                    ReadyNextMovement();
+                }
+                
+            }
         }
     }
 
@@ -147,9 +150,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // openGUI = false may cause problems if I want to use this checking code for things other than clicks
     bool InsideGUIBox(Vector2 rectMousePos) {
         Skills skills = GetComponent<Skills>();
+        Inventory inventory = GetComponent<Inventory>();
         if (skills.skillListRect.Contains(rectMousePos)) {
+            openGUI = false;
             return true;
         }
         if (openGUI) {
@@ -159,9 +165,14 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         if (skills.showSkillList && skills.windowRect.Contains(rectMousePos)) {
-            Debug.Log("this should be working");
+            openGUI = false;
             return true;
         }
+        if (inventory.openInventoryRect.Contains(rectMousePos)) {
+            openGUI = false;
+            return true;
+        }
+        //if (inventory)
 
         return false;
     }
