@@ -7,7 +7,7 @@ using UnityEngine;
 public class Skills : MonoBehaviour
 {
     public bool showSkillList = false;
-    public Dictionary<string, SkillInterface> skillList = new();
+    public Dictionary<string, ISkillInterface> skillList = new();
     // The position on of the scrolling viewport
     public Vector2 scrollPosition = Vector2.zero;
     public Rect windowRect = new(Screen.width / 2, Screen.height / 2, 200, 100);

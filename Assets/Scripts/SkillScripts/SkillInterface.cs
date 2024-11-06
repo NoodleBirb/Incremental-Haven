@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface SkillInterface {
+public interface ISkillInterface {
 
     float GetEXP();
     void IncreaseEXP(float increase);

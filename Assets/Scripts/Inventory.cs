@@ -1,22 +1,25 @@
-
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
+using Defective.JSON;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
 {
     public bool showInventory;
-    public Dictionary<string, SkillInterface> inventory = new();
+    public Dictionary<string, ISkillInterface> inventory = new();
     // The position on of the scrolling viewport
     public Vector2 scrollPosition = Vector2.zero;
     public Rect windowRect = new(Screen.width / 2, Screen.height / 2, 200, 100);
     public Rect openInventoryRect;
-    bool stillNotCloseEnough;
-    bool shifting;
+    public bool stillNotCloseEnough;
+    public bool shifting;
     GameObject player;
     GameObject mainCamera;
+
+    private List<Item> inventoryList;
+
     void Start()
     {
         shifting = false;
@@ -25,6 +28,15 @@ public class Inventory : MonoBehaviour
         stillNotCloseEnough = false;
         showInventory = false;
         openInventoryRect = new(Screen.width - 200, Screen.height - 50, 100, 50);
+
+        TextAsset stoneAxe = Resources.Load<TextAsset>("stone_axe");
+        Item item = LoadItemFromJson(stoneAxe.text);
+
+        inventoryList = new() // eventually will be initialized with stuff from the saving system.
+        {
+            // Placeholder for testing
+            item
+        }; 
     }
 
     void OnGUI() {
@@ -33,14 +45,56 @@ public class Inventory : MonoBehaviour
             stillNotCloseEnough = true;
         }
         if (showInventory && !shifting && !stillNotCloseEnough) {
-            
+            int buttonWidth = (Screen.width / 2 - 60) / 3;
+            int startX = Screen.width / 2;
 
-            scrollPosition = GUI.BeginScrollView(new Rect(Screen.width / 2 , 20, Screen.width / 2, Screen.height- 20), scrollPosition, new Rect(0, 0, Screen.width / 2, Screen.height- 20));
-            if (GUI.Button(new(180, 20, 20, 20), "Close")) {
+            // okay i give up on understanding why this won't make a clean placement of the buttons. It's not my problem anymore. 
+            if (GUI.Button(new(startX, 0, buttonWidth, 30), "Tab 1")) {
                 showInventory = false;
             }
+            if (GUI.Button(new(startX + buttonWidth, 0, buttonWidth, 30), "Tab 2")) {
+                showInventory = false;
+            }
+            if (GUI.Button(new(startX + 2*buttonWidth, 0, buttonWidth, 30), "Tab 3")) {
+                showInventory = false;
+            }
+            if ((startX - 60) % 3 == 0 && GUI.Button(new(Screen.width - 60, 0, 60, 30), "Close")) {
+                showInventory = false;
+            }
+            else if ((startX - 60) % 3 == 1 && GUI.Button(new(Screen.width - 62, 0, 62, 30), "Close")) {
+                showInventory = false;
+            }
+            else if ((startX - 60) % 3 == 2 && GUI.Button(new(Screen.width - 63, 0, 63, 30), "Close")) {
+                showInventory = false;
+            }
+
+            scrollPosition = GUI.BeginScrollView(new Rect(Screen.width / 2 , 30, Screen.width / 2, Screen.height- 50), scrollPosition, new Rect(0, 0, Screen.width / 2, Screen.height- 50));
+            GUI.Box(new Rect(0, 0, Screen.width / 2, Screen.height- 20), "");
+            
+            int itemBoxWidth = Screen.width / 8;
+            int itemBoxYPos = 0;
+            int itemBoxXPos = 0;
+
             // List the items. Coordinates begin in the corner of the ScrollView.
-            GUI.Box(new Rect(0, 20, 200, 50),  "this is an item!");
+            for (int i = 0; i < inventoryList.Count; i++) {
+                if (i != 0 && i % 4 == 0) {
+                    itemBoxYPos += 30;
+                    itemBoxXPos = 0;
+                }
+                if (inventoryList[i].IsEquippable() && GUI.Button(new(itemBoxXPos, itemBoxYPos, itemBoxWidth, 30), inventoryList[i].GetName())) {
+                    Debug.Log("I was equipped!");
+                    Equipment equipmentInfo = GetComponent<Equipment>();
+                    Item previouslyEquippedItem = equipmentInfo.SwapWeapon(inventoryList[i]);
+                    if (previouslyEquippedItem != null) {
+                        inventoryList.Add(previouslyEquippedItem);
+                    }
+                    inventoryList.RemoveAt(i);
+                } else if (!inventoryList[i].IsEquippable()){
+                    GUI.Box(new Rect(new(itemBoxXPos, itemBoxYPos, itemBoxWidth, 30)), inventoryList[i].GetName());
+                }
+                itemBoxXPos += itemBoxWidth;
+            }
+
 
             // End the scroll view that we began above.
             GUI.EndScrollView();
@@ -72,10 +126,55 @@ public class Inventory : MonoBehaviour
         }
     }
     IEnumerator ShiftCameraToRight() {
-        for (int i = 0; i < 70 /*arbitrary value i randomly set*/; i++) {
-            mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, new(mainCamera.transform.position.x + mainCamera.transform.right.x, mainCamera.transform.position.y, mainCamera.transform.position.z + mainCamera.transform.right.z), .1f * Time.deltaTime);
+        while (Vector2.Distance(new(mainCamera.transform.position.x, mainCamera.transform.position.z), new(player.transform.position.x, player.transform.position.z)) <= 2.2f) {
+            mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, new(mainCamera.transform.position.x + mainCamera.transform.right.x, mainCamera.transform.position.y, mainCamera.transform.position.z + mainCamera.transform.right.z), .05f * Time.deltaTime);
             yield return null;
         }
         shifting = false;
     }
+
+
+
+
+    private static Item LoadItemFromJson(string json)
+    {
+        // Create JSONObject to easily sort through the data
+        JSONObject obj = new(json);
+        
+
+        // Fill the stats dictionary with necessary values from the JSON file.
+        Dictionary<string, float> statsDict;
+
+        int i = 0;
+        if (obj["equippable"].boolValue) {
+            statsDict = new();
+            var stats = obj["stats"];
+            foreach (string val in stats.keys) {
+                statsDict[val] = obj["stats"][i].floatValue;
+                Debug.Log(obj["stats"][i].floatValue);
+                i++;
+            }
+        } else {
+            statsDict = null;
+        }
+        
+        Dictionary<string, bool> specificFunctionDict = new();
+        var functions = obj["specific_functions"];
+        i = 0;
+        foreach (string str in functions.keys) {
+            specificFunctionDict[str] = obj["specific_functions"][i].boolValue;
+            Debug.Log(obj["specific_functions"][i].boolValue);
+            i++;
+        }
+
+        return new Item(obj["name"].stringValue, obj["id"].intValue, obj["equippable"].boolValue, statsDict, specificFunctionDict);
+    }
+
+    public void AddItem(Item newItem) {
+        inventoryList.Add(newItem);
+    }
+
+
 }
+
+

@@ -1,0 +1,17 @@
+{
+    "name": "placeholder",
+    "id": 0,
+    "equippable": true,
+    "stats": {
+        "strength": -1,
+        "speed": -1,
+        "mana": -1,
+        "resistance": -1,
+        "defence": -1,
+        "elemental_defence": -1,
+        "elemental_affinity": -1
+    },
+    "specific_functions": {
+        
+    }
+}
