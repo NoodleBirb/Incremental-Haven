@@ -55,4 +55,10 @@ public class TreeObject : MonoBehaviour, InteractableObject
         }
         yield return new WaitForSeconds(.1f);
     }
+
+    public void InteractWith() {
+        if (!isCut) {
+            treeCutTime = true;
+        }
+    }
 }

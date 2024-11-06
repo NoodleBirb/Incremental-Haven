@@ -17,5 +17,8 @@ public class NothingObject : MonoBehaviour, InteractableObject
     public int GetGUIHeight() {
         return guiHeight;
     }
+    public void InteractWith() {
+        
+    }
 
 }

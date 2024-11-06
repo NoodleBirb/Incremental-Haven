@@ -78,6 +78,10 @@ public class PlayerMovement : MonoBehaviour
 
     // Move to the raycasted tile.
     void BeginMovement(GameObject endTile) {
+
+        if (endTile.GetComponent<TileSettings>().heldObject != null) {
+            endTile.GetComponent<TileSettings>().heldObject.GetComponent<InteractableObject>().InteractWith();
+        }
         
         Vector2Int playerPos = new(technicalPos.x, technicalPos.y);
                 

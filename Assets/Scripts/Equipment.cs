@@ -32,4 +32,6 @@ public class Equipment : MonoBehaviour{
     public Item GetWeaponSlot() {
         return weaponSlot;
     }
+
+    
 }
