@@ -33,9 +33,8 @@ public class TileSettings : MonoBehaviour
         if (GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y, totalGUIWidth, personalGUIHeight), "Walk Towards") && latestClick == 0) {
             Vector2Int pos = GetComponent<BasicTile>().pos;
             GameObject player = GameObject.Find("Player");
-            if (Vector3.Distance(player.transform.position, new(pos.x, 0, pos.y)) > 1) {
-                player.GetComponent<PlayerMovement>().GuiMovement(pos);
-            }
+            player.GetComponent<PlayerMovement>().BeginMovement(gameObject);
+
             
             player.GetComponent<PlayerMovement>().openGUI = false;
         }

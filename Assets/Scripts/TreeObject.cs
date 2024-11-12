@@ -9,30 +9,29 @@ public class TreeObject : MonoBehaviour, InteractableObject
     private int treeTime;
     private bool treeCutTime;
     public bool isCut;
+    GameObject Player;
     
     void Start() {
         isCut = false;
         treeTime = 0;
         treeCutTime = false;
+        PlayerMovement.ResetActions += StopCuttingTree;
+        Player = GameObject.Find("Player");
     }
 
     void Update() {
-        if (treeCutTime) {
-            GameObject Player = GameObject.Find("Player");
-            if (Player.GetComponent<Equipment>().GetWeaponSlot() != null && Player.GetComponent<Equipment>().GetWeaponSlot().GetSpecificFunctions()["is_axe"]) {
-                StartCoroutine(CutTree(Player));
-            }
+        if (treeCutTime && Player.GetComponent<PlayerMovement>().movementPath.Count == 0) {
+            StartCoroutine(CutTree());
         }
     }
 
     public void CreateOptions(int previousHeight, Vector2 clickPos, int totalGUIWidth) {
         if (GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y + previousHeight, totalGUIWidth, personalGUIHeight), "Chop Tree")) {
             Vector2Int pos = GetComponentInParent<BasicTile>().pos;
-            GameObject Player = GameObject.Find("Player");
             if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
-                Player.GetComponent<PlayerMovement>().GuiMovement(pos);
+                Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
             }
-            if (!isCut) {
+            if (!isCut && Player.GetComponent<Equipment>().GetWeaponSlot() != null && Player.GetComponent<Equipment>().GetWeaponSlot().GetSpecificFunctions()["is_axe"]) {
                 treeCutTime = true;
             }
             Player.GetComponent<PlayerMovement>().openGUI = false;
@@ -44,14 +43,12 @@ public class TreeObject : MonoBehaviour, InteractableObject
     }
 
 
-    IEnumerator CutTree(GameObject player) {
-        if (player.GetComponent<PlayerMovement>().movementPath.Count == 0) {
-            treeTime += 1;
-        }
+    IEnumerator CutTree() {
+        treeTime += 1;
         Debug.Log("cutting down the tree");
         if (treeTime == 300) {
-            player.GetComponent<Skills>().skillList["Woodcutting"].IncreaseEXP(20);
-            StopCoroutine(CutTree(player));
+            Player.GetComponent<Skills>().skillList["Woodcutting"].IncreaseEXP(20);
+            StopCoroutine(CutTree());
             treeCutTime = false;
             treeTime = 0;
             isCut = true;
@@ -63,5 +60,10 @@ public class TreeObject : MonoBehaviour, InteractableObject
         if (!isCut) {
             treeCutTime = true;
         }
+    }
+    public void StopCuttingTree() {
+        treeCutTime = false;
+        treeTime = 0;
+
     }
 }

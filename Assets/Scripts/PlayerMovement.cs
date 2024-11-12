@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -16,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2 clickPos;
     Vector2 guiPos;
     int latestClick;
+    public static event Action ResetActions;
 
 
     void Start() {
@@ -26,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
             StoreTileMap.OnMapInitialized += PlayerMovementInitialized;
         }
         technicalPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        ResetActions?.Invoke();
     }
     // Update is called once per frame
     void Update()
@@ -77,8 +80,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Move to the raycasted tile.
-    void BeginMovement(GameObject endTile) {
-
+    public void BeginMovement(GameObject endTile) {
+        ResetActions?.Invoke();
         if (endTile.GetComponent<TileSettings>().heldObject != null) {
             endTile.GetComponent<TileSettings>().heldObject.GetComponent<InteractableObject>().InteractWith();
         }
@@ -112,19 +115,6 @@ public class PlayerMovement : MonoBehaviour
     void ReadyMovement () {
         map = GameObject.Find("Game Map").GetComponent<StoreTileMap>().map;
         readyToMove = true;
-    }
-
-    // Movement code particular to when the user clicks on a GUI for movement.
-    public void GuiMovement (Vector2Int tilePos) {
-        Vector2Int playerPos = new(technicalPos.x, technicalPos.y);
-
-        // Pathfind to the point found by the ray.
-        movementPath = GetComponent<Pathfinding>().GetAStarPath(map[playerPos], map[tilePos]);
-        if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) > 0.00001f){
-            movementPath.Insert(0, map[new(technicalPos.x, technicalPos.y)]);
-        }
-                
-        technicalPos = new((int)movementPath[0].transform.position.x, (int)movementPath[0].transform.position.z);
     }
 
     // Readies the screen to have a gui, giving it the proper information.
