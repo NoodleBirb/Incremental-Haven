@@ -28,6 +28,12 @@ public class Item {
     public bool IsEquippable() {
         return equippable;
     }
+    public Dictionary<string, float> GetStats() {
+        return stats;
+    }
+    public Dictionary<string, bool> GetSpecificFunctions() {
+        return specific_functions;
+    }
     public float GetStrength() {
         if (!equippable) return 0;
         return stats["strength"];

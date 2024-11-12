@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,8 @@ public class Inventory : MonoBehaviour
     public bool shifting;
     GameObject player;
     GameObject mainCamera;
-
+    public static event Action OnInventoryInitialized;
+    public static bool isInventoryInitialized = false;
     private List<Item> inventoryList;
 
     void Start()
@@ -37,6 +39,8 @@ public class Inventory : MonoBehaviour
             // Placeholder for testing
             item
         }; 
+        isInventoryInitialized = true;
+        OnInventoryInitialized?.Invoke();
     }
 
     void OnGUI() {
@@ -68,8 +72,8 @@ public class Inventory : MonoBehaviour
                 showInventory = false;
             }
 
-            scrollPosition = GUI.BeginScrollView(new Rect(Screen.width / 2 , 30, Screen.width / 2, Screen.height- 50), scrollPosition, new Rect(0, 0, Screen.width / 2, Screen.height- 50));
-            GUI.Box(new Rect(0, 0, Screen.width / 2, Screen.height- 20), "");
+            scrollPosition = GUI.BeginScrollView(new Rect(Screen.width / 2 , 30, Screen.width / 2, Screen.height- 90), scrollPosition, new Rect(0, 0, Screen.width / 2, Screen.height- 50));
+            GUI.Box(new Rect(0, 0, Screen.width / 2, Screen.height * 2), "");
             
             int itemBoxWidth = Screen.width / 8;
             int itemBoxYPos = 0;
@@ -89,6 +93,7 @@ public class Inventory : MonoBehaviour
                         inventoryList.Add(previouslyEquippedItem);
                     }
                     inventoryList.RemoveAt(i);
+                    GetComponent<PlayerStatistics>().UpdateStats();
                 } else if (!inventoryList[i].IsEquippable()){
                     GUI.Box(new Rect(new(itemBoxXPos, itemBoxYPos, itemBoxWidth, 30)), inventoryList[i].GetName());
                 }

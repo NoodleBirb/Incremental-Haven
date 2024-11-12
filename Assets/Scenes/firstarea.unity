@@ -13032,6 +13032,8 @@ GameObject:
   - component: {fileID: 1535957164}
   - component: {fileID: 1535957165}
   - component: {fileID: 1535957166}
+  - component: {fileID: 1535957168}
+  - component: {fileID: 1535957167}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -13128,12 +13130,38 @@ MonoBehaviour:
     y: 236
     width: 200
     height: 100
-  inventoryRect:
+  openInventoryRect:
     serializedVersion: 2
     x: 0
     y: 0
     width: 0
     height: 0
+  stillNotCloseEnough: 0
+  shifting: 0
+--- !u!114 &1535957167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535957161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8c2aac15b0739347a94b6cfa775aa96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1535957168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535957161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a300776a3f299b0439de30f7c1fd4fa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1539500881
 PrefabInstance:
   m_ObjectHideFlags: 0

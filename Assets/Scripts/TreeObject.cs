@@ -19,7 +19,9 @@ public class TreeObject : MonoBehaviour, InteractableObject
     void Update() {
         if (treeCutTime) {
             GameObject Player = GameObject.Find("Player");
-            StartCoroutine(CutTree(Player));
+            if (Player.GetComponent<Equipment>().GetWeaponSlot() != null && Player.GetComponent<Equipment>().GetWeaponSlot().GetSpecificFunctions()["is_axe"]) {
+                StartCoroutine(CutTree(Player));
+            }
         }
     }
 
@@ -46,6 +48,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
         if (player.GetComponent<PlayerMovement>().movementPath.Count == 0) {
             treeTime += 1;
         }
+        Debug.Log("cutting down the tree");
         if (treeTime == 300) {
             player.GetComponent<Skills>().skillList["Woodcutting"].IncreaseEXP(20);
             StopCoroutine(CutTree(player));
