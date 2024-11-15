@@ -1,0 +1,54 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class TurnDecider : MonoBehaviour {
+    public List<string> turnOrder;
+    public Queue currentTurnOrder;
+    float speedPlayer;
+    float speedEnemy;
+    int playerAV;
+    int enemyAV;
+
+    void Start() {
+        // speedPlayer = PlayerPrefs.GetFloat("speed_player");
+        // speedEnemy = PlayerPrefs.GetFloat("speed_enemy");
+        speedPlayer = 3;
+        speedEnemy = 5;
+        turnOrder = new List<string>();
+        playerAV = (int)(10000 / speedPlayer);
+        enemyAV = (int)(10000 / speedEnemy);
+        FillTurnOrder();
+    }
+
+    void FillTurnOrder() {
+        while(turnOrder.Count < 5) {
+            if (playerAV == 0) {
+                turnOrder.Add("player");
+                playerAV = (int)(10000 / speedPlayer);
+                continue;
+            } 
+            if (enemyAV == 0) {
+                turnOrder.Add("enemy");
+                enemyAV = (int)(10000 / speedEnemy);
+            }
+            enemyAV -= 1;
+            playerAV -= 1;
+        }
+    }
+
+    void OnGUI() {
+        if (turnOrder.Count == 5) {
+            GUI.Box(new(0, 0, 80, 40), turnOrder[0]);
+            GUI.Box(new(0, 40, 80, 40), turnOrder[1]);
+            GUI.Box(new(0, 80, 80, 40), turnOrder[2]);
+            GUI.Box(new(0, 120, 80, 40), turnOrder[3]);
+            GUI.Box(new(0, 160, 80, 40), turnOrder[4]);
+        } else {
+            FillTurnOrder();
+        }
+    }
+
+
+}

@@ -31,7 +31,7 @@ public class Inventory : MonoBehaviour
         showInventory = false;
         openInventoryRect = new(Screen.width - 200, Screen.height - 50, 100, 50);
 
-        TextAsset stoneAxe = Resources.Load<TextAsset>("stone_axe");
+        TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
         Item item = LoadItemFromJson(stoneAxe.text);
 
         inventoryList = new() // eventually will be initialized with stuff from the saving system.

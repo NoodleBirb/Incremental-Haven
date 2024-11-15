@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Defective.JSON;
 
 public class PlayerStatistics : MonoBehaviour {
     private Dictionary<string, float> stats;
@@ -16,6 +17,13 @@ public class PlayerStatistics : MonoBehaviour {
         else {
             Inventory.OnInventoryInitialized += UpdateStats;
         }
+        PlayerPrefs.SetFloat("strength", stats["strength"]);
+        PlayerPrefs.SetFloat("speed", stats["speed"]);
+        PlayerPrefs.SetFloat("mana", stats["mana"]);
+        PlayerPrefs.SetFloat("resistance", stats["resistance"]);
+        PlayerPrefs.SetFloat("defence", stats["defence"]);
+        PlayerPrefs.SetFloat("elemental_defence", stats["elemental_defence"]);
+        PlayerPrefs.SetFloat("elemental_affinity", stats["elemental_affinity"]);
     }
 
     public void UpdateStats() {
@@ -41,7 +49,13 @@ public class PlayerStatistics : MonoBehaviour {
                 }
             }
         }
-        
+        PlayerPrefs.SetFloat("strength_player", stats["strength"]);
+        PlayerPrefs.SetFloat("speed_player", stats["speed"]);
+        PlayerPrefs.SetFloat("mana_player", stats["mana"]);
+        PlayerPrefs.SetFloat("resistance_player", stats["resistance"]);
+        PlayerPrefs.SetFloat("defence_player", stats["defence"]);
+        PlayerPrefs.SetFloat("elemental_defence_player", stats["elemental_defence"]);
+        PlayerPrefs.SetFloat("elemental_affinity_player", stats["elemental_affinity"]);
     }
      void OnGUI() {
         if (inventory.showInventory && !inventory.shifting && !inventory.stillNotCloseEnough) {
