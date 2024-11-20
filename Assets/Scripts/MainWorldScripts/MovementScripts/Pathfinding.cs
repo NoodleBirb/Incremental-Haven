@@ -25,7 +25,7 @@ public class Pathfinding : MonoBehaviour
     }
 
     // GameObject must be a Tile.
-    public List<GameObject> GetAStarPath(GameObject startTile, GameObject goalTile) {
+    public static List<GameObject> GetAStarPath(GameObject startTile, GameObject goalTile) {
 
         List<GameObject> openList = new();
         List<GameObject> closedList = new();
@@ -81,15 +81,15 @@ public class Pathfinding : MonoBehaviour
         return GetActualPath(lowestDistNode); // closest path to the destination if you can't reach the destination.
     }
     
-    int CalcFCost (GameObject tile, GameObject startTile, GameObject goalTile) {
+    static int  CalcFCost (GameObject tile, GameObject startTile, GameObject goalTile) {
         return GetDistance(tile, startTile) + GetDistance(tile, goalTile);
     }
 
-    int CalcGCost (GameObject tile, GameObject startTile) {
+    static int CalcGCost (GameObject tile, GameObject startTile) {
         return GetDistance(tile, startTile);
     }
 
-    int GetDistance (GameObject tile1, GameObject tile2) {
+    static int GetDistance (GameObject tile1, GameObject tile2) {
         int dstX = (int)Mathf.Abs(tile1.transform.position.x - tile2.transform.position.x);
         int dstZ = (int)Mathf.Abs(tile1.transform.position.z - tile2.transform.position.z);
 
@@ -99,7 +99,7 @@ public class Pathfinding : MonoBehaviour
         return 140 * dstX + 100 * (dstZ - dstX);
     }
 
-    List<GameObject> GetActualPath(Node finalNode) {
+    static List<GameObject> GetActualPath(Node finalNode) {
         List<GameObject> retList = new();
         while (finalNode.GetParentNode() != null) {
             retList.Add(finalNode.GetTile());

@@ -89,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2Int playerPos = new(technicalPos.x, technicalPos.y);
                 
         // Pathfind to the point found by the ray.
-        movementPath = GetComponent<Pathfinding>().GetAStarPath(map[playerPos], endTile);
+        movementPath = Pathfinding.GetAStarPath(map[playerPos], endTile);
         if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) > 0.00001f){
             movementPath.Insert(0, map[new(technicalPos.x, technicalPos.y)]);
         }
