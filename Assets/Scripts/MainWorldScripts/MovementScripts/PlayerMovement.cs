@@ -170,4 +170,8 @@ public class PlayerMovement : MonoBehaviour
 
         return false;
     }
+
+    public Vector2Int GetTechnicalPos() {
+        return technicalPos;
+    }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Defective.JSON;
+using UnityEngine.SceneManagement;
 
 public class EnemyStatistics : MonoBehaviour {
     private Dictionary<string, float> stats;
@@ -9,7 +10,7 @@ public class EnemyStatistics : MonoBehaviour {
 
 
     void Start() {
-        JSONObject enemyInfo = new(Resources.Load<TextAsset>("Enemeies/" + enemyName).text);
+        JSONObject enemyInfo = new(Resources.Load<TextAsset>("Enemies/" + enemyName).text);
         stats = new()
         {
             ["strength"] = 0f,
@@ -28,7 +29,7 @@ public class EnemyStatistics : MonoBehaviour {
         }
     }
 
-     void BumpedIntoPlayer() {
+     public void BumpedIntoPlayer() {
         PlayerPrefs.SetFloat("strength_enemy", stats["strength"]);
         PlayerPrefs.SetFloat("speed_enemy", stats["speed"]);
         PlayerPrefs.SetFloat("mana_enemy", stats["mana"]);
@@ -36,5 +37,7 @@ public class EnemyStatistics : MonoBehaviour {
         PlayerPrefs.SetFloat("defence_enemy", stats["defence"]);
         PlayerPrefs.SetFloat("elemental_defence_enemy", stats["elemental_defence"]);
         PlayerPrefs.SetFloat("elemental_affinity_enemy", stats["elemental_affinity"]);
+        PlayerPrefs.SetString("enemy_name", enemyName);
+        SceneManager.LoadScene("CombatZone");
      }
 }
