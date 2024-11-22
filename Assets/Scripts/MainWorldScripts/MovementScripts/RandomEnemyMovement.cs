@@ -29,20 +29,22 @@ public class RandomEnemyMovement : MonoBehaviour {
     }
 
     void Update() {
-        Vector2Int playerTechnicalPos = Player.GetComponent<PlayerMovement>().GetTechnicalPos();
-        if (technicalPos.x == playerTechnicalPos.x && technicalPos.y == playerTechnicalPos.y) {
-            GetComponent<EnemyStatistics>().BumpedIntoPlayer();
-        }
-        if (readyToMove && movementPath.Count == 0 && (int)(Random.value * 100) == 1) {
-            BeginMovement(Enumerable.ToList<GameObject>(map.Values)[(int)(Random.value * map.Count)]);
-        }
-        // Checks if a movement path is currently being run through.
-        if (movementPath != null && movementPath.Count > 0) {
-            transform.position = Vector3.MoveTowards(transform.position, new(technicalPos.x, 0, technicalPos.y), speed * Time.deltaTime);
-            if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) < 0.00001f){
-                ReadyNextMovement();
+        if (!Inventory.showInventory) { 
+            Vector2Int playerTechnicalPos = Player.GetComponent<PlayerMovement>().GetTechnicalPos();
+            if (technicalPos.x == playerTechnicalPos.x && technicalPos.y == playerTechnicalPos.y) {
+                GetComponent<EnemyStatistics>().BumpedIntoPlayer();
             }
-                
+            if (readyToMove && movementPath.Count == 0 && (int)(Random.value * 100) == 1) {
+                BeginMovement(Enumerable.ToList<GameObject>(map.Values)[(int)(Random.value * map.Count)]);
+            }
+            // Checks if a movement path is currently being run through.
+            if (movementPath != null && movementPath.Count > 0) {
+                transform.position = Vector3.MoveTowards(transform.position, new(technicalPos.x, 0, technicalPos.y), speed * Time.deltaTime);
+                if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) < 0.00001f){
+                    ReadyNextMovement();
+                }
+                    
+            }
         }
     }
 

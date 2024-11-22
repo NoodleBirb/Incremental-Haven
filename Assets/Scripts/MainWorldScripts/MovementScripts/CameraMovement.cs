@@ -42,8 +42,7 @@ public class MouseOrbitImproved : MonoBehaviour {
  
     void LateUpdate () 
     {
-        bool inventoryOpen = GameObject.Find("Player").GetComponent<Inventory>().showInventory; // probably inefficient, but i'm not gonna worry about that now
-        if (!inventoryOpen && target) 
+        if (!Inventory.showInventory && target) 
         {
             if (Input.GetMouseButton(1)){
                 x += Input.GetAxis("Mouse X") * xSpeed * distance * 0.02f;

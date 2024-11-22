@@ -15,7 +15,7 @@ public class Equipment : MonoBehaviour{
     }
 
     void OnGUI() {
-        if (inventory.showInventory && !inventory.shifting && !inventory.stillNotCloseEnough) {
+        if (Inventory.showInventory && !inventory.shifting && !inventory.stillNotCloseEnough) {
             
             if (weaponSlot != null && GUI.Button(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), weaponSlot.GetName())) {
                 inventory.AddItem (weaponSlot);

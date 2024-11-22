@@ -12,10 +12,8 @@ public class TurnDecider : MonoBehaviour {
     int enemyAV;
 
     void Start() {
-        // speedPlayer = PlayerPrefs.GetFloat("speed_player");
-        // speedEnemy = PlayerPrefs.GetFloat("speed_enemy");
-        speedPlayer = 3;
-        speedEnemy = 5;
+        speedPlayer = PlayerPrefs.GetFloat("speed_player");
+        speedEnemy = PlayerPrefs.GetFloat("speed_enemy");
         turnOrder = new List<string>();
         playerAV = (int)(10000 / speedPlayer);
         enemyAV = (int)(10000 / speedEnemy);

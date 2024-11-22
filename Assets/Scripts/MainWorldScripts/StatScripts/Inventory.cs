@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
 {
-    public bool showInventory;
+    public static bool showInventory = false;
     public Dictionary<string, ISkillInterface> inventory = new();
     // The position on of the scrolling viewport
     public Vector2 scrollPosition = Vector2.zero;

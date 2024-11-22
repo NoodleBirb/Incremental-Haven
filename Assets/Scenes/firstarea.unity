@@ -2361,6 +2361,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a814c7bcee15ed4cae77262985ba6fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &201434516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201434513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7528752e8683ea8419e5249cde5a0cdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyName: test_enemy
 --- !u!1001 &202846344
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13265,7 +13278,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffde7a9699e960c43a309e6af709b5ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showInventory: 0
   scrollPosition: {x: 0, y: 0}
   windowRect:
     serializedVersion: 2
@@ -17960,6 +17972,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5114777364579975394, guid: 11cb38bfa9a4cff41ab6182a841224f0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 201434515}
+    - targetCorrespondingSourceObject: {fileID: 5114777364579975394, guid: 11cb38bfa9a4cff41ab6182a841224f0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 201434516}
   m_SourcePrefab: {fileID: 100100000, guid: 11cb38bfa9a4cff41ab6182a841224f0, type: 3}
 --- !u!4 &2012999974 stripped
 Transform:

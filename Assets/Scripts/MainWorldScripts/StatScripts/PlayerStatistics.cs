@@ -7,35 +7,53 @@ public class PlayerStatistics : MonoBehaviour {
     private Dictionary<string, float> stats;
     private Equipment equipment; 
     private Inventory inventory;
+    private Skills skills;
+    bool playerStatsInitialized = false;
 
     void Start() {
-        equipment = GetComponent<Equipment>();
-        inventory = GetComponent<Inventory>();
-        if (Inventory.isInventoryInitialized) {
-            UpdateStats();
+        stats = new()
+        {
+            ["strength"] = 1f,
+            ["speed"] = 1f,
+            ["mana"] = 1f,
+            ["resistance"] = 1f,
+            ["defence"] = 1f,
+            ["elemental_defence"] = 1f,
+            ["elemental_affinity"] = 1f
+        };
+        if (Inventory.isInventoryInitialized && Skills.isSkillsInitialized) {
+            TryUpdateStats();
+        }
+        else if (!Skills.isSkillsInitialized) {
+            Skills.OnSkillsInitialized += TryUpdateStats;
+        }
+        else if (!Inventory.isInventoryInitialized) {
+            Inventory.OnInventoryInitialized += TryUpdateStats;
         }
         else {
-            Inventory.OnInventoryInitialized += UpdateStats;
+            Skills.OnSkillsInitialized += TryUpdateStats;
+            Inventory.OnInventoryInitialized += TryUpdateStats;
         }
-        PlayerPrefs.SetFloat("strength", stats["strength"]);
-        PlayerPrefs.SetFloat("speed", stats["speed"]);
-        PlayerPrefs.SetFloat("mana", stats["mana"]);
-        PlayerPrefs.SetFloat("resistance", stats["resistance"]);
-        PlayerPrefs.SetFloat("defence", stats["defence"]);
-        PlayerPrefs.SetFloat("elemental_defence", stats["elemental_defence"]);
-        PlayerPrefs.SetFloat("elemental_affinity", stats["elemental_affinity"]);
+    }
+    void TryUpdateStats() {
+        if (Skills.isSkillsInitialized && Inventory.isInventoryInitialized) {
+            equipment = GetComponent<Equipment>();
+            inventory = GetComponent<Inventory>();
+            skills = GetComponent<Skills>();
+            UpdateStats();
+        }
     }
 
     public void UpdateStats() {
         stats = new()
         {
-            ["strength"] = 0f,
-            ["speed"] = 0f,
-            ["mana"] = 0f,
-            ["resistance"] = 0f,
-            ["defence"] = 0f,
-            ["elemental_defence"] = 0f,
-            ["elemental_affinity"] = 0f
+            ["strength"] = 1f,
+            ["speed"] = 1f,
+            ["mana"] = 1f,
+            ["resistance"] = 1f,
+            ["defence"] = 1f,
+            ["elemental_defence"] = 1f,
+            ["elemental_affinity"] = 1f
         };
         List<Item> equippedItems = new()
         {
@@ -44,10 +62,12 @@ public class PlayerStatistics : MonoBehaviour {
         foreach (Item item in equippedItems) {
             if (item != null) {
                 foreach(string key in stats.Keys.ToList<string>()) {
-                    Debug.Log(key);
                     stats[key] += item.GetStats()[key];
                 }
             }
+        }
+        foreach (string key in skills.stats.Keys) {
+            stats[key] += skills.stats[key];
         }
         PlayerPrefs.SetFloat("strength_player", stats["strength"]);
         PlayerPrefs.SetFloat("speed_player", stats["speed"]);
@@ -56,9 +76,10 @@ public class PlayerStatistics : MonoBehaviour {
         PlayerPrefs.SetFloat("defence_player", stats["defence"]);
         PlayerPrefs.SetFloat("elemental_defence_player", stats["elemental_defence"]);
         PlayerPrefs.SetFloat("elemental_affinity_player", stats["elemental_affinity"]);
+        playerStatsInitialized = true;
     }
      void OnGUI() {
-        if (inventory.showInventory && !inventory.shifting && !inventory.stillNotCloseEnough) {
+        if (playerStatsInitialized && Inventory.showInventory && !inventory.shifting && !inventory.stillNotCloseEnough) {
             int topStatBoxWidth = Screen.width / 8;
             int bottomStatBoxWidth = Screen.width / 6;
             int startPos = Screen.width / 2;

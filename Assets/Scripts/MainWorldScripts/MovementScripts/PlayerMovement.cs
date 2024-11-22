@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        if (!GetComponent<Inventory>().showInventory) {
+        if (!Inventory.showInventory) {
             // Left click movement
             if (readyToMove && Input.GetMouseButtonDown(0)) {
                 latestClick = 0;
