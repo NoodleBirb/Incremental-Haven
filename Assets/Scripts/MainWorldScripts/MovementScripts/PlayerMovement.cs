@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     Dictionary<Vector2Int, GameObject> map;
     public List<GameObject> movementPath;
     bool readyToMove;
-    Vector2Int technicalPos;
+    static Vector2Int technicalPos = new(10000, 133769); // arbitrary numbers that are most definitely impossible to reach
     public float speed;
     public bool openGUI;
     GameObject guiTile = null;
@@ -27,7 +27,11 @@ public class PlayerMovement : MonoBehaviour
         } else {
             StoreTileMap.OnMapInitialized += PlayerMovementInitialized;
         }
-        technicalPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        if (technicalPos.Equals(new(10000, 133769))) {
+            technicalPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        } else {
+            transform.position.Set(technicalPos.x, 0, technicalPos.y);
+        }
         ResetActions?.Invoke();
     }
     // Update is called once per frame

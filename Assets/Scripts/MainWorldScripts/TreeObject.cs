@@ -47,7 +47,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
         treeTime += 1;
         Debug.Log("cutting down the tree");
         if (treeTime == 300) {
-            Player.GetComponent<Skills>().skillList["Woodcutting"].IncreaseEXP(20);
+            Skills.skillList["Woodcutting"].IncreaseEXP(20);
             StopCoroutine(CutTree());
             treeCutTime = false;
             treeTime = 0;

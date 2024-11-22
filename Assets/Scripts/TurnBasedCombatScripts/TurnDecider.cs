@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class TurnDecider : MonoBehaviour {
-    public List<string> turnOrder;
+    public static List<string> turnOrder;
     public Queue currentTurnOrder;
     float speedPlayer;
     float speedEnemy;

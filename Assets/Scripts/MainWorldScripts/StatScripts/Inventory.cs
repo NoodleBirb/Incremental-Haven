@@ -9,10 +9,8 @@ using UnityEngine.UIElements;
 public class Inventory : MonoBehaviour
 {
     public static bool showInventory = false;
-    public Dictionary<string, ISkillInterface> inventory = new();
     // The position on of the scrolling viewport
     public Vector2 scrollPosition = Vector2.zero;
-    public Rect windowRect = new(Screen.width / 2, Screen.height / 2, 200, 100);
     public Rect openInventoryRect;
     public bool stillNotCloseEnough;
     public bool shifting;
@@ -20,7 +18,7 @@ public class Inventory : MonoBehaviour
     GameObject mainCamera;
     public static event Action OnInventoryInitialized;
     public static bool isInventoryInitialized = false;
-    private List<Item> inventoryList;
+    public static List<Item> inventoryList;
 
     void Start()
     {
@@ -34,11 +32,14 @@ public class Inventory : MonoBehaviour
         TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
         Item item = LoadItemFromJson(stoneAxe.text);
 
-        inventoryList = new() // eventually will be initialized with stuff from the saving system.
-        {
-            // Placeholder for testing
-            item
-        }; 
+        if (inventoryList.Count == 0) {
+
+            inventoryList = new() // eventually will be initialized with stuff from the saving system.
+            {
+                // Placeholder for testing
+                item
+            }; 
+        }
         isInventoryInitialized = true;
         OnInventoryInitialized?.Invoke();
     }
