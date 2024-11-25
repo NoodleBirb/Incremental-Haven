@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UserInterface : MonoBehaviour
 {
@@ -44,6 +45,7 @@ public class UserInterface : MonoBehaviour
                 Debug.Log("Open change skill menu");
             }
             if (GUI.Button(runRect, "Run")) {
+                SceneManager.LoadScene("firstarea");
                 Debug.Log("Run away!");
             }
         }

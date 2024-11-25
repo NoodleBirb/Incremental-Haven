@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     Dictionary<Vector2Int, GameObject> map;
     public List<GameObject> movementPath;
     bool readyToMove;
-    static Vector2Int technicalPos = new(10000, 133769); // arbitrary numbers that are most definitely impossible to reach
+    static Vector2Int technicalPos; // arbitrary numbers that are most definitely impossible to reach
     public float speed;
     public bool openGUI;
     GameObject guiTile = null;
@@ -21,22 +21,28 @@ public class PlayerMovement : MonoBehaviour
 
 
     void Start() {
+
         openGUI = false;
         if (StoreTileMap.isMapInitialized) {
             ReadyMovement();
         } else {
             StoreTileMap.OnMapInitialized += PlayerMovementInitialized;
         }
-        if (technicalPos.Equals(new(10000, 133769))) {
+        if (technicalPos == new Vector2Int(0, 0)) {
+            Debug.Log("i ran");
             technicalPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         } else {
-            transform.position.Set(technicalPos.x, 0, technicalPos.y);
+            StartCoroutine(WaitForTransform(transform, () => {
+                transform.position = new(technicalPos.x, 0, technicalPos.y);
+            }));
+            
         }
         ResetActions?.Invoke();
     }
     // Update is called once per frame
     void Update()
     {   
+        
         if (!Inventory.showInventory) {
             // Left click movement
             if (readyToMove && Input.GetMouseButtonDown(0)) {
@@ -60,31 +66,44 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    IEnumerator WaitForTransform(Transform transform, System.Action loadPos) {
+        yield return new WaitUntil(() => transform != null);
+        loadPos?.Invoke();
+    }
 
     // Sends a ray based on the user's input and runs either movement or GUI creation
     void SendRay(int mouseInput) {
         // Create a ray based on the mouse click.
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            // cast ray
-            if (Physics.Raycast (ray, out RaycastHit hit)) {
-                Vector2 rectMousePos = new(clickPos.x, Screen.height - clickPos.y);
-                if (InsideGUIBox(rectMousePos)) {
-                    return;
-                }
-                if (mouseInput == 0) {
-                    openGUI = false;
-                    //if (Vector3.Distance(transform.position, hit.point) < 1) return;
-                    BeginMovement(GetActualRayTile(hit));
-                }
-                else if (mouseInput == 1) {
-                    ReadyGUI(hit);
-                }
+        // cast ray
+        if (Physics.Raycast (ray, out RaycastHit hit)) {
+            Vector2 rectMousePos = new(clickPos.x, Screen.height - clickPos.y);
+            if (InsideGUIBox(rectMousePos)) {
+                return;
             }
+            if (mouseInput == 0) {
+                openGUI = false;
+                BeginMovement(GetActualRayTile(hit));
+                /* test that each tile has a value set correctly for its neighbors
+                foreach (GameObject tile in map.Values) {
+                    Debug.Log("New Tile: ");
+                    Debug.Log("x pos: " + tile.transform.position.x + " z pos: " + tile.transform.position.z);
+                    Debug.Log("Neighbors: ");
+                    foreach (GameObject neighbor in tile.GetComponent<BasicTile>().neighbors) {
+                        Debug.Log("x pos: " + neighbor.transform.position.x + " z pos: " + neighbor.transform.position.z);
+                    }
+                } */
+            }
+            else if (mouseInput == 1) {
+                ReadyGUI(hit);
+            }
+        }
     }
 
     // Move to the raycasted tile.
     public void BeginMovement(GameObject endTile) {
+       
         ResetActions?.Invoke();
         if (endTile.GetComponent<TileSettings>().heldObject != null) {
             endTile.GetComponent<TileSettings>().heldObject.GetComponent<InteractableObject>().InteractWith();
@@ -117,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
 
     // Readies the player for movement as the map has been initialized.
     void ReadyMovement () {
-        map = GameObject.Find("Game Map").GetComponent<StoreTileMap>().map;
+        map = StoreTileMap.map;
         readyToMove = true;
     }
 

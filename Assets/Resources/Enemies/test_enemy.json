@@ -8,5 +8,8 @@
         "defence": 2,
         "elemental_defence": 2,
         "elemental_affinity": 2
-    }
+    },
+    "moves": [
+        "noodle_punch"
+    ]
 }

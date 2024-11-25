@@ -1,0 +1,12 @@
+{
+    "moves": {
+        "noodle_punch": {
+            "power": 5,
+            "mana_cost": 3,
+            "element": "godliness",
+            "specific_functions": { 
+                "is_attack": true
+            }
+        }
+    }
+}

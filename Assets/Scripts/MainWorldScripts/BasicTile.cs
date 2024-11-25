@@ -14,8 +14,9 @@ public class BasicTile : MonoBehaviour
         if (StoreTileMap.isMapInitialized) AccessMap();
         else StoreTileMap.OnMapInitialized += HandleMapInitialized;
 
-        pos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
-
+    }
+    void OnDestroy() {
+        StoreTileMap.OnMapInitialized -= HandleMapInitialized;
     }
 
     void HandleMapInitialized()
@@ -23,10 +24,12 @@ public class BasicTile : MonoBehaviour
         AccessMap();
     }
 
+
     void AccessMap() {
-        Dictionary<Vector2Int, GameObject> map = GetComponentInParent<StoreTileMap>().map;
+        Dictionary<Vector2Int, GameObject> map = StoreTileMap.map;
 
         neighbors = new List<GameObject>();
+        pos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
         if (map.ContainsKey(pos + new Vector2Int(1, 0)) && map[pos + new Vector2Int(1, 0)].GetComponentInChildren<TileSettings>().walkable) {
             neighbors.Add(map[pos + new Vector2Int(1, 0)]);

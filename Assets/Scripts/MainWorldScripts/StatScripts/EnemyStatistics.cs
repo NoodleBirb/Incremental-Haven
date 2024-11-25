@@ -3,13 +3,19 @@ using System.Linq;
 using UnityEngine;
 using Defective.JSON;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
 public class EnemyStatistics : MonoBehaviour {
     private Dictionary<string, float> stats;
+    private List<string> moveNames;
     public string enemyName = "test_enemy";
 
 
     void Start() {
+        SetEnemyStatsandMoves();
+        
+    }
+    void SetEnemyStatsandMoves() {
         JSONObject enemyInfo = new(Resources.Load<TextAsset>("Enemies/" + enemyName).text);
         stats = new()
         {
@@ -27,6 +33,12 @@ public class EnemyStatistics : MonoBehaviour {
             stats[val] = enemyInfo["stats"][i].floatValue;
             i++;
         }
+        var moveInfo = enemyInfo["moves"];
+        moveNames = new();
+        foreach (JSONObject move in moveInfo.list) {
+            moveNames.Add(move.stringValue);
+        }
+        
     }
 
      public void BumpedIntoPlayer() {
@@ -39,5 +51,6 @@ public class EnemyStatistics : MonoBehaviour {
         PlayerPrefs.SetFloat("elemental_affinity_enemy", stats["elemental_affinity"]);
         PlayerPrefs.SetString("enemy_name", enemyName);
         SceneManager.LoadScene("CombatZone");
+
      }
 }

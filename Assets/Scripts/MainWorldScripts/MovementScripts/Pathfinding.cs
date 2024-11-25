@@ -27,6 +27,8 @@ public class Pathfinding : MonoBehaviour
     // GameObject must be a Tile.
     public static List<GameObject> GetAStarPath(GameObject startTile, GameObject goalTile) {
 
+        
+
         List<GameObject> openList = new();
         List<GameObject> closedList = new();
 
@@ -59,7 +61,6 @@ public class Pathfinding : MonoBehaviour
             if (currentTile == goalTile) {
                 return GetActualPath(nodeDict[goalTile]);
             }
-
             // Check every neighbor of the currentTile to see if they can find a good path.
             foreach (GameObject neighbor in currentTile.GetComponent<BasicTile>().neighbors) {
                 if (closedList.Contains(neighbor)) continue;

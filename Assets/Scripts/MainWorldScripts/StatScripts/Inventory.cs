@@ -32,7 +32,7 @@ public class Inventory : MonoBehaviour
         TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
         Item item = LoadItemFromJson(stoneAxe.text);
 
-        if (inventoryList.Count == 0) {
+        if (inventoryList == null || inventoryList.Count == 0) {
 
             inventoryList = new() // eventually will be initialized with stuff from the saving system.
             {
@@ -157,7 +157,6 @@ public class Inventory : MonoBehaviour
             var stats = obj["stats"];
             foreach (string val in stats.keys) {
                 statsDict[val] = obj["stats"][i].floatValue;
-                Debug.Log(obj["stats"][i].floatValue);
                 i++;
             }
         } else {
@@ -169,7 +168,6 @@ public class Inventory : MonoBehaviour
         i = 0;
         foreach (string str in functions.keys) {
             specificFunctionDict[str] = obj["specific_functions"][i].boolValue;
-            Debug.Log(obj["specific_functions"][i].boolValue);
             i++;
         }
 

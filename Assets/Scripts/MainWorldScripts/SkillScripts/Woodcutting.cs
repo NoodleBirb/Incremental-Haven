@@ -36,9 +36,6 @@ public class Woodcutting : ISkillInterface {
         nextEXPThreshold += nextEXPThreshold * (float)Math.Pow(2, 0.1);
         Debug.Log(nextEXPThreshold);
     }
-    void UpdateStats() {
-        
-    }
 
     public Dictionary<string, float> GetStats() {
         Dictionary<string, float> stats = new();

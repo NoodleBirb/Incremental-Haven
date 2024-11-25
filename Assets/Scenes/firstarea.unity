@@ -13279,12 +13279,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollPosition: {x: 0, y: 0}
-  windowRect:
-    serializedVersion: 2
-    x: 172
-    y: 236
-    width: 200
-    height: 100
   openInventoryRect:
     serializedVersion: 2
     x: 0

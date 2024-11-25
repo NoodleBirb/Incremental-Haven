@@ -8,11 +8,9 @@ public class RandomEnemyMovement : MonoBehaviour {
     Dictionary<Vector2Int, GameObject> map;
     bool readyToMove;
     readonly int speed = 5;
-    GameObject Player;
     
 
     void Start() {
-        Player = GameObject.Find("Player");
         technicalPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         readyToMove = false;
         if (StoreTileMap.isMapInitialized) {
@@ -24,13 +22,13 @@ public class RandomEnemyMovement : MonoBehaviour {
     }
 
     void ReadyMovement () {
-        map = GameObject.Find("Game Map").GetComponent<StoreTileMap>().map;
+        map = StoreTileMap.map;
         readyToMove = true;
     }
 
     void Update() {
         if (!Inventory.showInventory) { 
-            Vector2Int playerTechnicalPos = Player.GetComponent<PlayerMovement>().GetTechnicalPos();
+            Vector2Int playerTechnicalPos = GameObject.Find("Player").GetComponent<PlayerMovement>().GetTechnicalPos();
             if (technicalPos.x == playerTechnicalPos.x && technicalPos.y == playerTechnicalPos.y) {
                 GetComponent<EnemyStatistics>().BumpedIntoPlayer();
             }
