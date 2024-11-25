@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Equipment : MonoBehaviour{
 
-    private Item weaponSlot;
+    private static Item weaponSlot;
     Inventory inventory;
     PlayerStatistics playerStats;
     
     void Start() {
-        weaponSlot = null;
+        weaponSlot ??= null;
         inventory = GetComponent<Inventory>();
         playerStats = GetComponent<PlayerStatistics>();
     }
@@ -18,7 +18,7 @@ public class Equipment : MonoBehaviour{
         if (Inventory.showInventory && !inventory.shifting && !inventory.stillNotCloseEnough) {
             
             if (weaponSlot != null && GUI.Button(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), weaponSlot.GetName())) {
-                inventory.AddItem (weaponSlot);
+                Inventory.AddItem (weaponSlot);
                 weaponSlot = null;
                 playerStats.UpdateStats();
             } else if (weaponSlot == null) {

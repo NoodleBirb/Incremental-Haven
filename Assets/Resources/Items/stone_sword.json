@@ -1,18 +1,17 @@
 {
-    "name": "stone_axe",
-    "id": 1,
+    "name": "stone_sword",
+    "id": 2,
     "equippable": true,
     "stats": {
-        "strength": 5,
-        "speed": 0,
+        "strength": 10,
+        "speed": 3,
         "mana": 0,
-        "resistance": 0,
-        "defence": 0,
+        "resistance": 2,
+        "defence": 3,
         "elemental_defence": 0,
         "elemental_affinity": 0
     },
     "specific_functions": {
-        "is_axe": true,
         "weapon_slot": true,
         "one_handed": true
     }

@@ -7,6 +7,14 @@
             "specific_functions": { 
                 "is_attack": true
             }
+        },
+        "slash": {
+            "power": 10,
+            "mana_cost": 0,
+            "element": "neutral",
+            "specific_functions": {
+                "one_handed": true
+            }
         }
     }
 }

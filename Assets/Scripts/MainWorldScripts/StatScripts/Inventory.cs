@@ -174,8 +174,11 @@ public class Inventory : MonoBehaviour
         return new Item(obj["name"].stringValue, obj["id"].intValue, obj["equippable"].boolValue, statsDict, specificFunctionDict);
     }
 
-    public void AddItem(Item newItem) {
+    public static void AddItem(Item newItem) {
         inventoryList.Add(newItem);
+    }
+    public static void AddItem(string json) {
+        inventoryList.Add(LoadItemFromJson(json));
     }
 
 

@@ -12,7 +12,7 @@ public class Skills : MonoBehaviour
     public Vector2 scrollPosition = Vector2.zero;
     public Rect windowRect = new(Screen.width / 2, Screen.height / 2, 200, 100);
     public Rect skillListRect;
-    public ISkillInterface currentSkill;
+    public ISkillInterface currentElementalSkill;
     public Dictionary<string, float> stats;
     public static event Action OnSkillsInitialized;
     public static bool isSkillsInitialized = false;
@@ -22,8 +22,8 @@ public class Skills : MonoBehaviour
         if (skillList.Count == 0) {
             FillSkillsList();
         }
-        currentSkill = skillList["Woodcutting"];
-        stats = currentSkill.GetStats();
+        currentElementalSkill = skillList["Woodcutting"];
+        stats = currentElementalSkill.GetStats();
         isSkillsInitialized = true;
         OnSkillsInitialized?.Invoke();
     }
