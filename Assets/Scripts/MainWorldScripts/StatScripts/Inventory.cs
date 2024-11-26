@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Defective.JSON;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
@@ -19,12 +20,15 @@ public class Inventory : MonoBehaviour
     public static event Action OnInventoryInitialized;
     public static bool isInventoryInitialized = false;
     public static List<Item> inventoryList;
+    float startTime;
+    Vector3 intitialPos;
 
-    void Start()
-    {
+    void Start() {
+        startTime = Time.time;
         shifting = false;
         player = GameObject.Find("player model");
         mainCamera = GameObject.Find("Main Camera");
+        intitialPos = mainCamera.transform.position;
         stillNotCloseEnough = false;
         showInventory = false;
         openInventoryRect = new(Screen.width - 200, Screen.height - 50, 100, 50);
@@ -48,6 +52,9 @@ public class Inventory : MonoBehaviour
         if (!showInventory && GUI.Button(openInventoryRect, "Inventory")) {
             showInventory = true;
             stillNotCloseEnough = true;
+            PlayerMovement.openGUI = false;
+            startTime = Time.time;
+            intitialPos = mainCamera.transform.position;
         }
         if (showInventory && !shifting && !stillNotCloseEnough) {
             int buttonWidth = (Screen.width / 2 - 60) / 3;
@@ -87,7 +94,6 @@ public class Inventory : MonoBehaviour
                     itemBoxXPos = 0;
                 }
                 if (inventoryList[i].IsEquippable() && GUI.Button(new(itemBoxXPos, itemBoxYPos, itemBoxWidth, 30), inventoryList[i].GetName())) {
-                    Debug.Log("I was equipped!");
                     Equipment equipmentInfo = GetComponent<Equipment>();
                     Item previouslyEquippedItem = equipmentInfo.SwapWeapon(inventoryList[i]);
                     if (previouslyEquippedItem != null) {
@@ -116,6 +122,7 @@ public class Inventory : MonoBehaviour
     }
 
     IEnumerator ZoomIntoPlayer() {
+
         if(Vector2.Distance(new(mainCamera.transform.position.x, mainCamera.transform.position.z), new(player.transform.position.x, player.transform.position.z)) <= 2f) {
             if (mainCamera.transform.position.y >= 1.5) {
                 mainCamera.transform.position = new (mainCamera.transform.position.x, mainCamera.transform.position.y - 5f * Time.deltaTime, mainCamera.transform.position.z);
@@ -126,7 +133,7 @@ public class Inventory : MonoBehaviour
             }
         }
         else {
-            mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, new(player.transform.position.x, 1.5f, player.transform.position.z),  5f * Time.deltaTime);
+            mainCamera.transform.position = Vector3.Lerp(intitialPos, new(player.transform.position.x, 1.5f, player.transform.position.z), Time.time - startTime);
             mainCamera.transform.LookAt(player.transform);
             yield return new WaitForSeconds(.1f);
         }

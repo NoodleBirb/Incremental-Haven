@@ -34,7 +34,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
             if (!isCut && Player.GetComponent<Equipment>().GetWeaponSlot() != null && Player.GetComponent<Equipment>().GetWeaponSlot().GetSpecificFunctions()["is_axe"]) {
                 treeCutTime = true;
             }
-            Player.GetComponent<PlayerMovement>().openGUI = false;
+            PlayerMovement.openGUI = false;
         }
     }
 

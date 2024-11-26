@@ -35,5 +35,8 @@
             "level_2": 3,
             "level_3": 4
         }
+    },
+    "moves": {
+        "level_1": "tree_poke"
     }
 }

@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     bool readyToMove;
     static Vector2Int technicalPos; // arbitrary numbers that are most definitely impossible to reach
     public float speed;
-    public bool openGUI;
+    public static bool openGUI;
     GameObject guiTile = null;
     Vector2 clickPos;
     Vector2 guiPos;
@@ -29,7 +29,6 @@ public class PlayerMovement : MonoBehaviour
             StoreTileMap.OnMapInitialized += PlayerMovementInitialized;
         }
         if (technicalPos == new Vector2Int(0, 0)) {
-            Debug.Log("i ran");
             technicalPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         } else {
             StartCoroutine(WaitForTransform(transform, () => {

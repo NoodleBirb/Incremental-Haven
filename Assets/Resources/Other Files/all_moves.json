@@ -15,6 +15,14 @@
             "specific_functions": {
                 "one_handed": true
             }
+        },
+        "tree_poke": {
+            "power": 7,
+            "mana_cost": 2,
+            "element": "tree",
+            "specific_functions": {
+                
+            }
         }
     }
 }

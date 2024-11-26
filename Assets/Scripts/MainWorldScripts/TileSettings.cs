@@ -36,7 +36,7 @@ public class TileSettings : MonoBehaviour
             player.GetComponent<PlayerMovement>().BeginMovement(gameObject);
 
             
-            player.GetComponent<PlayerMovement>().openGUI = false;
+            PlayerMovement.openGUI = false;
         }
         if (heldObject != null) {
             InteractableObject interactable = heldObject.GetComponent<InteractableObject>();

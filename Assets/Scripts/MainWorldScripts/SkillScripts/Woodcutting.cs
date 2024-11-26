@@ -33,6 +33,7 @@ public class Woodcutting : ISkillInterface {
     }
     void LevelUp() {
         woodCuttingLevel += 1;
+        woodcuttingEXP -= nextEXPThreshold;
         nextEXPThreshold += nextEXPThreshold * (float)Math.Pow(2, 0.1);
         Debug.Log(nextEXPThreshold);
     }

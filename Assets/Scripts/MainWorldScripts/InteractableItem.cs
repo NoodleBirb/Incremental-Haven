@@ -1,5 +1,6 @@
 
 
+using UnityEditor;
 using UnityEngine;
 
 public class InteractableItem : MonoBehaviour, InteractableObject  {
@@ -12,6 +13,7 @@ public class InteractableItem : MonoBehaviour, InteractableObject  {
         pickingUpItem = false;
         jsonDATA = Resources.Load<TextAsset>("Items/" + itemName).text;
         Player = GameObject.Find("Player");
+        Instantiate (Resources.Load<GameObject>("ItemModels/" + itemName), gameObject.transform);
     }
     void Update() {
         if (pickingUpItem && Player.GetComponent<PlayerMovement>().movementPath.Count == 0) {
@@ -26,7 +28,7 @@ public class InteractableItem : MonoBehaviour, InteractableObject  {
                 Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
             }
             pickingUpItem = true;
-            Player.GetComponent<PlayerMovement>().openGUI = false;
+            PlayerMovement.openGUI = false;
         }
     }
 
