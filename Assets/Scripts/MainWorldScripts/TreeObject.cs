@@ -56,7 +56,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
     }
 
     public void InteractWith() {
-        if (!isCut && Player.GetComponent<Equipment>().GetWeaponSlot() != null && Player.GetComponent<Equipment>().GetWeaponSlot().GetSpecificFunctions()["is_axe"]) {
+        if (!isCut && Player.GetComponent<Equipment>().GetWeaponSlot() != null && Player.GetComponent<Equipment>().GetWeaponSlot().GetSpecificFunctions().ContainsKey("is_axe"))  {
             treeCutTime = true;
         }
     }
