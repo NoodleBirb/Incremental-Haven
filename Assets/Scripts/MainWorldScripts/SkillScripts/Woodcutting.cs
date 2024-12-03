@@ -40,7 +40,7 @@ public class Woodcutting : ISkillInterface {
 
     public Dictionary<string, float> GetStats() {
         Dictionary<string, float> stats = new();
-        JSONObject statData = new(Resources.Load<TextAsset>("Skills/woodcutting_stats").text);
+        JSONObject statData = new(Resources.Load<TextAsset>("Skills/Woodcutting").text);
         int i = 0;
         foreach (string str in statData["stats"].keys) {
             stats.Add(str, statData["stats"][str][woodCuttingLevel - 1].floatValue);
@@ -48,5 +48,8 @@ public class Woodcutting : ISkillInterface {
         }
         
         return stats; 
+    }
+    public int GetLevel() {
+        return woodCuttingLevel;
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Defective.JSON;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
@@ -19,7 +20,8 @@ public class PlayerStatistics : MonoBehaviour {
             ["resistance"] = 1f,
             ["defence"] = 1f,
             ["elemental_defence"] = 1f,
-            ["elemental_affinity"] = 1f
+            ["elemental_affinity"] = 1f,
+            ["HP"] = 10f
         };
         if (Inventory.isInventoryInitialized && Skills.isSkillsInitialized) {
             TryUpdateStats();
@@ -53,7 +55,8 @@ public class PlayerStatistics : MonoBehaviour {
             ["resistance"] = 1f,
             ["defence"] = 1f,
             ["elemental_defence"] = 1f,
-            ["elemental_affinity"] = 1f
+            ["elemental_affinity"] = 1f,
+            ["HP"] = totalStats["HP"] + (Skills.playerIncrementality / 6) + 1
         };
         List<Item> equippedItems = new()
         {
@@ -61,7 +64,7 @@ public class PlayerStatistics : MonoBehaviour {
         };
         foreach (Item item in equippedItems) {
             if (item != null) {
-                foreach(string key in totalStats.Keys.ToList<string>()) {
+                foreach(string key in item.GetStats().Keys.ToList<string>()) {
                     totalStats[key] += item.GetStats()[key];
                 }
             }

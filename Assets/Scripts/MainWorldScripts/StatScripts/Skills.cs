@@ -17,12 +17,14 @@ public class Skills : MonoBehaviour
     public Dictionary<string, float> stats;
     public static event Action OnSkillsInitialized;
     public static bool isSkillsInitialized = false;
+    public static float playerIncrementality;
     void Start()
     {
         skillListRect = new(Screen.width - 100, Screen.height - 50, 100, 50);
         if (skillList.Count == 0) {
             FillSkillsList();
         }
+
         currentElementalSkill = skillList["Woodcutting"];
         stats = currentElementalSkill.GetStats();
         isSkillsInitialized = true;
@@ -62,5 +64,12 @@ public class Skills : MonoBehaviour
     void FillSkillsList() {
         skillList.Add("Woodcutting", new Woodcutting());
         skillList.Add("One Handed Weapon", new OneHandedCombat());
+    }
+    public static void UpdateIncrementality() {
+        playerIncrementality = 0;
+        foreach(ISkillInterface skill in skillList.Values) {
+            playerIncrementality += skill.GetLevel();
+        }
+        playerIncrementality /= skillList.Count;
     }
 }

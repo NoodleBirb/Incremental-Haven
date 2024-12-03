@@ -1,9 +1,11 @@
 
 using System.Collections.Generic;
+using UnityEditor;
 
 public class OneHandedCombat : ISkillInterface
 {
     float oneHandedCombatEXP;
+    int oneHandedCombatLevel;
     public float GetEXP() {
         return oneHandedCombatEXP;
     }
@@ -27,4 +29,9 @@ public class OneHandedCombat : ISkillInterface
     public void IncreaseEXP(float increase) {
         oneHandedCombatEXP += increase;
     }
+
+    public int GetLevel() {
+        return oneHandedCombatLevel;
+    }
+
 }

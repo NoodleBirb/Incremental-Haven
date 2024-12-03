@@ -7,5 +7,6 @@ public interface ISkillInterface {
     float GetEXP();
     void IncreaseEXP(float increase);
     string GetName();
+    int GetLevel();
     Dictionary<string, float> GetStats();
 }

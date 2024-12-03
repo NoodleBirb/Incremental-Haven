@@ -21,7 +21,7 @@
             "mana_cost": 2,
             "element": "tree",
             "specific_functions": {
-                
+                "is_attack": true
             }
         }
     }
