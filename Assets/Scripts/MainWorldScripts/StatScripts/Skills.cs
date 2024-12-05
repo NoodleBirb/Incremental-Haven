@@ -27,6 +27,7 @@ public class Skills : MonoBehaviour
 
         currentElementalSkill = skillList["Woodcutting"];
         stats = currentElementalSkill.GetStats();
+        currentWeaponSkill = skillList["One Handed Weapon"];
         isSkillsInitialized = true;
         OnSkillsInitialized?.Invoke();
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TurnDecider : MonoBehaviour {
     public static List<string> turnOrder;
@@ -46,6 +47,15 @@ public class TurnDecider : MonoBehaviour {
         } else {
             FillTurnOrder();
         }
+    }
+
+    public static void NextTurn() {
+        if (EnemyStatistics.totalCurrentHP[0] <= 0) {
+            SceneManager.LoadScene("firstarea");
+        } else if (PlayerStatistics.currentHP <= 0) {
+            SceneManager.LoadScene("firstarea");
+        }
+        turnOrder.RemoveAt(0);
     }
 
 

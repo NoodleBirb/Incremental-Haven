@@ -11,7 +11,7 @@
         "slash": {
             "power": 10,
             "mana_cost": 0,
-            "element": "neutral",
+            "element": "physical",
             "specific_functions": {
                 "one_handed": true
             }

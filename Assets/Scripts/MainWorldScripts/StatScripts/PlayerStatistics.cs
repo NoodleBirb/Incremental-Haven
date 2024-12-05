@@ -10,6 +10,8 @@ public class PlayerStatistics : MonoBehaviour {
     private Inventory inventory;
     private Skills skills;
     bool playerStatsInitialized = false;
+    public static float currentHP;
+    public static float currentMana;
 
     void Start() {
         totalStats = new()
@@ -72,6 +74,8 @@ public class PlayerStatistics : MonoBehaviour {
         foreach (string key in skills.stats.Keys) {
             totalStats[key] += skills.stats[key];
         }
+        currentHP = totalStats["HP"];
+        currentMana = totalStats["mana"];
         playerStatsInitialized = true;
     }
      void OnGUI() {
@@ -91,4 +95,5 @@ public class PlayerStatistics : MonoBehaviour {
             GUI.Box(new(startPos + 2*bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental Affinity: " + totalStats["elemental_affinity"]);
         }
      }
+
 }

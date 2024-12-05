@@ -7,7 +7,8 @@
         "resistance": 2,
         "defence": 2,
         "elemental_defence": 2,
-        "elemental_affinity": 2
+        "elemental_affinity": 2,
+        "HP": 50 
     },
     "moves": [
         "noodle_punch"
