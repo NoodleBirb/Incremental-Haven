@@ -28,6 +28,7 @@ public class EnemyTurn : MonoBehaviour {
             } else {
                 PlayerStatistics.currentHP -= pickedMove.GetPower() * EnemyStatistics.allEnemyStats[0]["elemental_affinity"] / PlayerStatistics.totalStats["elemental_defence"];
             }
+            Debug.Log("Enemy used move: " + pickedMove.GetName() + " which had: " + pickedMove.GetPower() + " power~!");
             TurnDecider.NextTurn();
         }
     }

@@ -10,7 +10,7 @@ public class Skills : MonoBehaviour
     public static Dictionary<string, ISkillInterface> skillList = new();
     // The position on of the scrolling viewport
     public Vector2 scrollPosition = Vector2.zero;
-    public Rect windowRect = new(Screen.width / 2, Screen.height / 2, 200, 100);
+    public Rect windowRect = new(Screen.width / 2, Screen.height / 2, 249, 200);
     public Rect skillListRect;
     public static ISkillInterface currentElementalSkill;
     public static ISkillInterface currentWeaponSkill;
@@ -47,12 +47,12 @@ public class Skills : MonoBehaviour
     }
 
     void SkillWindow(int windowID) {
-        scrollPosition = GUI.BeginScrollView(new Rect(0, 20, 200, 80), scrollPosition, new Rect(0, 0, 200, 200));
+        scrollPosition = GUI.BeginScrollView(new Rect(0, 20, 250, 250), scrollPosition, new Rect(0, 0, 250, 400));
         // List the skills. Coordinates begin in the corner of the ScrollView.
         int i = 0;
         int height = 50;
         foreach (ISkillInterface skill in skillList.Values) {
-            GUI.Box(new Rect(0, height * i, 200, height),  skill.GetName() + " | " + skill.GetEXP());
+            GUI.Box(new Rect(0, height * i, 200, height),  skill.GetName() + " | " + skill.GetEXP() + " | " + skill.GetLevel());
             i++;
         }
 
@@ -64,6 +64,7 @@ public class Skills : MonoBehaviour
 
     void FillSkillsList() {
         skillList.Add("Woodcutting", new Woodcutting());
+        skillList.Add("Fishing", new Fishing());
         skillList.Add("One Handed Weapon", new OneHandedCombat());
     }
     public static void UpdateIncrementality() {

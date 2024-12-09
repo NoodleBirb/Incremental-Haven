@@ -1,6 +1,6 @@
 {
     "moves": {
-        "noodle_punch": {
+        "Noodle Punch": {
             "power": 5,
             "mana_cost": 3,
             "element": "godliness",
@@ -8,7 +8,7 @@
                 "is_attack": true
             }
         },
-        "slash": {
+        "Slash": {
             "power": 10,
             "mana_cost": 0,
             "element": "physical",
@@ -16,10 +16,18 @@
                 "one_handed": true
             }
         },
-        "tree_poke": {
+        "Tree Poke": {
             "power": 7,
             "mana_cost": 2,
             "element": "tree",
+            "specific_functions": {
+                "is_attack": true
+            }
+        },
+        "Bubble": {
+            "power": 10,
+            "mana_cost": 3,
+            "element": "fish",
             "specific_functions": {
                 "is_attack": true
             }

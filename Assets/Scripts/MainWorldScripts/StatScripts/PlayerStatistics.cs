@@ -6,10 +6,10 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
-    private Equipment equipment; 
-    private Inventory inventory;
-    private Skills skills;
-    bool playerStatsInitialized = false;
+    private static Equipment equipment; 
+    private static Inventory inventory;
+    private static Skills skills;
+    static bool playerStatsInitialized = false;
     public static float currentHP;
     public static float currentMana;
 
@@ -48,7 +48,7 @@ public class PlayerStatistics : MonoBehaviour {
         }
     }
 
-    public void UpdateStats() {
+    public static void UpdateStats() {
         totalStats = new()
         {
             ["strength"] = 1f,

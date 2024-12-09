@@ -20,7 +20,7 @@ public class Equipment : MonoBehaviour{
             if (weaponSlot != null && GUI.Button(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), weaponSlot.GetName())) {
                 Inventory.AddItem (weaponSlot);
                 weaponSlot = null;
-                playerStats.UpdateStats();
+                PlayerStatistics.UpdateStats();
             } else if (weaponSlot == null) {
                 GUI.Box(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), "");
             }

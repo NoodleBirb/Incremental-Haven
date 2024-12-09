@@ -50,4 +50,7 @@ public class OneHandedCombat : ISkillInterface
         nextEXPThreshold += nextEXPThreshold * (float)Math.Pow(2, 0.1);
         Debug.Log(nextEXPThreshold);
     }
+    public bool IsElementalSkill() {
+        return false;
+    }
 }

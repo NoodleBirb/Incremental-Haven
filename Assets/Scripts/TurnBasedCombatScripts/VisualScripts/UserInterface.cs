@@ -13,6 +13,7 @@ public class UserInterface : MonoBehaviour
     Rect runRect;
     Rect playerHealthRect;
     Rect enemyHealthRect;
+    Rect playerManaRect;
     bool openElementalSkill;
     bool openWeaponSkill;
     bool openInventory;
@@ -35,6 +36,7 @@ public class UserInterface : MonoBehaviour
 
         playerHealthRect = new(40f, Screen.height - 40f, rectWidth * 3 / 4, 30f);
         enemyHealthRect = new(Screen.width - 3 * rectWidth / 4 - 30, 40f, 3 * rectWidth / 4, 30f);
+        playerManaRect = new(40f, Screen.height - 80f, rectWidth / 2, 30f);
 
 
         FillMoveLists();
@@ -46,6 +48,7 @@ public class UserInterface : MonoBehaviour
 
         GUI.Box (playerHealthRect, PlayerStatistics.currentHP + "/" + PlayerStatistics.totalStats["HP"]);
         GUI.Box (enemyHealthRect, EnemyStatistics.totalCurrentHP[0] + "/" + EnemyStatistics.allEnemyStats[0]["HP"]);
+        GUI.Box (playerManaRect, PlayerStatistics.currentMana + "/" + PlayerStatistics.totalStats["mana"]);
 
         if (TurnDecider.turnOrder[0] == "player" && !InMenu()) {
             if (GUI.Button(elementalSkillRect, "Elemental Skill")) {
@@ -61,6 +64,7 @@ public class UserInterface : MonoBehaviour
             }
             if (GUI.Button(swapSkillRect, "Change Skill")) {
                 Debug.Log("Open change skill menu");
+                openSwapSkill = true;
             }
             if (GUI.Button(runRect, "Run")) {
                 SceneManager.LoadScene("firstarea");
@@ -115,7 +119,21 @@ public class UserInterface : MonoBehaviour
 
         }
         if (openSwapSkill) {
-
+            float rectXPos = Screen.width / 2 + 20;
+            float rectYPos = Screen.height / 2;
+            float rectHeight = 40f;
+            float rectWidth = Screen.width / 2 - 40;
+            int i = 0;
+            foreach (ISkillInterface skill in Skills.skillList.Values) {
+                if (skill.IsElementalSkill() && GUI.Button(new(rectXPos, rectYPos + rectHeight * i, rectWidth, rectHeight), skill.GetName())) {
+                    Skills.currentElementalSkill = skill;
+                    SetNewElementalSkills();
+                    PlayerStatistics.UpdateStats();
+                    openSwapSkill = false;
+                    TurnDecider.NextTurn();
+                }
+                i++;
+            }
         }
         
     }
@@ -125,6 +143,10 @@ public class UserInterface : MonoBehaviour
         weaponSkills = ParseMoveNames.GetMoveList(ParseMoveNames.GetMoveNames(Skills.currentWeaponSkill));
 
     }
+
+    void SetNewElementalSkills() {
+        elementalSkills = ParseMoveNames.GetMoveList(ParseMoveNames.GetMoveNames(Skills.currentElementalSkill));
+    }
     bool InMenu() {
         return openElementalSkill || openInventory || openSwapSkill || openWeaponSkill;
     }
@@ -133,6 +155,6 @@ public class UserInterface : MonoBehaviour
         EnemyStatistics.totalCurrentHP[0] -= move.GetPower() * PlayerStatistics.totalStats["strength"] / EnemyStatistics.allEnemyStats[0]["defence"]; 
     }
     void ElementalAttackEnemy (Move move) {
-        EnemyStatistics.totalCurrentHP[0] -= move.GetPower() * PlayerStatistics.totalStats["elemental_affinity"] / EnemyStatistics.allEnemyStats[0]["elemental_defense"]; 
+        EnemyStatistics.totalCurrentHP[0] -= move.GetPower() * PlayerStatistics.totalStats["elemental_affinity"] / EnemyStatistics.allEnemyStats[0]["elemental_defence"]; 
     }
 }

@@ -100,7 +100,7 @@ public class Inventory : MonoBehaviour
                         inventoryList.Add(previouslyEquippedItem);
                     }
                     inventoryList.RemoveAt(i);
-                    GetComponent<PlayerStatistics>().UpdateStats();
+                    PlayerStatistics.UpdateStats();
                 } else if (!inventoryList[i].IsEquippable()){
                     GUI.Box(new Rect(new(itemBoxXPos, itemBoxYPos, itemBoxWidth, 30)), inventoryList[i].GetName());
                 }

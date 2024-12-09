@@ -35,6 +35,7 @@ public class Woodcutting : ISkillInterface {
         woodCuttingLevel += 1;
         woodcuttingEXP -= nextEXPThreshold;
         nextEXPThreshold += nextEXPThreshold * (float)Math.Pow(2, 0.1);
+        PlayerStatistics.UpdateStats();
         Debug.Log(nextEXPThreshold);
     }
 
@@ -51,5 +52,8 @@ public class Woodcutting : ISkillInterface {
     }
     public int GetLevel() {
         return woodCuttingLevel;
+    }
+    public bool IsElementalSkill() {
+        return true;
     }
 }
