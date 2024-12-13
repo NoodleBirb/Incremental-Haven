@@ -50,13 +50,13 @@ public class Item {
         if (!equippable) return 0;
         return stats["resistance"];
     }
-    public float GetDefence() {
+    public float Getdefense() {
         if (!equippable) return 0;
-        return stats["defence"];
+        return stats["defense"];
     }
-    public float GetElementalDefence() {
+    public float GetElementaldefense() {
         if (!equippable) return 0;
-        return stats["elemental_defence"];
+        return stats["elemental_defense"];
     }
     public float GetElementalAffinity() {
         if (!equippable) return 0;

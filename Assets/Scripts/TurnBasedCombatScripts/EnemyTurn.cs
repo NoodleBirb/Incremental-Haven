@@ -24,9 +24,9 @@ public class EnemyTurn : MonoBehaviour {
                 i++;
             }
             if (pickedMove.GetElement() == "physical") {
-                PlayerStatistics.currentHP -= pickedMove.GetPower() * EnemyStatistics.allEnemyStats[0]["strength"] / PlayerStatistics.totalStats["defence"];
+                PlayerStatistics.currentHP -= pickedMove.GetPower() * EnemyStatistics.allEnemyStats[0]["strength"] / PlayerStatistics.totalStats["defense"];
             } else {
-                PlayerStatistics.currentHP -= pickedMove.GetPower() * EnemyStatistics.allEnemyStats[0]["elemental_affinity"] / PlayerStatistics.totalStats["elemental_defence"];
+                PlayerStatistics.currentHP -= pickedMove.GetPower() * EnemyStatistics.allEnemyStats[0]["elemental_affinity"] / PlayerStatistics.totalStats["elemental_defense"];
             }
             Debug.Log("Enemy used move: " + pickedMove.GetName() + " which had: " + pickedMove.GetPower() + " power~!");
             TurnDecider.NextTurn();

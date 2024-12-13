@@ -35,8 +35,8 @@ public class EnemyStatistics : MonoBehaviour {
             ["speed"] = 0f,
             ["mana"] = 0f,
             ["resistance"] = 0f,
-            ["defence"] = 0f,
-            ["elemental_defence"] = 0f,
+            ["defense"] = 0f,
+            ["elemental_defense"] = 0f,
             ["elemental_affinity"] = 0f,
             ["HP"] = 0f
         };

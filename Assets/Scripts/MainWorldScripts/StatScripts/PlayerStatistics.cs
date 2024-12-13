@@ -20,8 +20,8 @@ public class PlayerStatistics : MonoBehaviour {
             ["speed"] = 1f,
             ["mana"] = 1f,
             ["resistance"] = 1f,
-            ["defence"] = 1f,
-            ["elemental_defence"] = 1f,
+            ["defense"] = 1f,
+            ["elemental_defense"] = 1f,
             ["elemental_affinity"] = 1f,
             ["HP"] = 10f
         };
@@ -55,8 +55,8 @@ public class PlayerStatistics : MonoBehaviour {
             ["speed"] = 1f,
             ["mana"] = 1f,
             ["resistance"] = 1f,
-            ["defence"] = 1f,
-            ["elemental_defence"] = 1f,
+            ["defense"] = 1f,
+            ["elemental_defense"] = 1f,
             ["elemental_affinity"] = 1f,
             ["HP"] = totalStats["HP"] + (Skills.playerIncrementality / 6) + 1
         };
@@ -90,8 +90,8 @@ public class PlayerStatistics : MonoBehaviour {
             GUI.Box(new(startPos + 2*topStatBoxWidth, yPos, topStatBoxWidth, 30), "Resistance: " + totalStats["resistance"]);
             GUI.Box(new(startPos + 3*topStatBoxWidth, yPos, topStatBoxWidth, 30), "Mana: " + totalStats["mana"]);
             yPos += 30;
-            GUI.Box(new(startPos, yPos, bottomStatBoxWidth, 30), "Defence: " + totalStats["defence"]);
-            GUI.Box(new(startPos + bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental Defence: " + totalStats["elemental_defence"]);
+            GUI.Box(new(startPos, yPos, bottomStatBoxWidth, 30), "defense: " + totalStats["defense"]);
+            GUI.Box(new(startPos + bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental defense: " + totalStats["elemental_defense"]);
             GUI.Box(new(startPos + 2*bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental Affinity: " + totalStats["elemental_affinity"]);
         }
      }
