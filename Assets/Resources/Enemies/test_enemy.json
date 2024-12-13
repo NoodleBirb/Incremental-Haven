@@ -5,8 +5,8 @@
         "speed": 2,
         "mana": 1337,
         "resistance": 2,
-        "defence": 2,
-        "elemental_defence": 2,
+        "defense": 2,
+        "elemental_defense": 2,
         "elemental_affinity": 2,
         "HP": 50 
     },

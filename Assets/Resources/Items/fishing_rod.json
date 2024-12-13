@@ -7,8 +7,8 @@
         "speed": 0,
         "mana": 1,
         "resistance": 0,
-        "defence": 0,
-        "elemental_defence": 0,
+        "defense": 0,
+        "elemental_defense": 0,
         "elemental_affinity": 2
     },
     "specific_functions": {

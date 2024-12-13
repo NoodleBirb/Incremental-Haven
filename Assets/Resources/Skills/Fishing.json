@@ -20,12 +20,12 @@
             "level_2": 2,
             "level_3": 2
         },
-        "defence": {
+        "defense": {
             "level_1": 2,
             "level_2": 3,
             "level_3": 4
         },
-        "elemental_defence": {
+        "elemental_defense": {
             "level_1": 3,
             "level_2": 4,
             "level_3": 6
