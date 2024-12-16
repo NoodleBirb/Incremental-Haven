@@ -1,1 +1,1 @@
-"# Incremental Haven" 
+"# Incremental Haven" is a video game.
