@@ -6,17 +6,16 @@ public class Equipment : MonoBehaviour{
 
     private static Item weaponSlot;
     Inventory inventory;
-    PlayerStatistics playerStats;
     
     void Start() {
         weaponSlot ??= null;
         inventory = GetComponent<Inventory>();
-        playerStats = GetComponent<PlayerStatistics>();
     }
 
     void OnGUI() {
-        if (Inventory.showInventory && !inventory.shifting && !inventory.stillNotCloseEnough) {
+        if (Inventory.showInventory && !Inventory.shifting && !inventory.stillNotCloseEnough) {
             
+            // If the player clicks on the weapon currently equipped, send weapon to inventory
             if (weaponSlot != null && GUI.Button(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), weaponSlot.GetName())) {
                 Inventory.AddItem (weaponSlot);
                 weaponSlot = null;
@@ -27,12 +26,12 @@ public class Equipment : MonoBehaviour{
         }
     }
 
-    public Item SwapWeapon(Item newWeapon) {
+    public static Item SwapWeapon(Item newWeapon) {
         Item tempItem = weaponSlot;
         weaponSlot = newWeapon;
         return tempItem;
     }
-    public Item GetWeaponSlot() {
+    public static Item GetWeaponSlot() {
         return weaponSlot;
     }
 

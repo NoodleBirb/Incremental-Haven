@@ -31,7 +31,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
             if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
                 Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
             }
-            if (!isCut && Player.GetComponent<Equipment>().GetWeaponSlot() != null && Player.GetComponent<Equipment>().GetWeaponSlot().GetSpecificFunctions()["is_axe"]) {
+            if (!isCut && Equipment.GetWeaponSlot() != null && Equipment.GetWeaponSlot().GetSpecificFunctions()["is_axe"]) {
                 treeCutTime = true;
             }
             PlayerMovement.openGUI = false;
@@ -56,7 +56,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
     }
 
     public void InteractWith() {
-        if (!isCut && Player.GetComponent<Equipment>().GetWeaponSlot() != null && Player.GetComponent<Equipment>().GetWeaponSlot().GetSpecificFunctions().ContainsKey("is_axe"))  {
+        if (!isCut && Equipment.GetWeaponSlot() != null && Equipment.GetWeaponSlot().GetSpecificFunctions().ContainsKey("is_axe"))  {
             treeCutTime = true;
         }
     }

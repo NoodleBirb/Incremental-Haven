@@ -14,7 +14,7 @@ public class Inventory : MonoBehaviour
     public Vector2 scrollPosition = Vector2.zero;
     public Rect openInventoryRect;
     public bool stillNotCloseEnough;
-    public bool shifting;
+    public static bool shifting;
     GameObject player;
     GameObject mainCamera;
     public static event Action OnInventoryInitialized;
@@ -33,11 +33,9 @@ public class Inventory : MonoBehaviour
         showInventory = false;
         openInventoryRect = new(Screen.width - 200, Screen.height - 50, 100, 50);
 
-        TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
-        Item item = LoadItemFromJson(stoneAxe.text);
-
-        if (inventoryList == null || inventoryList.Count == 0) {
-
+        if ((inventoryList == null || inventoryList.Count == 0) && Equipment.GetWeaponSlot() == null) {
+            TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
+            Item item = LoadItemFromJson(stoneAxe.text);
             inventoryList = new() // eventually will be initialized with stuff from the saving system.
             {
                 // Placeholder for testing
@@ -94,8 +92,7 @@ public class Inventory : MonoBehaviour
                     itemBoxXPos = 0;
                 }
                 if (inventoryList[i].IsEquippable() && GUI.Button(new(itemBoxXPos, itemBoxYPos, itemBoxWidth, 30), inventoryList[i].GetName())) {
-                    Equipment equipmentInfo = GetComponent<Equipment>();
-                    Item previouslyEquippedItem = equipmentInfo.SwapWeapon(inventoryList[i]);
+                    Item previouslyEquippedItem = Equipment.SwapWeapon(inventoryList[i]);
                     if (previouslyEquippedItem != null) {
                         inventoryList.Add(previouslyEquippedItem);
                     }
@@ -139,8 +136,14 @@ public class Inventory : MonoBehaviour
         }
     }
     IEnumerator ShiftCameraToRight() {
-        while (Vector2.Distance(new(mainCamera.transform.position.x, mainCamera.transform.position.z), new(player.transform.position.x, player.transform.position.z)) <= 2.2f) {
-            mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, new(mainCamera.transform.position.x + mainCamera.transform.right.x, mainCamera.transform.position.y, mainCamera.transform.position.z + mainCamera.transform.right.z), .05f * Time.deltaTime);
+        Vector2 camPos = new(mainCamera.transform.position.x, mainCamera.transform.position.z);
+        Vector2 playerPos = new(player.transform.position.x, player.transform.position.z);
+        Vector3 rightConversion = new(mainCamera.transform.position.x + mainCamera.transform.right.x, mainCamera.transform.position.y, mainCamera.transform.position.z + mainCamera.transform.right.z);
+        
+        while (Vector2.Distance(camPos, playerPos) <= 2.2f) {
+            mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, rightConversion, .05f * Time.deltaTime);
+            camPos = new(mainCamera.transform.position.x, mainCamera.transform.position.z);
+            rightConversion = new(mainCamera.transform.position.x + mainCamera.transform.right.x, mainCamera.transform.position.y, mainCamera.transform.position.z + mainCamera.transform.right.z);
             yield return null;
         }
         shifting = false;

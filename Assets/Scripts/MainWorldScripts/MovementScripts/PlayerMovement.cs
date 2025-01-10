@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
             }
             // Checks if a movement path is currently being run through.
             if (movementPath != null && movementPath.Count > 0) {
+                GameObject.Find("player model").transform.LookAt(new Vector3(technicalPos.x + 0.5f, 0, technicalPos.y + 0.5f));
                 transform.position = Vector3.MoveTowards(transform.position, new(technicalPos.x, 0, technicalPos.y), speed * Time.deltaTime);
                 if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) < 0.00001f){
                     ReadyNextMovement();

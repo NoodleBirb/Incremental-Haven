@@ -8,7 +8,6 @@ public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
     private static Equipment equipment; 
     private static Inventory inventory;
-    private static Skills skills;
     static bool playerStatsInitialized = false;
     public static float currentHP;
     public static float currentMana;
@@ -43,7 +42,6 @@ public class PlayerStatistics : MonoBehaviour {
         if (Skills.isSkillsInitialized && Inventory.isInventoryInitialized) {
             equipment = GetComponent<Equipment>();
             inventory = GetComponent<Inventory>();
-            skills = GetComponent<Skills>();
             UpdateStats();
         }
     }
@@ -58,11 +56,11 @@ public class PlayerStatistics : MonoBehaviour {
             ["defense"] = 1f,
             ["elemental_defense"] = 1f,
             ["elemental_affinity"] = 1f,
-            ["HP"] = totalStats["HP"] + (Skills.playerIncrementality / 6) + 1
+            ["HP"] = 10f + (Skills.playerIncrementality * 6) // Update this formula whenever all the skills are added.
         };
         List<Item> equippedItems = new()
         {
-            equipment.GetWeaponSlot()
+            Equipment.GetWeaponSlot()
         };
         foreach (Item item in equippedItems) {
             if (item != null) {
@@ -71,15 +69,16 @@ public class PlayerStatistics : MonoBehaviour {
                 }
             }
         }
-        foreach (string key in skills.stats.Keys) {
-            totalStats[key] += skills.stats[key];
+        Skills.UpdateElementalSkillStats();
+        foreach (string key in Skills.stats.Keys) {
+            totalStats[key] += Skills.stats[key];
         }
         currentHP = totalStats["HP"];
         currentMana = totalStats["mana"];
         playerStatsInitialized = true;
     }
      void OnGUI() {
-        if (playerStatsInitialized && Inventory.showInventory && !inventory.shifting && !inventory.stillNotCloseEnough) {
+        if (playerStatsInitialized && Inventory.showInventory && !Inventory.shifting && !inventory.stillNotCloseEnough) {
             int topStatBoxWidth = Screen.width / 8;
             int bottomStatBoxWidth = Screen.width / 6;
             int startPos = Screen.width / 2;
@@ -90,7 +89,7 @@ public class PlayerStatistics : MonoBehaviour {
             GUI.Box(new(startPos + 2*topStatBoxWidth, yPos, topStatBoxWidth, 30), "Resistance: " + totalStats["resistance"]);
             GUI.Box(new(startPos + 3*topStatBoxWidth, yPos, topStatBoxWidth, 30), "Mana: " + totalStats["mana"]);
             yPos += 30;
-            GUI.Box(new(startPos, yPos, bottomStatBoxWidth, 30), "defense: " + totalStats["defense"]);
+            GUI.Box(new(startPos, yPos, bottomStatBoxWidth, 30), "Defense: " + totalStats["defense"]);
             GUI.Box(new(startPos + bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental defense: " + totalStats["elemental_defense"]);
             GUI.Box(new(startPos + 2*bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental Affinity: " + totalStats["elemental_affinity"]);
         }

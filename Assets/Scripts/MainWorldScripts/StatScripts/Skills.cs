@@ -14,7 +14,7 @@ public class Skills : MonoBehaviour
     public Rect skillListRect;
     public static ISkillInterface currentElementalSkill;
     public static ISkillInterface currentWeaponSkill;
-    public Dictionary<string, float> stats;
+    public static Dictionary<string, float> stats;
     public static event Action OnSkillsInitialized;
     public static bool isSkillsInitialized = false;
     public static float playerIncrementality;
@@ -73,5 +73,8 @@ public class Skills : MonoBehaviour
             playerIncrementality += skill.GetLevel();
         }
         playerIncrementality /= skillList.Count;
+    }
+    public static void UpdateElementalSkillStats() {
+        stats = currentElementalSkill.GetStats();
     }
 }
