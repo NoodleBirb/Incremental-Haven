@@ -18,6 +18,7 @@ public class InteractableItem : MonoBehaviour, InteractableObject  {
     void Update() {
         if (pickingUpItem && Player.GetComponent<PlayerMovement>().movementPath.Count == 0) {
             Inventory.AddItem(jsonDATA);
+            PopupManager.AddPopup("Pickup", "You have picked up " + itemName + "!");
             Destroy(gameObject);
         }
     }

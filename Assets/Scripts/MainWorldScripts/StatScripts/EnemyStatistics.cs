@@ -43,7 +43,6 @@ public class EnemyStatistics : MonoBehaviour {
         var statsInfo = enemyInfo["stats"];
         foreach (string val in statsInfo.keys) {
             stats[val] = statsInfo[val].floatValue;
-            Debug.Log(statsInfo[val].floatValue);
         }
         var moveInfo = enemyInfo["moves"];
         moveNames = new();
