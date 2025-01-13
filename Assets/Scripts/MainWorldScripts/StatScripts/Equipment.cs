@@ -30,6 +30,16 @@ public class Equipment : MonoBehaviour{
             } else if (weaponSlot == null) {
                 GUI.Box(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), "");
             }
+
+            // If the player clicks on the chestplate currently equipped, send chestplate to inventory
+            if (weaponSlot != null && GUI.Button(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), weaponSlot.GetName())) {
+                Inventory.AddItem (weaponSlot);
+                weaponSlot = null;
+                PlayerStatistics.UpdateStats();
+            } else if (weaponSlot == null) {
+                GUI.Box(new(Screen.width / 2 - 200, Screen.height / 2 - 50, 60, 30), "");
+            }
+
         }
     }
 
@@ -44,10 +54,10 @@ public class Equipment : MonoBehaviour{
     public static Item SwapChestplate(Item newChestplate) {
         Item tempItem = chestplateSlot;
         chestplateSlot = newChestplate;
-        return tempItem;; // placeholder
+        return tempItem;
     }
     public static Item GetChestplate() {
-        return chestplateSlot; // placeholder
+        return chestplateSlot; 
     }
     public static Item SwapOffHand(Item newOffHand) {
         Item tempItem = offHandSlot;
@@ -55,37 +65,47 @@ public class Equipment : MonoBehaviour{
         return tempItem;
     }
     public static Item GetOffHand() {
-        return offHandSlot; // placeholder
+        return offHandSlot; 
     }
     public static Item SwapBoots(Item newBoots) {
-        return null; // placeholder
+        Item tempItem = bootSlot;
+        bootSlot = newBoots;
+        return tempItem;
     }
     public static Item GetBoots() {
-        return bootSlot; // placeholder
+        return bootSlot; 
     }
     public static Item SwapLeggings(Item newLeggings) {
-        return null; // placeholder
+        Item tempItem = leggingsSlot;
+        leggingsSlot = newLeggings;
+        return tempItem;
     }
     public static Item GetLeggings() {
-        return leggingsSlot; // placeholder
+        return leggingsSlot; 
     }
     public static Item SwapHeadPiece(Item newHeadPiece) {
-        return null; // placeholder
+        Item tempItem = headPieceSlot;
+        headPieceSlot = newHeadPiece;
+        return tempItem;
     }
     public static Item GetHeadPiece() {
-        return headPieceSlot; // placeholder
+        return headPieceSlot; 
     }
     public static Item SwapNecklace(Item newNecklace) {
-        return null; // placeholder
+        Item tempItem = necklaceSlot;
+        necklaceSlot = newNecklace;
+        return tempItem;
     }
     public static Item GetNecklace() {
-        return necklaceSlot; // placeholder
+        return necklaceSlot; 
     }
     public static Item SwapGloves(Item newGloves) {
-        return null; // placeholder
+        Item tempItem = gloveSlot;
+        gloveSlot = newGloves;
+        return tempItem;
     }
     public static Item GetGloves() {
-        return gloveSlot; // placeholder
+        return gloveSlot; 
     }
 
     

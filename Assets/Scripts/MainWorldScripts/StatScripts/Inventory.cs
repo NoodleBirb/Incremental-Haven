@@ -53,6 +53,7 @@ public class Inventory : MonoBehaviour
             PlayerMovement.openGUI = false;
             startTime = Time.time;
             intitialPos = mainCamera.transform.position;
+            player.transform.LookAt(new Vector3(mainCamera.transform.position.x, 0, mainCamera.transform.position.z));
         }
         if (showInventory && !shifting && !stillNotCloseEnough) {
             int buttonWidth = (Screen.width / 2 - 60) / 3;
@@ -123,7 +124,7 @@ public class Inventory : MonoBehaviour
         if(Vector2.Distance(new(mainCamera.transform.position.x, mainCamera.transform.position.z), new(player.transform.position.x, player.transform.position.z)) <= 2f) {
             if (mainCamera.transform.position.y >= 1.5) {
                 mainCamera.transform.position = new (mainCamera.transform.position.x, mainCamera.transform.position.y - 5f * Time.deltaTime, mainCamera.transform.position.z);
-                mainCamera.transform.LookAt(player.transform);
+                mainCamera.transform.LookAt(new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z));
             } else {
                 stillNotCloseEnough = false;
                 shifting = true;
@@ -131,7 +132,7 @@ public class Inventory : MonoBehaviour
         }
         else {
             mainCamera.transform.position = Vector3.Lerp(intitialPos, new(player.transform.position.x, 1.5f, player.transform.position.z), Time.time - startTime);
-            mainCamera.transform.LookAt(player.transform);
+            mainCamera.transform.LookAt(new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z));
             yield return new WaitForSeconds(.1f);
         }
     }
