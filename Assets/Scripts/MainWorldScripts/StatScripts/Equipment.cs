@@ -1,5 +1,6 @@
 
 
+using System;
 using UnityEngine;
 
 public class Equipment : MonoBehaviour{
@@ -12,34 +13,156 @@ public class Equipment : MonoBehaviour{
     private static Item leggingsSlot;
     private static Item gloveSlot;
     private static Item headPieceSlot;
-    Inventory inventory;
+
+    readonly Rect headPieceRect = new(Screen.width / 2 - 100, Screen.height / 2 - 200, 60, 30);
+    readonly Rect chestplateRect = new(Screen.width / 2 - 100, Screen.height / 2 - 100, 60, 30);
+    readonly Rect weaponRect = new(Screen.width / 2 - 100, Screen.height / 2, 60, 30);
+    readonly Rect leggingsRect = new(Screen.width / 2 - 100, Screen.height / 2 + 100, 60, 30);
     
+
+    readonly Rect necklaceRect = new(50, Screen.height / 2 - 155, 60, 30);
+    readonly Rect offHandRect = new(50, Screen.height / 2 - 55, 60, 30);
+    readonly Rect gloveRect = new(50, Screen.height / 2 + 55, 60, 30);
+    readonly Rect bootRect = new(50, Screen.height / 2 + 155, 60, 30);
+
+    private LineRenderer lineRenderer;
+    private Vector3[] positions;
+    Inventory inventory;
+    GameObject player;
+    GameObject head;
+    GameObject chest;
+    GameObject neck;
+    GameObject rightFoot;
+    GameObject rightArm;
+    GameObject leftArm;
+    GameObject leftLeg;
     void Start() {
         weaponSlot ??= null;
         inventory = GetComponent<Inventory>();
+        player = GameObject.Find("player model");
+        head = GameObject.Find("Paper Bag");
+        chest = GameObject.Find("Torso");
+        neck = GameObject.Find("Neck");
+        rightFoot = GameObject.Find("Right Foot");
+        rightArm = GameObject.Find("Right Arm");
+        leftArm = GameObject.Find("Left Arm");
+        leftLeg = GameObject.Find("Left Leg");
+
+        // Get or add the LineRenderer component
+        lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer == null)
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+
+        // Configure the LineRenderer
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.positionCount = 16; // 8 lines = 16 points
+        lineRenderer.useWorldSpace = false;
+        lineRenderer.enabled = false;
+        
     }
 
     void OnGUI() {
         if (Inventory.showInventory && !Inventory.shifting && !inventory.stillNotCloseEnough) {
-            
+            lineRenderer.enabled = true;
             // If the player clicks on the weapon currently equipped, send weapon to inventory
-            if (weaponSlot != null && GUI.Button(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), weaponSlot.GetName())) {
+            if (weaponSlot != null && GUI.Button(weaponRect, weaponSlot.GetName())) {
                 Inventory.AddItem (weaponSlot);
                 weaponSlot = null;
                 PlayerStatistics.UpdateStats();
             } else if (weaponSlot == null) {
-                GUI.Box(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), "");
+                GUI.Box(weaponRect, "");
             }
 
             // If the player clicks on the chestplate currently equipped, send chestplate to inventory
-            if (weaponSlot != null && GUI.Button(new(Screen.width / 2 - 100, Screen.height / 2, 60, 30), weaponSlot.GetName())) {
-                Inventory.AddItem (weaponSlot);
-                weaponSlot = null;
+            if (chestplateSlot != null && GUI.Button(chestplateRect, chestplateSlot.GetName())) {
+                Inventory.AddItem (chestplateSlot);
+                chestplateSlot = null;
                 PlayerStatistics.UpdateStats();
-            } else if (weaponSlot == null) {
-                GUI.Box(new(Screen.width / 2 - 200, Screen.height / 2 - 50, 60, 30), "");
+            } else if (chestplateSlot == null) {
+                GUI.Box(chestplateRect, "");
             }
 
+            // If the player clicks on the offhand currently equipped, send offhand to inventory
+            if (offHandSlot != null && GUI.Button(offHandRect, offHandSlot.GetName())) {
+                Inventory.AddItem (offHandSlot);
+                offHandSlot = null;
+                PlayerStatistics.UpdateStats();
+            } else if (offHandSlot == null) {
+                GUI.Box(offHandRect, "");
+            }
+
+            // If the player clicks on the necklace currently equipped, send necklace to inventory
+            if (necklaceSlot != null && GUI.Button(necklaceRect, chestplateSlot.GetName())) {
+                Inventory.AddItem (necklaceSlot);
+                necklaceSlot = null;
+                PlayerStatistics.UpdateStats();
+            } else if (necklaceSlot == null) {
+                GUI.Box(necklaceRect, "");
+            }
+
+            // If the player clicks on the boot currently equipped, send boot to inventory
+            if (bootSlot != null && GUI.Button(bootRect, chestplateSlot.GetName())) {
+                Inventory.AddItem (bootSlot);
+                bootSlot = null;
+                PlayerStatistics.UpdateStats();
+            } else if (bootSlot == null) {
+                GUI.Box(bootRect, "");
+            }
+
+            // If the player clicks on the leggings currently equipped, send leggings to inventory
+            if (leggingsSlot != null && GUI.Button(leggingsRect, chestplateSlot.GetName())) {
+                Inventory.AddItem (leggingsSlot);
+                leggingsSlot = null;
+                PlayerStatistics.UpdateStats();
+            } else if (leggingsSlot == null) {
+                GUI.Box(leggingsRect, "");
+            }
+
+            // If the player clicks on the gloves currently equipped, send gloves to inventory
+            if (gloveSlot != null && GUI.Button(gloveRect, gloveSlot.GetName())) {
+                Inventory.AddItem (weaponSlot);
+                gloveSlot = null;
+                PlayerStatistics.UpdateStats();
+            } else if (gloveSlot == null) {
+                GUI.Box(gloveRect, "");
+            }
+
+            // If the player clicks on the headpiece currently equipped, send headpiece to inventory
+            if (headPieceSlot != null && GUI.Button(headPieceRect, headPieceSlot.GetName())) {
+                Inventory.AddItem (headPieceSlot);
+                headPieceSlot = null;
+                PlayerStatistics.UpdateStats();
+            } else if (headPieceSlot == null) {
+                GUI.Box(headPieceRect, "");
+            }
+
+        } else {
+            Vector3 rightDir = player.transform.right;
+            Vector3 forwardDir = player.transform.forward;
+            
+            lineRenderer.enabled = false;
+            positions = new Vector3[] {
+                // Headpiece
+                headPieceRect.x player.transform.position - rightDir + new Vector3(0, 2f, 0), Camera.main.WorldToScreenPoint(head.transform.position),
+                // Chest
+                player.transform.position - rightDir + new Vector3(0, 1.5f, 0), Camera.main.WorldToScreenPoint(chest.transform.position),
+                // Weapon
+                player.transform.position + rightDir, Camera.main.WorldToScreenPoint(leftArm.transform.position),
+                // Leggings
+                player.transform.position + rightDir, Camera.main.WorldToScreenPoint(leftLeg.transform.position),
+                // Necklace
+                player.transform.position + rightDir + new Vector3(0, 1.8f, 0), Camera.main.WorldToScreenPoint(neck.transform.position),
+                // Boots
+                player.transform.position - rightDir + new Vector3(0, .1f, 0), Camera.main.WorldToScreenPoint(rightFoot.transform.position),
+                // Off Hand
+                player.transform.position + rightDir + new Vector3(0, 2f, 0), Camera.main.WorldToScreenPoint(rightArm.transform.position),
+                // Gloves
+                player.transform.position + rightDir, Camera.main.WorldToScreenPoint(rightArm.transform.position),
+                
+            };
+            lineRenderer.SetPositions(positions);
         }
     }
 

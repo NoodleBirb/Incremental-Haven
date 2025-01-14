@@ -121,7 +121,7 @@ public class Inventory : MonoBehaviour
 
     IEnumerator ZoomIntoPlayer() {
 
-        if(Vector2.Distance(new(mainCamera.transform.position.x, mainCamera.transform.position.z), new(player.transform.position.x, player.transform.position.z)) <= 2f) {
+        if(Vector2.Distance(new(mainCamera.transform.position.x, mainCamera.transform.position.z), new(player.transform.position.x, player.transform.position.z)) <= 2.4f) {
             if (mainCamera.transform.position.y >= 1.5) {
                 mainCamera.transform.position = new (mainCamera.transform.position.x, mainCamera.transform.position.y - 5f * Time.deltaTime, mainCamera.transform.position.z);
                 mainCamera.transform.LookAt(new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z));
@@ -141,7 +141,7 @@ public class Inventory : MonoBehaviour
         Vector2 playerPos = new(player.transform.position.x, player.transform.position.z);
         Vector3 rightConversion = new(mainCamera.transform.position.x + mainCamera.transform.right.x, mainCamera.transform.position.y, mainCamera.transform.position.z + mainCamera.transform.right.z);
         
-        while (Vector2.Distance(camPos, playerPos) <= 2.2f) {
+        while (Vector2.Distance(camPos, playerPos) <= 2.7f) {
             mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, rightConversion, .05f * Time.deltaTime);
             camPos = new(mainCamera.transform.position.x, mainCamera.transform.position.z);
             rightConversion = new(mainCamera.transform.position.x + mainCamera.transform.right.x, mainCamera.transform.position.y, mainCamera.transform.position.z + mainCamera.transform.right.z);
