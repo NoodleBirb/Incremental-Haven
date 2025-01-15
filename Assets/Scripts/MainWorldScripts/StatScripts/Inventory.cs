@@ -10,8 +10,6 @@ using UnityEngine.UIElements;
 public class Inventory : MonoBehaviour
 {
     public static bool showInventory = false;
-    // The position on of the scrolling viewport
-    public Vector2 scrollPosition = Vector2.zero;
     public Rect openInventoryRect;
     public bool stillNotCloseEnough;
     public static bool shifting;
@@ -102,10 +100,84 @@ public class Inventory : MonoBehaviour
             yield return null;
         }
         shifting = false;
-        GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
+        LoadInventory();
     }
 
+    public static void LoadInventory() {
+        GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
+        Transform content = GameObject.Find("Inventory List").transform;
+        foreach (Transform transform in content) { 
+            Destroy(transform.gameObject);         
+        }   
+        foreach (Item item in inventoryList) {
+            GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"));
+            var button = equipmentItem.GetComponent<UnityEngine.UI.Button>();
+            button.onClick.AddListener(() => EquipItem(item));
+            equipmentItem.transform.SetParent(GameObject.Find("Inventory List").transform);
+            
+        }
+    }
 
+    static void EquipItem(Item item) {
+        Item previouslyEquippedItem = null;
+        if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
+           previouslyEquippedItem = Equipment.SwapWeapon(item);
+        } else if (item.GetSpecificFunctions()["chestplate_slot"] == true) {
+            previouslyEquippedItem = Equipment.SwapChestplate(item);
+        } else if (item.GetSpecificFunctions()["headpiece_slot"] == true) {
+            previouslyEquippedItem = Equipment.SwapHeadPiece(item);
+        } else if (item.GetSpecificFunctions()["offhand_slot"] == true) {
+            previouslyEquippedItem = Equipment.SwapOffHand(item);
+        } else if (item.GetSpecificFunctions()["necklace_slot"] == true) {
+            previouslyEquippedItem = Equipment.SwapNecklace(item);
+        } else if (item.GetSpecificFunctions()["leggings_slot"] == true) {
+            previouslyEquippedItem = Equipment.SwapLeggings(item);
+        } else if (item.GetSpecificFunctions()["gloves_slot"] == true) {
+            previouslyEquippedItem = Equipment.SwapGloves(item);
+        } else if (item.GetSpecificFunctions()["boots_slot"] == true) {
+            previouslyEquippedItem = Equipment.SwapBoots(item);
+        }
+        inventoryList.Remove(item);
+        if (previouslyEquippedItem != null) {
+            inventoryList.Add(previouslyEquippedItem);
+        }
+        LoadInventory();
+    }
+    void EquipChestplate(Item chestplate) {
+        Item previouslyEquippedItem = Equipment.SwapChestplate(chestplate);
+        inventoryList.Remove(chestplate);
+        inventoryList.Add(previouslyEquippedItem);
+    }
+    void EquipLeggings(Item leggings) {
+        Item previouslyEquippedItem = Equipment.SwapLeggings(leggings);
+        inventoryList.Remove(leggings);
+        inventoryList.Add(previouslyEquippedItem);
+    }
+    void EquipBoots(Item boots) {
+        Item previouslyEquippedItem = Equipment.SwapBoots(boots);
+        inventoryList.Remove(boots);
+        inventoryList.Add(previouslyEquippedItem);
+    }
+    void EquipGloves(Item gloves) {
+        Item previouslyEquippedItem = Equipment.SwapGloves(gloves);
+        inventoryList.Remove(gloves);
+        inventoryList.Add(previouslyEquippedItem);
+    }
+    void EquipNecklace(Item necklace) {
+        Item previouslyEquippedItem = Equipment.SwapNecklace(necklace);
+        inventoryList.Remove(necklace);
+        inventoryList.Add(previouslyEquippedItem);
+    }
+    void EquipHeadPiece(Item headPiece) {
+        Item previouslyEquippedItem = Equipment.SwapHeadPiece(headPiece);
+        inventoryList.Remove(headPiece);
+        inventoryList.Add(previouslyEquippedItem);
+    }
+    void EquipOffHand(Item offHand) {
+        Item previouslyEquippedItem = Equipment.SwapOffHand(offHand);
+        inventoryList.Remove(offHand);
+        inventoryList.Add(previouslyEquippedItem);
+    }
 
 
     private static Item LoadItemFromJson(string json)
