@@ -53,6 +53,25 @@ public class Equipment : MonoBehaviour{
         if (lineRenderer == null)
             lineRenderer = gameObject.AddComponent<LineRenderer>();
 
+        positions = new Vector3[] {
+            // Headpiece
+            new(), head.transform.position,
+            // Chest
+            new(), chest.transform.position,
+            // Weapon
+            new(), leftArm.transform.position,
+            // Leggings
+            new(), leftLeg.transform.position,
+            // Necklace
+            new(), neck.transform.position,
+            // Boots
+            new(), rightFoot.transform.position,
+            // Off Hand
+            new(), rightArm.transform.position,
+            // Gloves
+            new(), rightArm.transform.position,      
+        };
+
         // Configure the LineRenderer
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
@@ -61,6 +80,7 @@ public class Equipment : MonoBehaviour{
         lineRenderer.useWorldSpace = false;
         lineRenderer.enabled = false;
         
+        lineRenderer.SetPositions(positions);
     }
 
     void OnGUI() {
@@ -143,9 +163,9 @@ public class Equipment : MonoBehaviour{
             Vector3 forwardDir = player.transform.forward;
             
             lineRenderer.enabled = false;
-            positions = new Vector3[] {
+            /* positions = new Vector3[] {
                 // Headpiece
-                headPieceRect.x player.transform.position - rightDir + new Vector3(0, 2f, 0), Camera.main.WorldToScreenPoint(head.transform.position),
+                player.transform.position - rightDir + new Vector3(0, 2f, 0), Camera.main.WorldToScreenPoint(head.transform.position),
                 // Chest
                 player.transform.position - rightDir + new Vector3(0, 1.5f, 0), Camera.main.WorldToScreenPoint(chest.transform.position),
                 // Weapon
@@ -161,7 +181,7 @@ public class Equipment : MonoBehaviour{
                 // Gloves
                 player.transform.position + rightDir, Camera.main.WorldToScreenPoint(rightArm.transform.position),
                 
-            };
+            }; */
             lineRenderer.SetPositions(positions);
         }
     }
