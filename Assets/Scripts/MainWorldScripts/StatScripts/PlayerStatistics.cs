@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Defective.JSON;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using TMPro;
 
 public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
@@ -77,22 +78,15 @@ public class PlayerStatistics : MonoBehaviour {
         currentMana = totalStats["mana"];
         playerStatsInitialized = true;
     }
-     void OnGUI() {
-        if (playerStatsInitialized && Inventory.showInventory && !Inventory.shifting && !inventory.stillNotCloseEnough) {
-            int topStatBoxWidth = Screen.width / 8;
-            int bottomStatBoxWidth = Screen.width / 6;
-            int startPos = Screen.width / 2;
-            int yPos = Screen.height - 60;
-            GUI.Box(new(startPos, yPos, Screen.width / 2, 60), "");
-            GUI.Box(new(startPos, yPos, topStatBoxWidth, 30), "Strength: " + totalStats["strength"]);
-            GUI.Box(new(startPos + topStatBoxWidth, yPos, topStatBoxWidth, 30), "Speed: " + totalStats["speed"]);
-            GUI.Box(new(startPos + 2*topStatBoxWidth, yPos, topStatBoxWidth, 30), "Resistance: " + totalStats["resistance"]);
-            GUI.Box(new(startPos + 3*topStatBoxWidth, yPos, topStatBoxWidth, 30), "Mana: " + totalStats["mana"]);
-            yPos += 30;
-            GUI.Box(new(startPos, yPos, bottomStatBoxWidth, 30), "Defense: " + totalStats["defense"]);
-            GUI.Box(new(startPos + bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental defense: " + totalStats["elemental_defense"]);
-            GUI.Box(new(startPos + 2*bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental Affinity: " + totalStats["elemental_affinity"]);
-        }
-     }
 
+    public static void UpdateInventoryStats() {
+        GameObject.Find("HP").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["HP"];
+        GameObject.Find("Strength").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["strength"];
+        GameObject.Find("Speed").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["speed"];
+        GameObject.Find("Resistance").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["resistance"];
+        GameObject.Find("Mana").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["mana"];
+        GameObject.Find("Defense").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["defense"];
+        GameObject.Find("Elemental Defense").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["elemental_defense"];
+        GameObject.Find("Elemental Affinity").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["elemental_affinity"];
+    }
 }

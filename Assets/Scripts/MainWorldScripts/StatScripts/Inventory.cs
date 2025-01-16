@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Defective.JSON;
+using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
@@ -104,18 +106,20 @@ public class Inventory : MonoBehaviour
     }
 
     public static void LoadInventory() {
-        GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
+        
         Transform content = GameObject.Find("Inventory List").transform;
         foreach (Transform transform in content) { 
             Destroy(transform.gameObject);         
         }   
         foreach (Item item in inventoryList) {
             GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"));
-            var button = equipmentItem.GetComponent<UnityEngine.UI.Button>();
-            button.onClick.AddListener(() => EquipItem(item));
+            equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item));
+            equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text = item.GetName();
+            equipmentItem.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
             equipmentItem.transform.SetParent(GameObject.Find("Inventory List").transform);
-            
         }
+        PlayerStatistics.UpdateInventoryStats();
+        GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
     }
 
     static void EquipItem(Item item) {
