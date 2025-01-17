@@ -32,6 +32,7 @@ public class Skills : MonoBehaviour
         }
         isElementalTab = true;
         isSkillsInitialized = true;
+        GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + currentElementalSkill.GetName());
         OnSkillsInitialized?.Invoke();
     }
 
@@ -45,6 +46,7 @@ public class Skills : MonoBehaviour
     public void OpenOrCloseSkillsWindow() {
         bool isEnabled = GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled;
         if (!isEnabled) {
+            
             FillSkillsWindow();
             GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled = true;
         } else {
@@ -54,17 +56,31 @@ public class Skills : MonoBehaviour
     }
 
     void FillSkillsWindow() {
+        foreach (Transform skill in GameObject.Find("Skill List Content").transform) {
+            Destroy (skill.gameObject);
+        }
         foreach (ISkillInterface skill in skillList.Values) {
             GameObject skillBox = Instantiate(Resources.Load<GameObject>("UI/Skill Box"));
-            if (isElementalTab && skill.IsElementalSkill()) {
-                skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
-                skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
-            } else if (!isElementalTab && !skill.IsElementalSkill()) {
-                skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
-                skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
-                skillBox.GetComponent<Button>().interactable = false;
+            if (isElementalTab) {
+                if (skill.IsElementalSkill()) {
+                    skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+                    skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
+                    skillBox.GetComponent<Button>().onClick.AddListener(() => ChangeElementalSkill(skill));
+                    skillBox.transform.SetParent(GameObject.Find("Skill List Content").transform);
+                } else {
+                    Destroy (skillBox);
+                }
+            } else if (!isElementalTab) {
+                if (!skill.IsElementalSkill()) {
+                    skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+                    skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
+                    skillBox.GetComponent<Button>().interactable = false;
+                    skillBox.transform.SetParent(GameObject.Find("Skill List Content").transform);
+                } else {
+                    Destroy (skillBox);
+                }
             }
-            skillBox.transform.SetParent(GameObject.Find("Skill List Content").transform);
+            
         }
     }
     public static void UpdateElementalSkillStats() {
@@ -73,12 +89,20 @@ public class Skills : MonoBehaviour
 
     static void ChangeElementalSkill(ISkillInterface skill) {
         currentElementalSkill = skill;
+        GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
         stats = skill.GetStats();
+        PlayerStatistics.UpdateStats();
     }
     public void ElementalTab() {
-        isElementalTab = true;
+        if (!isElementalTab){
+            isElementalTab = true;
+            FillSkillsWindow();
+        }
     }
     public void WeaponTab() {
-        isElementalTab = false;
+        if (isElementalTab) {
+            isElementalTab = false;
+            FillSkillsWindow();
+        }
     }
 }

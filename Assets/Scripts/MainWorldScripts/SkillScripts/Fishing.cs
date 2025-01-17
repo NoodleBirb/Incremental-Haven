@@ -41,7 +41,7 @@ public class Fishing : ISkillInterface {
 
     public Dictionary<string, float> GetStats() {
         Dictionary<string, float> stats = new();
-        JSONObject statData = new(Resources.Load<TextAsset>("Skills/Woodcutting").text);
+        JSONObject statData = new(Resources.Load<TextAsset>("Skills/Fishing").text);
         int i = 0;
         foreach (string str in statData["stats"].keys) {
             stats.Add(str, statData["stats"][str][fishingLevel - 1].floatValue);

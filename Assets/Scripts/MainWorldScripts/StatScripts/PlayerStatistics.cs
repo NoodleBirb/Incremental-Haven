@@ -71,16 +71,17 @@ public class PlayerStatistics : MonoBehaviour {
         }
         currentHP = totalStats["HP"];
         currentMana = totalStats["mana"];
+        UpdateInventoryStats();
     }
 
     public static void UpdateInventoryStats() {
-        GameObject.Find("HP").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["HP"];
-        GameObject.Find("Strength").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["strength"];
-        GameObject.Find("Speed").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["speed"];
-        GameObject.Find("Resistance").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["resistance"];
-        GameObject.Find("Mana").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["mana"];
-        GameObject.Find("Defense").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["defense"];
-        GameObject.Find("Elemental Defense").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["elemental_defense"];
-        GameObject.Find("Elemental Affinity").GetComponentInChildren<TextMeshProUGUI>().text = "" + totalStats["elemental_affinity"];
+        GameObject.Find("HP").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["HP"];
+        GameObject.Find("Strength").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["strength"];
+        GameObject.Find("Speed").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["speed"];
+        GameObject.Find("Resistance").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["resistance"];
+        GameObject.Find("Mana").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["mana"];
+        GameObject.Find("Defense").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["defense"];
+        GameObject.Find("Elemental Defense").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["elemental_defense"];
+        GameObject.Find("Elemental Affinity").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["elemental_affinity"];
     }
 }
