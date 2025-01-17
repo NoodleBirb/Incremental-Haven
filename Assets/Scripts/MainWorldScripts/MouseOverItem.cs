@@ -8,10 +8,17 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     Item item;
     private bool mouse_over = false;
+    RectTransform tooltipRect;
+    RectTransform tooltipCanvasRect;
+
+    void Start() {
+        tooltipRect = GameObject.Find("Tooltip").GetComponent<RectTransform>();
+        tooltipCanvasRect = GameObject.Find("Tooltip Canvas").GetComponent<RectTransform>();
+    }
 
     void Update() {
-        if (mouse_over && RectTransformUtility.ScreenPointToWorldPointInRectangle(GameObject.Find("User Interface").GetComponent<RectTransform>(), Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main, out Vector3 newPoint)) {
-            GameObject.Find("Tooltip").GetComponent<RectTransform>().position = newPoint;
+        if (mouse_over) {
+            tooltipRect.anchoredPosition = tooltipCanvasRect.InverseTransformPoint(Input.mousePosition) + new Vector3(tooltipRect.rect.width, -tooltipRect.rect.height, 0f);
         }
     }
 
@@ -20,7 +27,7 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
     void UpdateTooltipStats() {
         GameObject.Find("Item Name Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetName() + "";
-        GameObject.Find("Description Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetStrength() + "";
+        GameObject.Find("Description Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetDescription() + "";
         GameObject.Find("Strength Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetStrength() + "";
         GameObject.Find("Speed Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetSpeed() + "";
         GameObject.Find("Resistance Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetResistance() + "";
@@ -33,12 +40,12 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         mouse_over = true;
         UpdateTooltipStats();
-        GameObject.Find("Tooltip Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("Tooltip Canvas").GetComponent<Canvas>().enabled = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         mouse_over = false;
-        GameObject.Find("Tooltip Canvas").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("Tooltip Canvas").GetComponent<Canvas>().enabled = false;
     }
 }

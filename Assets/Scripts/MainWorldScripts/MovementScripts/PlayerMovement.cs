@@ -79,7 +79,8 @@ public class PlayerMovement : MonoBehaviour
         // cast ray
         if (Physics.Raycast (ray, out RaycastHit hit)) {
             Vector2 rectMousePos = new(clickPos.x, Screen.height - clickPos.y);
-            if (InsideGUIBox(rectMousePos)) {
+            if (InsideGUIBox()) {
+                Debug.Log("functioning correctly");
                 return;
             }
             if (mouseInput == 0) {
@@ -169,6 +170,7 @@ public class PlayerMovement : MonoBehaviour
 
     // openGUI = false may cause problems if I want to use this checking code for things other than clicks
     bool InsideGUIBox(Vector2 rectMousePos) {
+        
         Skills skills = GetComponent<Skills>();
         Inventory inventory = GetComponent<Inventory>();
         if (skills.skillListRect.Contains(rectMousePos)) {
@@ -191,6 +193,20 @@ public class PlayerMovement : MonoBehaviour
         }
         //if (inventory)
 
+        return false;
+    }
+
+    bool InsideGUIBox() {
+        RectTransform inventoryRect = GameObject.Find("Inventory Button").GetComponent<RectTransform>();
+        RectTransform skillsRect = GameObject.Find("Skills Button").GetComponent<RectTransform>();
+        Vector2 localMousePosition = inventoryRect.InverseTransformPoint(Input.mousePosition);
+        if (inventoryRect.rect.Contains(localMousePosition)) {
+            return true;
+        }
+        localMousePosition = skillsRect.InverseTransformPoint(Input.mousePosition);
+        if (skillsRect.rect.Contains(localMousePosition)) {
+            return true;
+        }
         return false;
     }
 
