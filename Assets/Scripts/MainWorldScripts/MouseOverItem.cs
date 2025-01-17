@@ -57,5 +57,6 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public static void ItemVanished() {
         mouse_over = false;
+        GameObject.Find("Tooltip Canvas").GetComponent<Canvas>().enabled = false;
     }
 }

@@ -16,6 +16,7 @@ public class Equipment : MonoBehaviour{
     private static Item leggingsSlot;
     private static Item gloveSlot;
     private static Item headPieceSlot;
+    public static event Action OnEquipmentInitialized;
 
     readonly Rect headPieceRect = new(Screen.width / 2 - 100, Screen.height / 2 - 200, 60, 30);
     readonly Rect chestplateRect = new(Screen.width / 2 - 100, Screen.height / 2 - 100, 60, 30);
@@ -40,7 +41,7 @@ public class Equipment : MonoBehaviour{
     GameObject leftArm;
     GameObject leftLeg;
     void Start() {
-        equippedItems = new() {
+        equippedItems ??= new() {
             ["Weapon Slot"] = null,
             ["Off Hand Slot"] = null,
             ["Necklace Slot"] = null,
@@ -122,46 +123,6 @@ public class Equipment : MonoBehaviour{
             lineRenderer.SetPositions(positions);
     }
 
-    public static void RemoveEquippableItem(string type) {
-
-        if (type == "Weapon Slot") {
-            Inventory.AddItem(weaponSlot);
-            weaponSlot = null;
-        }
-        if (type == "Chestplate Slot") {
-            Inventory.AddItem(chestplateSlot);
-            chestplateSlot = null;
-        }
-        if (type == "Off Hand Slot") {
-            Inventory.AddItem(offHandSlot);
-            offHandSlot = null;
-        }
-        if (type == "Necklace Slot") {
-            Inventory.AddItem(necklaceSlot);
-            necklaceSlot = null;
-        }
-        if (type == "Boots Slot") {
-            Inventory.AddItem(bootSlot);
-            bootSlot = null;
-        }
-        if (type == "Leggings Slot") {
-            Inventory.AddItem(leggingsSlot);
-            leggingsSlot = null;
-        }
-        if (type == "Glove Slot") {
-            Inventory.AddItem(gloveSlot);
-            gloveSlot = null;
-        }
-        if (type == "Head Piece Slot") {
-            Inventory.AddItem(headPieceSlot);
-            headPieceSlot = null;
-        }
-        GameObject.Find(type).GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.Find(type).GetComponent<Button>().interactable = false;
-        GameObject.Find(type).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/transparentbackground");
-        GameObject.Find(type).GetComponent<MouseOverItem>().SetItem(null);
-        Inventory.LoadInventory();
-    }
 
     public static void SwapEquipmentPiece(Item item, string type) {
         
@@ -173,6 +134,8 @@ public class Equipment : MonoBehaviour{
         GameObject.Find(type).GetComponent<Button>().interactable = false;
         GameObject.Find(type).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/transparentbackground");
         GameObject.Find(type).GetComponent<MouseOverItem>().SetItem(null);
+        MouseOverItem.ItemVanished();
+        PlayerStatistics.UpdateStats();
         Inventory.LoadInventory();
     }
 

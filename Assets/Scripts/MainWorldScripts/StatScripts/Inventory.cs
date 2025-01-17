@@ -33,15 +33,13 @@ public class Inventory : MonoBehaviour
         showInventory = false;
         openInventoryRect = new(Screen.width - 200, Screen.height - 50, 100, 50);
 
-        if ((inventoryList == null || inventoryList.Count == 0) && Equipment.GetEquippedItems()["Weapon Slot"] == null) {
-            TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
-            Item item = LoadItemFromJson(stoneAxe.text);
-            inventoryList = new() // eventually will be initialized with stuff from the saving system.
-            {
+        TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
+        Item item = LoadItemFromJson(stoneAxe.text);
+        inventoryList ??= new() // eventually will be initialized with stuff from the saving system.
+        {
                 // Placeholder for testing
-                item
-            }; 
-        }
+            item
+        }; 
         isInventoryInitialized = true;
         OnInventoryInitialized?.Invoke();
     }
@@ -148,6 +146,7 @@ public class Inventory : MonoBehaviour
         }
         Equipment.GetEquippedItems()[itemType] = item;
         MouseOverItem.ItemVanished();
+        PlayerStatistics.UpdateStats();
         LoadInventory();
     }
 
