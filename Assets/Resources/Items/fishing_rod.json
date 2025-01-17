@@ -15,5 +15,6 @@
         "weapon_slot": true,
         "two_handed": true,
         "is_fishing_rod": true
-    }
+    },
+    "description": "Allows the user to fish basic fish in water."
 }

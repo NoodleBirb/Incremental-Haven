@@ -15,5 +15,6 @@
         "is_axe": true,
         "weapon_slot": true,
         "one_handed": true
-    }
+    },
+    "description": "Allows the user to cut down basic oak trees. Doubles as a weapon."
 }

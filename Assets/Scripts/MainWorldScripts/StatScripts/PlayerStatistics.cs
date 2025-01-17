@@ -9,7 +9,6 @@ public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
     private static Equipment equipment; 
     private static Inventory inventory;
-    static bool playerStatsInitialized = false;
     public static float currentHP;
     public static float currentMana;
 
@@ -76,7 +75,6 @@ public class PlayerStatistics : MonoBehaviour {
         }
         currentHP = totalStats["HP"];
         currentMana = totalStats["mana"];
-        playerStatsInitialized = true;
     }
 
     public static void UpdateInventoryStats() {

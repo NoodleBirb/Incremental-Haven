@@ -113,6 +113,7 @@ public class Inventory : MonoBehaviour
         }   
         foreach (Item item in inventoryList) {
             GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"));
+            equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
             equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item));
             equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text = item.GetName();
             equipmentItem.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
@@ -213,7 +214,7 @@ public class Inventory : MonoBehaviour
             i++;
         }
 
-        return new Item(obj["name"].stringValue, obj["id"].intValue, obj["equippable"].boolValue, statsDict, specificFunctionDict);
+        return new Item(obj["name"].stringValue, obj["id"].intValue, obj["equippable"].boolValue, statsDict, specificFunctionDict, obj["description"].stringValue);
     }
 
     public static void AddItem(Item newItem) {
