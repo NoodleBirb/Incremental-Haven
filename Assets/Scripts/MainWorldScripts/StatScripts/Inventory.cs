@@ -115,8 +115,8 @@ public class Inventory : MonoBehaviour
             GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"));
             equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
             equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item));
-            equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text = item.GetName();
-            equipmentItem.GetComponentInChildren<TextMeshProUGUI>().fontSize = 12;
+            Debug.Log( Resources.Load<Sprite>("UI/Images/" + item.GetName()));
+            equipmentItem.transform.Find("Item Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             equipmentItem.transform.SetParent(GameObject.Find("Inventory List").transform);
         }
         PlayerStatistics.UpdateInventoryStats();
@@ -125,8 +125,11 @@ public class Inventory : MonoBehaviour
 
     static void EquipItem(Item item) {
         Item previouslyEquippedItem = null;
+        GameObject button = Instantiate(Resources.Load<GameObject>("UI/Equipped Item"));
+        button.GetComponentInChildren<TextMeshProUGUI>().text = item.GetName();
         if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
            previouslyEquippedItem = Equipment.SwapWeapon(item);
+           button.transform.SetParent(GameObject.Find("Inventory List").transform);
         } else if (item.GetSpecificFunctions()["chestplate_slot"] == true) {
             previouslyEquippedItem = Equipment.SwapChestplate(item);
         } else if (item.GetSpecificFunctions()["headpiece_slot"] == true) {
@@ -141,6 +144,8 @@ public class Inventory : MonoBehaviour
             previouslyEquippedItem = Equipment.SwapGloves(item);
         } else if (item.GetSpecificFunctions()["boots_slot"] == true) {
             previouslyEquippedItem = Equipment.SwapBoots(item);
+        } else {
+            Debug.Log("The void ate your item for some reason");
         }
         inventoryList.Remove(item);
         if (previouslyEquippedItem != null) {
@@ -148,45 +153,8 @@ public class Inventory : MonoBehaviour
         }
         LoadInventory();
     }
-    void EquipChestplate(Item chestplate) {
-        Item previouslyEquippedItem = Equipment.SwapChestplate(chestplate);
-        inventoryList.Remove(chestplate);
-        inventoryList.Add(previouslyEquippedItem);
-    }
-    void EquipLeggings(Item leggings) {
-        Item previouslyEquippedItem = Equipment.SwapLeggings(leggings);
-        inventoryList.Remove(leggings);
-        inventoryList.Add(previouslyEquippedItem);
-    }
-    void EquipBoots(Item boots) {
-        Item previouslyEquippedItem = Equipment.SwapBoots(boots);
-        inventoryList.Remove(boots);
-        inventoryList.Add(previouslyEquippedItem);
-    }
-    void EquipGloves(Item gloves) {
-        Item previouslyEquippedItem = Equipment.SwapGloves(gloves);
-        inventoryList.Remove(gloves);
-        inventoryList.Add(previouslyEquippedItem);
-    }
-    void EquipNecklace(Item necklace) {
-        Item previouslyEquippedItem = Equipment.SwapNecklace(necklace);
-        inventoryList.Remove(necklace);
-        inventoryList.Add(previouslyEquippedItem);
-    }
-    void EquipHeadPiece(Item headPiece) {
-        Item previouslyEquippedItem = Equipment.SwapHeadPiece(headPiece);
-        inventoryList.Remove(headPiece);
-        inventoryList.Add(previouslyEquippedItem);
-    }
-    void EquipOffHand(Item offHand) {
-        Item previouslyEquippedItem = Equipment.SwapOffHand(offHand);
-        inventoryList.Remove(offHand);
-        inventoryList.Add(previouslyEquippedItem);
-    }
 
-
-    private static Item LoadItemFromJson(string json)
-    {
+    private static Item LoadItemFromJson(string json) {
         // Create JSONObject to easily sort through the data
         JSONObject obj = new(json);
         
@@ -223,6 +191,4 @@ public class Inventory : MonoBehaviour
     public static void AddItem(string json) {
         inventoryList.Add(LoadItemFromJson(json));
     }
-
-
 }

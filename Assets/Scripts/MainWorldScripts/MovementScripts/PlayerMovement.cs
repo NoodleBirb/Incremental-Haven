@@ -198,11 +198,11 @@ public class PlayerMovement : MonoBehaviour
 
     bool InsideGUIBox() {
         RectTransform inventoryRect = GameObject.Find("Inventory Button").GetComponent<RectTransform>();
-        RectTransform skillsRect = GameObject.Find("Skills Button").GetComponent<RectTransform>();
         Vector2 localMousePosition = inventoryRect.InverseTransformPoint(Input.mousePosition);
         if (inventoryRect.rect.Contains(localMousePosition)) {
             return true;
         }
+        RectTransform skillsRect = GameObject.Find("Skills Button").GetComponent<RectTransform>();
         localMousePosition = skillsRect.InverseTransformPoint(Input.mousePosition);
         if (skillsRect.rect.Contains(localMousePosition)) {
             return true;
