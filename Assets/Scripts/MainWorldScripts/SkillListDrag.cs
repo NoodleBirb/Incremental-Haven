@@ -6,11 +6,11 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(CanvasGroup))]
 public class SkillListDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    bool dragging;
-    Vector3 beginMousePoint;
-    Vector3 beginListPos;
-    RectTransform userInterfaceRect;
-    RectTransform skillListRect;
+    static bool dragging;
+    static Vector3 beginMousePoint;
+    static Vector3 beginListPos;
+    static RectTransform userInterfaceRect;
+    static RectTransform skillListRect;
 
     void Start() {
         userInterfaceRect = GameObject.Find("User Interface").GetComponent<RectTransform>();
@@ -18,10 +18,7 @@ public class SkillListDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        beginMousePoint = userInterfaceRect.InverseTransformPoint(eventData.position);
-        beginListPos = skillListRect.anchoredPosition;
-        dragging = true;
-        Debug.Log("dragging");
+       ReadyDrag(eventData);
     }
      public void OnDrag(PointerEventData eventData)
     {
@@ -31,7 +28,15 @@ public class SkillListDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     public void OnEndDrag(PointerEventData eventData)
     {
         dragging = false;
-        Debug.Log("not dragging");
+    }
+
+    public static void ReadyDrag(PointerEventData eventData) {
+        dragging = true;
+        beginMousePoint = userInterfaceRect.InverseTransformPoint(eventData.position);
+        beginListPos = skillListRect.anchoredPosition;
+    }
+    public static void EndDrag() {
+        dragging = false;
     }
 
     void Update()
