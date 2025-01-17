@@ -31,7 +31,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
             if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
                 Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
             }
-            if (!isFished && Equipment.GetWeaponSlot() != null && Equipment.GetWeaponSlot().GetSpecificFunctions()["is_fishing_rod"]) {
+            if (!isFished && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions()["is_fishing_rod"]) {
                 fishingTime = true;
             }
             PlayerMovement.openGUI = false;
@@ -56,7 +56,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
     }
 
     public void InteractWith() {
-        if (!isFished && Equipment.GetWeaponSlot() != null && Equipment.GetWeaponSlot().GetSpecificFunctions().ContainsKey("is_fishing_rod"))  {
+        if (!isFished && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_fishing_rod"))  {
             fishingTime = true;
         }
     }

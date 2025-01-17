@@ -33,7 +33,7 @@ public class Inventory : MonoBehaviour
         showInventory = false;
         openInventoryRect = new(Screen.width - 200, Screen.height - 50, 100, 50);
 
-        if ((inventoryList == null || inventoryList.Count == 0) && Equipment.GetWeaponSlot() == null) {
+        if ((inventoryList == null || inventoryList.Count == 0) && Equipment.GetEquippedItems()["Weapon Slot"] == null) {
             TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
             Item item = LoadItemFromJson(stoneAxe.text);
             inventoryList = new() // eventually will be initialized with stuff from the saving system.
@@ -45,16 +45,6 @@ public class Inventory : MonoBehaviour
         isInventoryInitialized = true;
         OnInventoryInitialized?.Invoke();
     }
-
-    void Update() {
-        if (showInventory && stillNotCloseEnough) {
-            StartCoroutine(ZoomIntoPlayer());
-        }
-        if (showInventory && shifting) {
-            StartCoroutine(ShiftCameraToRight());
-        }
-    }
-
     public void OpenInventory() {
         showInventory = true;
         stillNotCloseEnough = true;
@@ -63,7 +53,7 @@ public class Inventory : MonoBehaviour
         intitialPos = mainCamera.transform.position;
         GameObject.Find("World Canvas").GetComponent<Canvas>().enabled = false;
         player.transform.LookAt(new Vector3(mainCamera.transform.position.x, 0, mainCamera.transform.position.z));
-
+        StartCoroutine(ZoomIntoPlayer());
         // List the items. Coordinates begin in the corner of the ScrollView.
         
     }
@@ -75,19 +65,24 @@ public class Inventory : MonoBehaviour
 
     IEnumerator ZoomIntoPlayer() {
 
-        if(Vector2.Distance(new(mainCamera.transform.position.x, mainCamera.transform.position.z), new(player.transform.position.x, player.transform.position.z)) <= 2.4f) {
-            if (mainCamera.transform.position.y >= 1.5) {
-                mainCamera.transform.position = new (mainCamera.transform.position.x, mainCamera.transform.position.y - 5f * Time.deltaTime, mainCamera.transform.position.z);
+        if (Vector2.Distance(new(mainCamera.transform.position.x, mainCamera.transform.position.z), new(player.transform.position.x, player.transform.position.z)) <= 2.4f) {
+            if (mainCamera.transform.position.y >= 1.5f) {
+                mainCamera.transform.position = new (mainCamera.transform.position.x, mainCamera.transform.position.y - 3f * Time.deltaTime, mainCamera.transform.position.z);
                 mainCamera.transform.LookAt(new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z));
+                yield return null;
+                StartCoroutine(ZoomIntoPlayer());
             } else {
                 stillNotCloseEnough = false;
                 shifting = true;
+                StartCoroutine(ShiftCameraToRight());
+                yield break;
             }
         }
         else {
             mainCamera.transform.position = Vector3.Lerp(intitialPos, new(player.transform.position.x, 1.5f, player.transform.position.z), Time.time - startTime);
             mainCamera.transform.LookAt(new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z));
-            yield return new WaitForSeconds(.1f);
+            yield return null;
+            StartCoroutine(ZoomIntoPlayer());
         }
     }
     IEnumerator ShiftCameraToRight() {
@@ -96,13 +91,14 @@ public class Inventory : MonoBehaviour
         Vector3 rightConversion = new(mainCamera.transform.position.x + mainCamera.transform.right.x, mainCamera.transform.position.y, mainCamera.transform.position.z + mainCamera.transform.right.z);
         
         while (Vector2.Distance(camPos, playerPos) <= 2.7f) {
-            mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, rightConversion, .05f * Time.deltaTime);
+            mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, rightConversion, 1.5f * Time.deltaTime);
             camPos = new(mainCamera.transform.position.x, mainCamera.transform.position.z);
             rightConversion = new(mainCamera.transform.position.x + mainCamera.transform.right.x, mainCamera.transform.position.y, mainCamera.transform.position.z + mainCamera.transform.right.z);
             yield return null;
         }
         shifting = false;
         LoadInventory();
+        
     }
 
     public static void LoadInventory() {
@@ -114,7 +110,24 @@ public class Inventory : MonoBehaviour
         foreach (Item item in inventoryList) {
             GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"));
             equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
-            equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item));
+            if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
+                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Weapon Slot"));
+            } else if (item.GetSpecificFunctions()["chestplate_slot"] == true) {
+                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Chestplate Slot"));
+            } else if (item.GetSpecificFunctions()["headpiece_slot"] == true) {
+                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Head Piece Slot"));
+            } else if (item.GetSpecificFunctions()["offhand_slot"] == true) {
+                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Off Hand Slot"));
+            } else if (item.GetSpecificFunctions()["necklace_slot"] == true) {
+                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Necklace Slot"));
+            } else if (item.GetSpecificFunctions()["leggings_slot"] == true) {
+                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Leggings Slot"));
+            } else if (item.GetSpecificFunctions()["gloves_slot"] == true) {
+                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Glove Slot"));
+            } else if (item.GetSpecificFunctions()["boots_slot"] == true) {
+                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Boots Slot"));
+            }
+            
             Debug.Log( Resources.Load<Sprite>("UI/Images/" + item.GetName()));
             equipmentItem.transform.Find("Item Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             equipmentItem.transform.SetParent(GameObject.Find("Inventory List").transform);
@@ -123,34 +136,18 @@ public class Inventory : MonoBehaviour
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
     }
 
-    static void EquipItem(Item item) {
-        Item previouslyEquippedItem = null;
-        GameObject button = Instantiate(Resources.Load<GameObject>("UI/Equipped Item"));
-        button.GetComponentInChildren<TextMeshProUGUI>().text = item.GetName();
-        if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
-           previouslyEquippedItem = Equipment.SwapWeapon(item);
-           button.transform.SetParent(GameObject.Find("Inventory List").transform);
-        } else if (item.GetSpecificFunctions()["chestplate_slot"] == true) {
-            previouslyEquippedItem = Equipment.SwapChestplate(item);
-        } else if (item.GetSpecificFunctions()["headpiece_slot"] == true) {
-            previouslyEquippedItem = Equipment.SwapHeadPiece(item);
-        } else if (item.GetSpecificFunctions()["offhand_slot"] == true) {
-            previouslyEquippedItem = Equipment.SwapOffHand(item);
-        } else if (item.GetSpecificFunctions()["necklace_slot"] == true) {
-            previouslyEquippedItem = Equipment.SwapNecklace(item);
-        } else if (item.GetSpecificFunctions()["leggings_slot"] == true) {
-            previouslyEquippedItem = Equipment.SwapLeggings(item);
-        } else if (item.GetSpecificFunctions()["gloves_slot"] == true) {
-            previouslyEquippedItem = Equipment.SwapGloves(item);
-        } else if (item.GetSpecificFunctions()["boots_slot"] == true) {
-            previouslyEquippedItem = Equipment.SwapBoots(item);
-        } else {
-            Debug.Log("The void ate your item for some reason");
-        }
+    static void EquipItem(Item item, string itemType) {
+        Item previouslyEquippedItem = Equipment.GetEquippedItems()[itemType];
+        GameObject.Find(itemType).GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Equipment.SwapEquipmentPiece(null, itemType));
+        GameObject.Find(itemType).GetComponent<UnityEngine.UI.Button>().interactable = true;
+        GameObject.Find(itemType).GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+        GameObject.Find(itemType).GetComponent<MouseOverItem>().SetItem(item);
         inventoryList.Remove(item);
         if (previouslyEquippedItem != null) {
             inventoryList.Add(previouslyEquippedItem);
         }
+        Equipment.GetEquippedItems()[itemType] = item;
+        MouseOverItem.ItemVanished();
         LoadInventory();
     }
 

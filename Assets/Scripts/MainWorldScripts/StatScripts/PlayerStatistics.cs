@@ -58,11 +58,7 @@ public class PlayerStatistics : MonoBehaviour {
             ["elemental_affinity"] = 1f,
             ["HP"] = 10f + (Skills.playerIncrementality * 6) // Update this formula whenever all the skills are added.
         };
-        List<Item> equippedItems = new()
-        {
-            Equipment.GetWeaponSlot()
-        };
-        foreach (Item item in equippedItems) {
+        foreach (Item item in Equipment.GetEquippedItems().Values) {
             if (item != null) {
                 foreach(string key in item.GetStats().Keys.ToList<string>()) {
                     totalStats[key] += item.GetStats()[key];

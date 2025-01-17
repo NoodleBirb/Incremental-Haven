@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     Item item;
-    private bool mouse_over = false;
+    private static bool mouse_over = false;
     RectTransform tooltipRect;
     RectTransform tooltipCanvasRect;
 
@@ -17,7 +17,7 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     void Update() {
-        if (mouse_over) {
+        if (item != null && mouse_over) {
             tooltipRect.anchoredPosition = tooltipCanvasRect.InverseTransformPoint(Input.mousePosition) + new Vector3(tooltipRect.rect.width, -tooltipRect.rect.height, 0f);
         }
     }
@@ -38,6 +38,9 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (item == null) {
+            return;
+        }
         mouse_over = true;
         UpdateTooltipStats();
         GameObject.Find("Tooltip Canvas").GetComponent<Canvas>().enabled = true;
@@ -45,7 +48,14 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (item == null) {
+            return;
+        }
         mouse_over = false;
         GameObject.Find("Tooltip Canvas").GetComponent<Canvas>().enabled = false;
+    }
+
+    public static void ItemVanished() {
+        mouse_over = false;
     }
 }
