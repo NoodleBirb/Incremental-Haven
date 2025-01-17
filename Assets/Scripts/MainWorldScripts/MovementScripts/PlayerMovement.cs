@@ -168,33 +168,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // openGUI = false may cause problems if I want to use this checking code for things other than clicks
-    bool InsideGUIBox(Vector2 rectMousePos) {
-        
-        Skills skills = GetComponent<Skills>();
-        Inventory inventory = GetComponent<Inventory>();
-        if (skills.skillListRect.Contains(rectMousePos)) {
-            openGUI = false;
-            return true;
-        }
-        if (openGUI) {
-            TileSettings guiTileSettings = guiTile.GetComponent<TileSettings>();
-            if (guiTileSettings.fullRectSize.Contains(rectMousePos)) {
-                return true;
-            }
-        }
-        if (skills.showSkillList && skills.windowRect.Contains(rectMousePos)) {
-            openGUI = false;
-            return true;
-        }
-        if (inventory.openInventoryRect.Contains(rectMousePos)) {
-            openGUI = false;
-            return true;
-        }
-        //if (inventory)
-
-        return false;
-    }
 
     bool InsideGUIBox() {
         RectTransform inventoryRect = GameObject.Find("Inventory Button").GetComponent<RectTransform>();
@@ -205,6 +178,11 @@ public class PlayerMovement : MonoBehaviour
         RectTransform skillsRect = GameObject.Find("Skills Button").GetComponent<RectTransform>();
         localMousePosition = skillsRect.InverseTransformPoint(Input.mousePosition);
         if (skillsRect.rect.Contains(localMousePosition)) {
+            return true;
+        }
+        RectTransform skillListRect = GameObject.Find("Skill List Canvas").GetComponent<RectTransform>();
+        localMousePosition = skillListRect.InverseTransformPoint(Input.mousePosition);
+        if (skillListRect.rect.Contains(localMousePosition)) {
             return true;
         }
         return false;

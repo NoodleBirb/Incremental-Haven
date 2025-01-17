@@ -38,6 +38,8 @@ public class Inventory : MonoBehaviour
         inventoryList ??= new() // eventually will be initialized with stuff from the saving system.
         {
                 // Placeholder for testing
+            item,
+            item,
             item
         }; 
         isInventoryInitialized = true;
@@ -59,6 +61,8 @@ public class Inventory : MonoBehaviour
         showInventory = false;
         GameObject.Find("World Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("Equipment Canvas").GetComponent<Canvas>().enabled = false;
     }
 
     IEnumerator ZoomIntoPlayer() {
@@ -132,6 +136,8 @@ public class Inventory : MonoBehaviour
         }
         PlayerStatistics.UpdateInventoryStats();
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("Equipment Canvas").GetComponent<Canvas>().enabled = true;
     }
 
     static void EquipItem(Item item, string itemType) {

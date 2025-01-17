@@ -1,17 +1,17 @@
 
 using System;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Skills : MonoBehaviour
 {
     public bool showSkillList = false;
-    public static Dictionary<string, ISkillInterface> skillList = new();
+    public bool isElementalTab;
+    public static Dictionary<string, ISkillInterface> skillList;
     // The position on of the scrolling viewport
-    public Vector2 scrollPosition = Vector2.zero;
-    public Rect windowRect = new(Screen.width / 2, Screen.height / 2, 249, 200);
-    public Rect skillListRect;
     public static ISkillInterface currentElementalSkill;
     public static ISkillInterface currentWeaponSkill;
     public static Dictionary<string, float> stats;
@@ -20,53 +20,21 @@ public class Skills : MonoBehaviour
     public static float playerIncrementality;
     void Start()
     {
-        skillListRect = new(Screen.width - 100, Screen.height - 50, 100, 50);
-        if (skillList.Count == 0) {
-            FillSkillsList();
+        if (skillList == null) {
+            skillList = new() {
+                ["Woodcutting"] = new Woodcutting(),
+                ["Fishing"] = new Fishing(),
+                ["One Handed Weapon"] = new OneHandedCombat(),
+            };
+            currentElementalSkill = skillList["Woodcutting"];
+            stats = currentElementalSkill.GetStats();
+            currentWeaponSkill = skillList["One Handed Weapon"];
         }
-
-        currentElementalSkill = skillList["Woodcutting"];
-        stats = currentElementalSkill.GetStats();
-        currentWeaponSkill = skillList["One Handed Weapon"];
+        isElementalTab = true;
         isSkillsInitialized = true;
         OnSkillsInitialized?.Invoke();
     }
 
-    void OnGUI() {
-        if (!Inventory.showInventory) {
-            if (!showSkillList && GUI.Button(skillListRect, "Show Skills")) {
-                showSkillList = true;
-            }
-            if (showSkillList) {
-                windowRect = GUI.Window(0, windowRect, SkillWindow, "My Window");
-            }
-            if (showSkillList && GUI.Button(skillListRect, "Show Skills")) {
-                showSkillList = false;
-            }
-        }
-    }
-
-    void SkillWindow(int windowID) {
-        scrollPosition = GUI.BeginScrollView(new Rect(0, 20, 250, 250), scrollPosition, new Rect(0, 0, 250, 400));
-        // List the skills. Coordinates begin in the corner of the ScrollView.
-        int i = 0;
-        int height = 50;
-        foreach (ISkillInterface skill in skillList.Values) {
-            GUI.Box(new Rect(0, height * i, 200, height),  skill.GetName() + " | " + skill.GetEXP() + " | " + skill.GetLevel());
-            i++;
-        }
-
-        // End the scroll view that we began above.
-        GUI.EndScrollView();
-        // Make the windows be draggable.
-        GUI.DragWindow(new Rect(0, 0, 10000, 10000));
-    }
-
-    void FillSkillsList() {
-        skillList.Add("Woodcutting", new Woodcutting());
-        skillList.Add("Fishing", new Fishing());
-        skillList.Add("One Handed Weapon", new OneHandedCombat());
-    }
     public static void UpdateIncrementality() {
         playerIncrementality = 0;
         foreach(ISkillInterface skill in skillList.Values) {
@@ -74,7 +42,43 @@ public class Skills : MonoBehaviour
         }
         playerIncrementality /= skillList.Count;
     }
+    public void OpenOrCloseSkillsWindow() {
+        bool isEnabled = GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled;
+        if (!isEnabled) {
+            FillSkillsWindow();
+            GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled = true;
+        } else {
+            GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled = false;
+        }
+        
+    }
+
+    void FillSkillsWindow() {
+        foreach (ISkillInterface skill in skillList.Values) {
+            GameObject skillBox = Instantiate(Resources.Load<GameObject>("UI/Skill Box"));
+            if (isElementalTab && skill.IsElementalSkill()) {
+                skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+                skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
+            } else if (!isElementalTab && !skill.IsElementalSkill()) {
+                skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+                skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
+                skillBox.GetComponent<Button>().interactable = false;
+            }
+            skillBox.transform.SetParent(GameObject.Find("Skill List Content").transform);
+        }
+    }
     public static void UpdateElementalSkillStats() {
         stats = currentElementalSkill.GetStats();
+    }
+
+    static void ChangeElementalSkill(ISkillInterface skill) {
+        currentElementalSkill = skill;
+        stats = skill.GetStats();
+    }
+    public void ElementalTab() {
+        isElementalTab = true;
+    }
+    public void WeaponTab() {
+        isElementalTab = false;
     }
 }
