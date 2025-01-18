@@ -80,7 +80,6 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast (ray, out RaycastHit hit)) {
             Vector2 rectMousePos = new(clickPos.x, Screen.height - clickPos.y);
             if (InsideGUIBox()) {
-                Debug.Log("functioning correctly");
                 return;
             }
             if (mouseInput == 0) {
@@ -180,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
         if (skillsRect.rect.Contains(localMousePosition)) {
             return true;
         }
-        RectTransform skillListRect = GameObject.Find("Skill List Canvas").GetComponent<RectTransform>();
+        RectTransform skillListRect = GameObject.Find("Skill List Package").GetComponent<RectTransform>();
         localMousePosition = skillListRect.InverseTransformPoint(Input.mousePosition);
         if (skillListRect.rect.Contains(localMousePosition)) {
             return true;

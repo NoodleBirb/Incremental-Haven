@@ -9,11 +9,11 @@ public class SkillListDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     static bool dragging;
     static Vector3 beginMousePoint;
     static Vector3 beginListPos;
-    static RectTransform userInterfaceRect;
+    static RectTransform skillListCanvasRect;
     static RectTransform skillListRect;
 
     void Start() {
-        userInterfaceRect = GameObject.Find("User Interface").GetComponent<RectTransform>();
+        skillListCanvasRect = GameObject.Find("Skill List Canvas").GetComponent<RectTransform>();
         skillListRect = gameObject.GetComponent<RectTransform>();
     }
     public void OnBeginDrag(PointerEventData eventData)
@@ -32,7 +32,7 @@ public class SkillListDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
 
     public static void ReadyDrag(PointerEventData eventData) {
         dragging = true;
-        beginMousePoint = userInterfaceRect.InverseTransformPoint(eventData.position);
+        beginMousePoint = skillListCanvasRect.InverseTransformPoint(eventData.position);
         beginListPos = skillListRect.anchoredPosition;
     }
     public static void EndDrag() {
@@ -42,7 +42,7 @@ public class SkillListDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     void Update()
     {
         if (dragging) {
-            Vector3 currentMousePoint = userInterfaceRect.InverseTransformPoint(Input.mousePosition);
+            Vector3 currentMousePoint = skillListCanvasRect.InverseTransformPoint(Input.mousePosition);
             skillListRect.anchoredPosition = beginListPos - (beginMousePoint - currentMousePoint);
         }
     }

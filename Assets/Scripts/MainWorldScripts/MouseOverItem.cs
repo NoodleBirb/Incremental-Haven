@@ -4,8 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
-{
+public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
     Item item;
     private static bool mouse_over = false;
     RectTransform tooltipRect;
@@ -26,18 +25,17 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         this.item = item;
     }
     void UpdateTooltipStats() {
-        GameObject.Find("Item Name Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetName() + "";
-        GameObject.Find("Description Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetDescription() + "";
-        GameObject.Find("Strength Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetStrength() + "";
-        GameObject.Find("Speed Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetSpeed() + "";
-        GameObject.Find("Resistance Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetResistance() + "";
-        GameObject.Find("Mana Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetMana() + "";
-        GameObject.Find("Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetDefense() + "";
-        GameObject.Find("Elemental Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetElementalDefense() + "";
-        GameObject.Find("Elemental Affinity Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetElementalAffinity() + "";
+        tooltipRect.transform.Find("Item Name Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetName() + "";
+        tooltipRect.transform.Find("Description Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetDescription() + "";
+        tooltipRect.transform.Find("Strength Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetStrength() + "";
+        tooltipRect.transform.Find("Speed Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetSpeed() + "";
+        tooltipRect.transform.Find("Resistance Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetResistance() + "";
+        tooltipRect.transform.Find("Mana Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetMana() + "";
+        tooltipRect.transform.Find("Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetDefense() + "";
+        tooltipRect.transform.Find("Elemental Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetElementalDefense() + "";
+        tooltipRect.transform.Find("Elemental Affinity Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetElementalAffinity() + "";
     }
-    public void OnPointerEnter(PointerEventData eventData)
-    {
+    public void OnPointerEnter(PointerEventData eventData) {
         if (item == null) {
             return;
         }
@@ -46,8 +44,7 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         GameObject.Find("Tooltip Canvas").GetComponent<Canvas>().enabled = true;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
+    public void OnPointerExit(PointerEventData eventData) {
         if (item == null) {
             return;
         }
