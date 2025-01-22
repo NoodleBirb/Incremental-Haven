@@ -10,7 +10,7 @@ public class NothingObject : MonoBehaviour, InteractableObject
         guiHeight = 0;
     }
 
-    public void CreateOptions(int previousHeight, Vector2 mousePos, int totalGUIWidth) {
+    public void CreateOptions(float previousHeight) {
 
     }
 

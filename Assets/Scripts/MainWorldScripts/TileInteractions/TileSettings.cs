@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TileSettings : MonoBehaviour
 {
@@ -10,37 +12,33 @@ public class TileSettings : MonoBehaviour
     public bool walkable = true;
     // For logic with GUIBoxes
     public GameObject heldObject = null;
-    // Value from adding the heights of the tile's objects gui boxes together.
-    public int guiHeight = 0;
-    // for creating boxes with the correct heights
-    readonly int personalGUIHeight = 50;
-    public readonly int totalGUIWidth = 250;
-    public Vector2 guiPos = new(-1, -1);
-    public Rect fullRectSize;
 
-    void Start() {
-        guiHeight = personalGUIHeight;
-        if (heldObject != null) {
-            guiHeight += heldObject.GetComponent<InteractableObject>().GetGUIHeight();
-        }
-        fullRectSize = new(1000000, 1000000, totalGUIWidth, guiHeight);
-    }
-    
-    public void GuiOptions (Vector2 clickPos, int latestClick) {
-        guiPos = clickPos;
-        fullRectSize = new(clickPos.x, Screen.height - clickPos.y, totalGUIWidth, guiHeight);
+    public void GuiOptions () {
 
-        if (GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y, totalGUIWidth, personalGUIHeight), "Walk Towards") && latestClick == 0) {
-            Vector2Int pos = GetComponent<BasicTile>().pos;
-            GameObject player = GameObject.Find("Player");
-            player.GetComponent<PlayerMovement>().BeginMovement(gameObject);
+        GameObject interactionCanvas = GameObject.Find("Tile Interaction");
+        GameObject interactionContainer = GameObject.Find("Interaction Container");
+        RectTransform interactionContainerRT = interactionContainer.GetComponent<RectTransform>();
 
+        GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"));
+        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Walk Towards";
+        Debug.Log($"Listener added. Listener count: {interactButton.GetComponent<Button>().onClick.GetPersistentEventCount()}");
+        interactButton.GetComponent<Button>().onClick.AddListener(() => WalkTowards());
+        Debug.Log($"Listener added. Listener count: {interactButton.GetComponent<Button>().onClick.GetPersistentEventCount()}");
+        interactButton.transform.SetParent(interactionContainer.transform);
+        interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2 (0, 0);
+        interactionContainer.GetComponent<RectTransform>().sizeDelta = new(interactButton.GetComponent<RectTransform>().rect.width, interactButton.GetComponent<RectTransform>().rect.height);
+        
             
-            PlayerMovement.openGUI = false;
-        }
         if (heldObject != null) {
             InteractableObject interactable = heldObject.GetComponent<InteractableObject>();
-            interactable?.CreateOptions(personalGUIHeight, clickPos, totalGUIWidth);
+            interactable?.CreateOptions(interactButton.GetComponent<RectTransform>().rect.height);
         }
+        interactionContainerRT.anchoredPosition = interactionCanvas.GetComponent<RectTransform>().InverseTransformPoint(Input.mousePosition) + new Vector3(interactionContainerRT.rect.width / 2, -interactionContainerRT.rect.height / 2, 0f);
+        interactionCanvas.GetComponent<Canvas>().enabled = true;
+    }
+
+    void WalkTowards() {
+        InteractableObject.ResetGUI();
+        GameObject.Find("Player").GetComponent<PlayerMovement>().BeginMovement(gameObject);
     }
 }

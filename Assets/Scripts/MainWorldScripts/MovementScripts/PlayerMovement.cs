@@ -15,8 +15,6 @@ public class PlayerMovement : MonoBehaviour
     public static bool openGUI;
     GameObject guiTile = null;
     Vector2 clickPos;
-    Vector2 guiPos;
-    int latestClick;
     public static event Action ResetActions;
 
 
@@ -45,14 +43,12 @@ public class PlayerMovement : MonoBehaviour
         if (!Inventory.showInventory) {
             // Left click movement
             if (readyToMove && Input.GetMouseButtonDown(0)) {
-                latestClick = 0;
-                clickPos = new(Input.mousePosition.x, Input.mousePosition.y);
+                clickPos = Input.mousePosition;
                 SendRay(0);
             }
             // Right click gui creation
             if (readyToMove && Input.GetMouseButtonUp(1)) {
-                latestClick = 1;
-                clickPos = new(Input.mousePosition.x, Input.mousePosition.y); 
+                clickPos = Input.mousePosition; 
                 SendRay(1);
             }
             // Checks if a movement path is currently being run through.
@@ -78,7 +74,6 @@ public class PlayerMovement : MonoBehaviour
 
         // cast ray
         if (Physics.Raycast (ray, out RaycastHit hit)) {
-            Vector2 rectMousePos = new(clickPos.x, Screen.height - clickPos.y);
             if (InsideGUIBox()) {
                 return;
             }
@@ -143,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
     // Readies the screen to have a gui, giving it the proper information.
     void ReadyGUI (RaycastHit hit) {
         guiTile = GetActualRayTile(hit);
-        guiPos = clickPos;
+        guiTile.GetComponent<TileSettings>().GuiOptions();
         openGUI = true;
     }
 
@@ -160,17 +155,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Create the clickable guis based on the tile
-    void OnGUI () {
-        if (openGUI) {
-            guiTile.GetComponent<TileSettings>().GuiOptions(guiPos, latestClick);
-        }
-    }
-
-
     bool InsideGUIBox() {
+        RectTransform interactionRect = GameObject.Find("Interaction Container").GetComponent<RectTransform>();
+        Vector2 localMousePosition = interactionRect.InverseTransformPoint(Input.mousePosition);
+        if (GameObject.Find("Tile Interaction").GetComponent<Canvas>().enabled && interactionRect.rect.Contains(localMousePosition)) {
+            return true;
+        }
+        InteractableObject.ResetGUI();
         RectTransform inventoryRect = GameObject.Find("Inventory Button").GetComponent<RectTransform>();
-        Vector2 localMousePosition = inventoryRect.InverseTransformPoint(Input.mousePosition);
+        localMousePosition = inventoryRect.InverseTransformPoint(Input.mousePosition);
         if (inventoryRect.rect.Contains(localMousePosition)) {
             return true;
         }
@@ -181,7 +174,7 @@ public class PlayerMovement : MonoBehaviour
         }
         RectTransform skillListRect = GameObject.Find("Skill List Package").GetComponent<RectTransform>();
         localMousePosition = skillListRect.InverseTransformPoint(Input.mousePosition);
-        if (skillListRect.rect.Contains(localMousePosition)) {
+        if (GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled && skillListRect.rect.Contains(localMousePosition)) {
             return true;
         }
         return false;

@@ -1,7 +1,9 @@
 
 
+using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractableItem : MonoBehaviour, InteractableObject  {
     bool pickingUpItem;
@@ -22,14 +24,24 @@ public class InteractableItem : MonoBehaviour, InteractableObject  {
             Destroy(gameObject);
         }
     }
-    public void CreateOptions(int previousHeight, Vector2 clickPos, int totalGUIWidth) {
-        if (GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y + previousHeight, totalGUIWidth, personalGUIHeight), "Pick Up")) {
-            Vector2Int pos = GetComponentInParent<BasicTile>().pos;
-            if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
-                Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
-            }
-            pickingUpItem = true;
-            PlayerMovement.openGUI = false;
+    public void CreateOptions(float previousHeight) {
+        GameObject interactionContainer = GameObject.Find("Interaction Container");
+        
+        GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"));
+        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Pick Up";
+        interactButton.GetComponent<Button>().onClick.AddListener(() => PickUpItem());
+        interactButton.transform.SetParent(interactionContainer.transform);
+        interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -previousHeight);
+
+        interactionContainer.GetComponent<RectTransform>().sizeDelta = interactionContainer.GetComponent<RectTransform>().sizeDelta + new Vector2(0, interactButton.GetComponent<RectTransform>().sizeDelta.y);
+    }
+
+    void PickUpItem() {
+        pickingUpItem = true;
+        InteractableObject.ResetGUI();
+        Vector2Int pos = GetComponentInParent<BasicTile>().pos;
+        if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
+            Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
         }
     }
 

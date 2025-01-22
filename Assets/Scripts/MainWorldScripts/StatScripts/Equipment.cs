@@ -16,7 +16,6 @@ public class Equipment : MonoBehaviour{
     private static Item leggingsSlot;
     private static Item gloveSlot;
     private static Item headPieceSlot;
-    public static event Action OnEquipmentInitialized;
 
     readonly Rect headPieceRect = new(Screen.width / 2 - 100, Screen.height / 2 - 200, 60, 30);
     readonly Rect chestplateRect = new(Screen.width / 2 - 100, Screen.height / 2 - 100, 60, 30);
