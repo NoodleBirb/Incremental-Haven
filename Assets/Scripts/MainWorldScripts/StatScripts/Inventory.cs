@@ -64,7 +64,7 @@ public class Inventory : MonoBehaviour
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Equipment Canvas").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled = false;
     }
 
     IEnumerator ZoomIntoPlayer() {

@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using Defective.JSON;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UserInterface : MonoBehaviour
 {
-    Rect inventoryRect;
     Rect swapSkillRect;
-    Rect runRect;
     bool openSwapSkill;
 
     List<Move> elementalSkills;
     List<Move> weaponSkills;
+
+    Slider playerHPSlider;
+    Slider enemyHPSlider;
+    Slider playerManaSlider;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,17 +25,41 @@ public class UserInterface : MonoBehaviour
         float rectYPos = Screen.height / 2;
         float rectHeight = 40f;
         float rectWidth = Screen.width / 2 - 40;
-        inventoryRect = new(rectXPos, rectYPos + 2 * 50f, rectWidth, rectHeight);
         swapSkillRect = new(rectXPos, rectYPos + 3 * 50f, rectWidth, rectHeight);
-        runRect = new(rectXPos, rectYPos + 4 * 50f, rectWidth, rectHeight);
+
+        playerHPSlider = GameObject.Find("Player HP Slider").GetComponent<Slider>();
+        playerHPSlider.maxValue = PlayerStatistics.totalStats["HP"];
+        playerHPSlider.value = PlayerStatistics.currentHP;
+
+        enemyHPSlider = GameObject.Find("Enemy HP Slider").GetComponent<Slider>();
+        enemyHPSlider.maxValue = EnemyStatistics.allEnemyStats[0]["HP"];
+        enemyHPSlider.value = EnemyStatistics.totalCurrentHP[0];
+
+        playerManaSlider = GameObject.Find("Player Mana Slider").GetComponent<Slider>();
+        playerManaSlider.maxValue = PlayerStatistics.totalStats["mana"];
+        playerManaSlider.value = PlayerStatistics.currentMana;
+
+
 
         GameObject.Find("Elemental Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenElementalSkill());
         GameObject.Find("Weapon Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenWeaponSkill());
 
+
+        GameObject.Find("Run Button").GetComponent<Button>().onClick.AddListener(() => SceneManager.LoadScene("firstarea"));
+
         FillMoveLists();
     }
 
+    public static void BeginTurn() {
+        GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = true;
+    }
+
     void OpenWeaponSkill() {
+
+        foreach (Transform transform in GameObject.Find("Weapon Skill Container").transform) {
+            GameObject.Destroy(transform.gameObject);
+        }
+
         int i = 0;
         GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = false;
         GameObject weaponSkillCanvas = GameObject.Find("Weapon Skill Canvas");
@@ -42,9 +69,7 @@ public class UserInterface : MonoBehaviour
             button.GetComponent<Button>().onClick.AddListener(() => weaponSkillCanvas.GetComponent<Canvas>().enabled = false);
             
             button.GetComponentInChildren<TextMeshProUGUI>().text = move.GetName();
-            button.transform.SetParent(weaponSkillCanvas.transform);
-            button.GetComponent<RectTransform>().anchoredPosition = GameObject.Find("Elemental Skill Button").GetComponent<RectTransform>().anchoredPosition + new Vector2(0, (button.GetComponent<RectTransform>().rect.height + 10) * i);
-            
+            button.transform.SetParent(GameObject.Find("Weapon Skill Container").transform);
             i++;
         }
         weaponSkillCanvas.GetComponent<Canvas>().enabled = true;
@@ -63,6 +88,10 @@ public class UserInterface : MonoBehaviour
     }
 
     void OpenElementalSkill() {
+        foreach (Transform transform in GameObject.Find("Elemental Skill Container").transform) {
+            GameObject.Destroy(transform.gameObject);
+        }
+
         int i = 0;
         GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = false;
         GameObject elementalSkillCanvas = GameObject.Find("Elemental Skill Canvas");
@@ -72,8 +101,7 @@ public class UserInterface : MonoBehaviour
             button.GetComponent<Button>().onClick.AddListener(() => elementalSkillCanvas.GetComponent<Canvas>().enabled = false);
             
             button.GetComponentInChildren<TextMeshProUGUI>().text = move.GetName();
-            button.transform.SetParent(elementalSkillCanvas.transform);
-            button.GetComponent<RectTransform>().anchoredPosition = GameObject.Find("Elemental Skill Button").GetComponent<RectTransform>().anchoredPosition + new Vector2(0, (button.GetComponent<RectTransform>().rect.height + 10) * i);
+            button.transform.SetParent(GameObject.Find("Elemental Skill Container").transform);
             
             i++;
         }
@@ -93,20 +121,6 @@ public class UserInterface : MonoBehaviour
     }
 
     void OnGUI() {
-
-        if (TurnDecider.turnOrder[0] == "player") {
-            if (GUI.Button(inventoryRect, "Inventory")) {
-                Debug.Log("open inventory");
-            }
-            if (GUI.Button(swapSkillRect, "Change Skill")) {
-                Debug.Log("Open change skill menu");
-                openSwapSkill = true;
-            }
-            if (GUI.Button(runRect, "Run")) {
-                SceneManager.LoadScene("firstarea");
-                Debug.Log("Run away!");
-            }
-        }
         if (openSwapSkill) {
             float rectXPos = Screen.width / 2 + 20;
             float rectYPos = Screen.height / 2;
@@ -138,8 +152,10 @@ public class UserInterface : MonoBehaviour
     }
     void PhysicalAttackEnemy(Move move) {
         EnemyStatistics.totalCurrentHP[0] -= move.GetPower() * PlayerStatistics.totalStats["strength"] / EnemyStatistics.allEnemyStats[0]["defense"]; 
+        enemyHPSlider.value = EnemyStatistics.totalCurrentHP[0];
     }
     void ElementalAttackEnemy (Move move) {
-        EnemyStatistics.totalCurrentHP[0] -= move.GetPower() * PlayerStatistics.totalStats["elemental_affinity"] / EnemyStatistics.allEnemyStats[0]["elemental_defense"]; 
+        EnemyStatistics.totalCurrentHP[0] -= move.GetPower() * PlayerStatistics.totalStats["elemental_affinity"] / EnemyStatistics.allEnemyStats[0]["elemental_defense"];
+        enemyHPSlider.value = EnemyStatistics.totalCurrentHP[0]; 
     }
 }

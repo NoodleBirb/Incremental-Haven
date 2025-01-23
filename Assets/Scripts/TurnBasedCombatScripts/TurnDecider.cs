@@ -19,6 +19,12 @@ public class TurnDecider : MonoBehaviour {
         playerAV = (int)(10000 / speedPlayer);
         enemyAV = (int)(10000 / speedEnemy);
         FillTurnOrder();
+
+        if (turnOrder[0] == "player") {
+            UserInterface.BeginTurn();
+        } else if (turnOrder[0] == "enemy") {
+            EnemyTurn.TakeTurn();
+        }
     }
 
     static void FillTurnOrder() {
@@ -35,8 +41,8 @@ public class TurnDecider : MonoBehaviour {
             enemyAV -= 1;
             playerAV -= 1;
         }
-        GameObject turnOrderCanvas = GameObject.Find("Turn Order Canvas");
-        foreach (Transform transform in turnOrderCanvas.transform) {
+        GameObject turnOrderContainer = GameObject.Find("Turn Order Container");
+        foreach (Transform transform in turnOrderContainer.transform) {
             GameObject.Destroy(transform.gameObject);
         }
         for (int i = 0; i < turnOrder.Count; i++) {
@@ -46,7 +52,7 @@ public class TurnDecider : MonoBehaviour {
             } else {
                 image.transform.Find("Turn Order Sprite").gameObject.GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + EnemyStatistics.enemyNames[0] + "_sprite");
             }
-            image.transform.SetParent(turnOrderCanvas.transform);
+            image.transform.SetParent(turnOrderContainer.transform);
             image.GetComponent<RectTransform>().anchoredPosition = new Vector2(10, -60 -60*i);
         }
     }
@@ -56,9 +62,16 @@ public class TurnDecider : MonoBehaviour {
             SceneManager.LoadScene("firstarea");
         } else if (PlayerStatistics.currentHP <= 0) {
             SceneManager.LoadScene("firstarea");
+        } else {
+            turnOrder.RemoveAt(0);
+            FillTurnOrder();
+
+            if (turnOrder[0] == "player") {
+                UserInterface.BeginTurn();
+            } else if (turnOrder[0] == "enemy") {
+                EnemyTurn.TakeTurn();
+            }
         }
-        turnOrder.RemoveAt(0);
-        FillTurnOrder();
     }
 
 
