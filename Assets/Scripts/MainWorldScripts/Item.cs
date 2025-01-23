@@ -9,14 +9,16 @@ public class Item {
     private readonly bool equippable;
     private readonly Dictionary<string, float> stats;
     private readonly Dictionary<string, bool> specific_functions;
+    private readonly string description;
 
 
-    public Item (string name, int id, bool equippable, Dictionary<string, float> stats, Dictionary<string, bool> specific_functions) {
+    public Item (string name, int id, bool equippable, Dictionary<string, float> stats, Dictionary<string, bool> specific_functions, string description) {
         this.name = name;
         this.id = id;
         this.equippable = equippable;
         this.stats = stats;
         this.specific_functions = specific_functions;
+        this.description = description;
     }
 
     public string GetName() {
@@ -50,17 +52,20 @@ public class Item {
         if (!equippable) return 0;
         return stats["resistance"];
     }
-    public float Getdefense() {
+    public float GetDefense() {
         if (!equippable) return 0;
         return stats["defense"];
     }
-    public float GetElementaldefense() {
+    public float GetElementalDefense() {
         if (!equippable) return 0;
         return stats["elemental_defense"];
     }
     public float GetElementalAffinity() {
         if (!equippable) return 0;
         return stats["elemental_affinity"];
+    }
+    public string GetDescription() {
+        return description;
     }
 
 

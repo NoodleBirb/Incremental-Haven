@@ -3,12 +3,12 @@ using System.Linq;
 using UnityEngine;
 using Defective.JSON;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using TMPro;
 
 public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
     private static Equipment equipment; 
     private static Inventory inventory;
-    static bool playerStatsInitialized = false;
     public static float currentHP;
     public static float currentMana;
 
@@ -43,10 +43,14 @@ public class PlayerStatistics : MonoBehaviour {
             equipment = GetComponent<Equipment>();
             inventory = GetComponent<Inventory>();
             UpdateStats();
+            currentHP = totalStats["HP"];
+            currentMana = totalStats["mana"];
         }
     }
 
     public static void UpdateStats() {
+        float oldMaxHP = totalStats["HP"];
+        float oldMaxMana = totalStats["mana"];
         totalStats = new()
         {
             ["strength"] = 1f,
@@ -58,11 +62,7 @@ public class PlayerStatistics : MonoBehaviour {
             ["elemental_affinity"] = 1f,
             ["HP"] = 10f + (Skills.playerIncrementality * 6) // Update this formula whenever all the skills are added.
         };
-        List<Item> equippedItems = new()
-        {
-            Equipment.GetWeaponSlot()
-        };
-        foreach (Item item in equippedItems) {
+        foreach (Item item in Equipment.GetEquippedItems().Values) {
             if (item != null) {
                 foreach(string key in item.GetStats().Keys.ToList<string>()) {
                     totalStats[key] += item.GetStats()[key];
@@ -73,26 +73,21 @@ public class PlayerStatistics : MonoBehaviour {
         foreach (string key in Skills.stats.Keys) {
             totalStats[key] += Skills.stats[key];
         }
-        currentHP = totalStats["HP"];
-        currentMana = totalStats["mana"];
-        playerStatsInitialized = true;
-    }
-     void OnGUI() {
-        if (playerStatsInitialized && Inventory.showInventory && !Inventory.shifting && !inventory.stillNotCloseEnough) {
-            int topStatBoxWidth = Screen.width / 8;
-            int bottomStatBoxWidth = Screen.width / 6;
-            int startPos = Screen.width / 2;
-            int yPos = Screen.height - 60;
-            GUI.Box(new(startPos, yPos, Screen.width / 2, 60), "");
-            GUI.Box(new(startPos, yPos, topStatBoxWidth, 30), "Strength: " + totalStats["strength"]);
-            GUI.Box(new(startPos + topStatBoxWidth, yPos, topStatBoxWidth, 30), "Speed: " + totalStats["speed"]);
-            GUI.Box(new(startPos + 2*topStatBoxWidth, yPos, topStatBoxWidth, 30), "Resistance: " + totalStats["resistance"]);
-            GUI.Box(new(startPos + 3*topStatBoxWidth, yPos, topStatBoxWidth, 30), "Mana: " + totalStats["mana"]);
-            yPos += 30;
-            GUI.Box(new(startPos, yPos, bottomStatBoxWidth, 30), "Defense: " + totalStats["defense"]);
-            GUI.Box(new(startPos + bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental defense: " + totalStats["elemental_defense"]);
-            GUI.Box(new(startPos + 2*bottomStatBoxWidth, yPos, bottomStatBoxWidth, 30), "Elemental Affinity: " + totalStats["elemental_affinity"]);
+        currentHP = totalStats["HP"] * currentHP / oldMaxHP;
+        currentMana = totalStats["mana"] * currentMana / oldMaxMana;
+        if (GameObject.Find("Inventory Canvas") != null) {
+            UpdateInventoryStats();
         }
-     }
+    }
 
+    public static void UpdateInventoryStats() {
+        GameObject.Find("HP").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["HP"];
+        GameObject.Find("Strength").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["strength"];
+        GameObject.Find("Speed").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["speed"];
+        GameObject.Find("Resistance").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["resistance"];
+        GameObject.Find("Mana").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["mana"];
+        GameObject.Find("Defense").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["defense"];
+        GameObject.Find("Elemental Defense").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["elemental_defense"];
+        GameObject.Find("Elemental Affinity").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["elemental_affinity"];
+    }
 }

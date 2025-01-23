@@ -14,5 +14,6 @@
     "specific_functions": {
         "weapon_slot": true,
         "one_handed": true
-    }
+    },
+    "description": "Basic one handed weapon used by all beginning on their journey."
 }

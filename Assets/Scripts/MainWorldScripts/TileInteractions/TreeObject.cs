@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TreeObject : MonoBehaviour, InteractableObject
 {
@@ -25,16 +27,27 @@ public class TreeObject : MonoBehaviour, InteractableObject
         }
     }
 
-    public void CreateOptions(int previousHeight, Vector2 clickPos, int totalGUIWidth) {
-        if (GUI.Button(new Rect(clickPos.x, Screen.height - clickPos.y + previousHeight, totalGUIWidth, personalGUIHeight), "Chop Tree")) {
-            Vector2Int pos = GetComponentInParent<BasicTile>().pos;
-            if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
-                Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
-            }
-            if (!isCut && Equipment.GetWeaponSlot() != null && Equipment.GetWeaponSlot().GetSpecificFunctions()["is_axe"]) {
-                treeCutTime = true;
-            }
-            PlayerMovement.openGUI = false;
+    public void CreateOptions(float previousHeight) {
+        
+        GameObject interactionContainer = GameObject.Find("Interaction Container");
+        
+        GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"));
+        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Chop Tree";
+        interactButton.GetComponent<Button>().onClick.AddListener(() => ChopTree());
+        interactButton.transform.SetParent(interactionContainer.transform);
+        interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -previousHeight);
+
+        interactionContainer.GetComponent<RectTransform>().sizeDelta = interactionContainer.GetComponent<RectTransform>().sizeDelta + new Vector2(0, interactButton.GetComponent<RectTransform>().sizeDelta.y);
+    }
+
+    void ChopTree() {
+        InteractableObject.ResetGUI();
+        Vector2Int pos = GetComponentInParent<BasicTile>().pos;
+        if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
+            Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
+        }
+        if (!isCut && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions()["is_axe"]) {
+            treeCutTime = true;
         }
     }
 
@@ -56,7 +69,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
     }
 
     public void InteractWith() {
-        if (!isCut && Equipment.GetWeaponSlot() != null && Equipment.GetWeaponSlot().GetSpecificFunctions().ContainsKey("is_axe"))  {
+        if (!isCut && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_axe"))  {
             treeCutTime = true;
         }
     }

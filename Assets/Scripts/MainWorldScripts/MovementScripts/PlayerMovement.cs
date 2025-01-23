@@ -15,8 +15,6 @@ public class PlayerMovement : MonoBehaviour
     public static bool openGUI;
     GameObject guiTile = null;
     Vector2 clickPos;
-    Vector2 guiPos;
-    int latestClick;
     public static event Action ResetActions;
 
 
@@ -45,14 +43,12 @@ public class PlayerMovement : MonoBehaviour
         if (!Inventory.showInventory) {
             // Left click movement
             if (readyToMove && Input.GetMouseButtonDown(0)) {
-                latestClick = 0;
-                clickPos = new(Input.mousePosition.x, Input.mousePosition.y);
+                clickPos = Input.mousePosition;
                 SendRay(0);
             }
             // Right click gui creation
             if (readyToMove && Input.GetMouseButtonUp(1)) {
-                latestClick = 1;
-                clickPos = new(Input.mousePosition.x, Input.mousePosition.y); 
+                clickPos = Input.mousePosition; 
                 SendRay(1);
             }
             // Checks if a movement path is currently being run through.
@@ -78,8 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
         // cast ray
         if (Physics.Raycast (ray, out RaycastHit hit)) {
-            Vector2 rectMousePos = new(clickPos.x, Screen.height - clickPos.y);
-            if (InsideGUIBox(rectMousePos)) {
+            if (InsideGUIBox()) {
                 return;
             }
             if (mouseInput == 0) {
@@ -143,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
     // Readies the screen to have a gui, giving it the proper information.
     void ReadyGUI (RaycastHit hit) {
         guiTile = GetActualRayTile(hit);
-        guiPos = clickPos;
+        guiTile.GetComponent<TileSettings>().GuiOptions();
         openGUI = true;
     }
 
@@ -160,37 +155,28 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Create the clickable guis based on the tile
-    void OnGUI () {
-        if (openGUI) {
-            guiTile.GetComponent<TileSettings>().GuiOptions(guiPos, latestClick);
-        }
-    }
-
-    // openGUI = false may cause problems if I want to use this checking code for things other than clicks
-    bool InsideGUIBox(Vector2 rectMousePos) {
-        Skills skills = GetComponent<Skills>();
-        Inventory inventory = GetComponent<Inventory>();
-        if (skills.skillListRect.Contains(rectMousePos)) {
-            openGUI = false;
+    bool InsideGUIBox() {
+        RectTransform interactionRect = GameObject.Find("Interaction Container").GetComponent<RectTransform>();
+        Vector2 localMousePosition = interactionRect.InverseTransformPoint(Input.mousePosition);
+        if (GameObject.Find("Tile Interaction").GetComponent<Canvas>().enabled && interactionRect.rect.Contains(localMousePosition)) {
             return true;
         }
-        if (openGUI) {
-            TileSettings guiTileSettings = guiTile.GetComponent<TileSettings>();
-            if (guiTileSettings.fullRectSize.Contains(rectMousePos)) {
-                return true;
-            }
-        }
-        if (skills.showSkillList && skills.windowRect.Contains(rectMousePos)) {
-            openGUI = false;
+        InteractableObject.ResetGUI();
+        RectTransform inventoryRect = GameObject.Find("Inventory Button").GetComponent<RectTransform>();
+        localMousePosition = inventoryRect.InverseTransformPoint(Input.mousePosition);
+        if (inventoryRect.rect.Contains(localMousePosition)) {
             return true;
         }
-        if (inventory.openInventoryRect.Contains(rectMousePos)) {
-            openGUI = false;
+        RectTransform skillsRect = GameObject.Find("Skills Button").GetComponent<RectTransform>();
+        localMousePosition = skillsRect.InverseTransformPoint(Input.mousePosition);
+        if (skillsRect.rect.Contains(localMousePosition)) {
             return true;
         }
-        //if (inventory)
-
+        RectTransform skillListRect = GameObject.Find("Skill List Package").GetComponent<RectTransform>();
+        localMousePosition = skillListRect.InverseTransformPoint(Input.mousePosition);
+        if (GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled && skillListRect.rect.Contains(localMousePosition)) {
+            return true;
+        }
         return false;
     }
 
