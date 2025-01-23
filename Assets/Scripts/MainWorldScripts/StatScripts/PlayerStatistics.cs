@@ -43,10 +43,14 @@ public class PlayerStatistics : MonoBehaviour {
             equipment = GetComponent<Equipment>();
             inventory = GetComponent<Inventory>();
             UpdateStats();
+            currentHP = totalStats["HP"];
+            currentMana = totalStats["mana"];
         }
     }
 
     public static void UpdateStats() {
+        float oldMaxHP = totalStats["HP"];
+        float oldMaxMana = totalStats["mana"];
         totalStats = new()
         {
             ["strength"] = 1f,
@@ -69,9 +73,11 @@ public class PlayerStatistics : MonoBehaviour {
         foreach (string key in Skills.stats.Keys) {
             totalStats[key] += Skills.stats[key];
         }
-        currentHP = totalStats["HP"];
-        currentMana = totalStats["mana"];
-        UpdateInventoryStats();
+        currentHP = totalStats["HP"] * currentHP / oldMaxHP;
+        currentMana = totalStats["mana"] * currentMana / oldMaxMana;
+        if (GameObject.Find("Inventory Canvas") != null) {
+            UpdateInventoryStats();
+        }
     }
 
     public static void UpdateInventoryStats() {

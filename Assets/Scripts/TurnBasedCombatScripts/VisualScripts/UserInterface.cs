@@ -44,7 +44,7 @@ public class UserInterface : MonoBehaviour
         GameObject.Find("Elemental Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenElementalSkill());
         GameObject.Find("Weapon Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenWeaponSkill());
 
-
+        GameObject.Find("Change Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenChangeSkill());
         GameObject.Find("Run Button").GetComponent<Button>().onClick.AddListener(() => SceneManager.LoadScene("firstarea"));
 
         FillMoveLists();
@@ -78,6 +78,7 @@ public class UserInterface : MonoBehaviour
         if (PlayerStatistics.currentMana >= move.GetManaCost()) {
             Debug.Log("I used move: " + move.GetName() + " which had: " + move.GetPower() + " power~!");
             PlayerStatistics.currentMana -= move.GetManaCost();
+            playerManaSlider.value = PlayerStatistics.currentMana;
             PhysicalAttackEnemy(move);
 
             TurnDecider.NextTurn();
@@ -98,7 +99,6 @@ public class UserInterface : MonoBehaviour
         foreach (Move move in elementalSkills) {
             GameObject button = GameObject.Instantiate(Resources.Load<GameObject>("UI/Use Skill Button"));
             button.GetComponent<Button>().onClick.AddListener(() => UseElementalSkill(move));
-            button.GetComponent<Button>().onClick.AddListener(() => elementalSkillCanvas.GetComponent<Canvas>().enabled = false);
             
             button.GetComponentInChildren<TextMeshProUGUI>().text = move.GetName();
             button.transform.SetParent(GameObject.Find("Elemental Skill Container").transform);
@@ -111,8 +111,9 @@ public class UserInterface : MonoBehaviour
         if (PlayerStatistics.currentMana >= move.GetManaCost()) {
             Debug.Log("I used move: " + move.GetName() + " which had: " + move.GetPower() + " power~!");
             PlayerStatistics.currentMana -= move.GetManaCost();
+            playerManaSlider.value = PlayerStatistics.currentMana;
             ElementalAttackEnemy(move);
-
+            GameObject.Find("Elemental Skill Canvas").GetComponent<Canvas>().enabled = false;
             TurnDecider.NextTurn();
         } else {
             Debug.Log("Not enough mana!");
@@ -120,25 +121,23 @@ public class UserInterface : MonoBehaviour
 
     }
 
-    void OnGUI() {
-        if (openSwapSkill) {
-            float rectXPos = Screen.width / 2 + 20;
-            float rectYPos = Screen.height / 2;
-            float rectHeight = 40f;
-            float rectWidth = Screen.width / 2 - 40;
-            int i = 0;
-            foreach (ISkillInterface skill in Skills.skillList.Values) {
-                if (skill.IsElementalSkill() && GUI.Button(new(rectXPos, rectYPos + rectHeight * i, rectWidth, rectHeight), skill.GetName())) {
-                    Skills.currentElementalSkill = skill;
-                    SetNewElementalSkills();
-                    PlayerStatistics.UpdateStats();
-                    openSwapSkill = false;
-                    TurnDecider.NextTurn();
-                }
-                i++;
-            }
-        }
+    void OpenChangeSkill() {
         
+        foreach (Transform transform in GameObject.Find("Change Skill Container").transform) {
+            GameObject.Destroy(transform.gameObject);
+        }
+        GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("Change Skill Canvas").GetComponent<Canvas>().enabled = true;
+        foreach (ISkillInterface skill in Skills.skillList.Values) {
+                if (skill.IsElementalSkill()) {
+                    GameObject skillBox = Instantiate(Resources.Load<GameObject>("UI/Skill Box"));
+
+                    skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+                    skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
+                    skillBox.GetComponent<Button>().onClick.AddListener(() => SetNewElementalSkills(skill));
+                    skillBox.transform.SetParent(GameObject.Find("Change Skill Container").transform);
+                }
+            }
     }
 
     void FillMoveLists() {
@@ -147,8 +146,11 @@ public class UserInterface : MonoBehaviour
 
     }
 
-    void SetNewElementalSkills() {
+    void SetNewElementalSkills(ISkillInterface skill) {
+        Skills.ChangeElementalSkill(skill);
         elementalSkills = ParseMoveNames.GetMoveList(ParseMoveNames.GetMoveNames(Skills.currentElementalSkill));
+        GameObject.Find("Change Skill Canvas").GetComponent<Canvas>().enabled = false;
+        TurnDecider.NextTurn();
     }
     void PhysicalAttackEnemy(Move move) {
         EnemyStatistics.totalCurrentHP[0] -= move.GetPower() * PlayerStatistics.totalStats["strength"] / EnemyStatistics.allEnemyStats[0]["defense"]; 
@@ -157,5 +159,12 @@ public class UserInterface : MonoBehaviour
     void ElementalAttackEnemy (Move move) {
         EnemyStatistics.totalCurrentHP[0] -= move.GetPower() * PlayerStatistics.totalStats["elemental_affinity"] / EnemyStatistics.allEnemyStats[0]["elemental_defense"];
         enemyHPSlider.value = EnemyStatistics.totalCurrentHP[0]; 
+    }
+
+    public static void CloseAllMenus() {
+        GameObject.Find("Weapon Skill Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("Elemental Skill Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("Change Skill Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = true;
     }
 }

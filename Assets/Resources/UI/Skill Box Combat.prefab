@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 5, y: -5}
-  m_SizeDelta: {x: 30, y: 30}
+  m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &7614545875373300993
 CanvasRenderer:
@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 8897516824814680666}
   - component: {fileID: 1912447461392307638}
   m_Layer: 5
-  m_Name: Skill Box
+  m_Name: Skill Box Combat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -382,7 +382,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250, y: 40}
+  m_SizeDelta: {x: 167, y: 70}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &6543669077052559253
 CanvasRenderer:

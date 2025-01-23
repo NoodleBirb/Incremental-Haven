@@ -87,9 +87,11 @@ public class Skills : MonoBehaviour
         stats = currentElementalSkill.GetStats();
     }
 
-    static void ChangeElementalSkill(ISkillInterface skill) {
+    public static void ChangeElementalSkill(ISkillInterface skill) {
         currentElementalSkill = skill;
-        GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+        if (GameObject.Find("Skill List Canvas") != null) {
+            GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+        }
         stats = skill.GetStats();
         PlayerStatistics.UpdateStats();
     }
