@@ -42,11 +42,12 @@ public class TurnDecider : MonoBehaviour {
         for (int i = 0; i < turnOrder.Count; i++) {
             GameObject image = GameObject.Instantiate(Resources.Load<GameObject>("UI/TurnImage"));
             if (turnOrder[i] == "player") {
-                image.GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/PlayerIcon");
+                image.transform.Find("Turn Order Sprite").gameObject.GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/PlayerIcon");
             } else {
-                image.GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + EnemyStatistics.enemyNames[0] + "_sprite");
+                image.transform.Find("Turn Order Sprite").gameObject.GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + EnemyStatistics.enemyNames[0] + "_sprite");
             }
             image.transform.SetParent(turnOrderCanvas.transform);
+            image.GetComponent<RectTransform>().anchoredPosition = new Vector2(10, -60 -60*i);
         }
     }
 

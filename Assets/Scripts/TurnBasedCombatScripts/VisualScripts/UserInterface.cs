@@ -8,13 +8,9 @@ using UnityEngine.UI;
 
 public class UserInterface : MonoBehaviour
 {
-    Rect elementalSkillRect;
     Rect inventoryRect;
     Rect swapSkillRect;
     Rect runRect;
-    bool openElementalSkill;
-    bool openWeaponSkill;
-    bool openInventory;
     bool openSwapSkill;
 
     List<Move> elementalSkills;
@@ -26,7 +22,6 @@ public class UserInterface : MonoBehaviour
         float rectYPos = Screen.height / 2;
         float rectHeight = 40f;
         float rectWidth = Screen.width / 2 - 40;
-        elementalSkillRect = new(rectXPos, rectYPos, rectWidth, rectHeight);
         inventoryRect = new(rectXPos, rectYPos + 2 * 50f, rectWidth, rectHeight);
         swapSkillRect = new(rectXPos, rectYPos + 3 * 50f, rectWidth, rectHeight);
         runRect = new(rectXPos, rectYPos + 4 * 50f, rectWidth, rectHeight);
@@ -99,7 +94,7 @@ public class UserInterface : MonoBehaviour
 
     void OnGUI() {
 
-        if (TurnDecider.turnOrder[0] == "player" && !InMenu()) {
+        if (TurnDecider.turnOrder[0] == "player") {
             if (GUI.Button(inventoryRect, "Inventory")) {
                 Debug.Log("open inventory");
             }
@@ -111,9 +106,6 @@ public class UserInterface : MonoBehaviour
                 SceneManager.LoadScene("firstarea");
                 Debug.Log("Run away!");
             }
-        }
-        if (openInventory) {
-
         }
         if (openSwapSkill) {
             float rectXPos = Screen.width / 2 + 20;
@@ -144,10 +136,6 @@ public class UserInterface : MonoBehaviour
     void SetNewElementalSkills() {
         elementalSkills = ParseMoveNames.GetMoveList(ParseMoveNames.GetMoveNames(Skills.currentElementalSkill));
     }
-    bool InMenu() {
-        return openElementalSkill || openInventory || openSwapSkill || openWeaponSkill;
-    }
-
     void PhysicalAttackEnemy(Move move) {
         EnemyStatistics.totalCurrentHP[0] -= move.GetPower() * PlayerStatistics.totalStats["strength"] / EnemyStatistics.allEnemyStats[0]["defense"]; 
     }
