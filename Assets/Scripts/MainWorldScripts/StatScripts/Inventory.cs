@@ -132,7 +132,6 @@ public class Inventory : MonoBehaviour
                 equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Boots Slot"));
             }
             
-            Debug.Log( Resources.Load<Sprite>("UI/Images/" + item.GetName()));
             equipmentItem.transform.Find("Item Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             equipmentItem.transform.SetParent(GameObject.Find("Inventory List").transform);
         }

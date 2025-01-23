@@ -1,19 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using Defective.JSON;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UserInterface : MonoBehaviour
 {
     Rect elementalSkillRect;
-    Rect weaponSkillRect;
     Rect inventoryRect;
     Rect swapSkillRect;
     Rect runRect;
-    Rect playerHealthRect;
-    Rect enemyHealthRect;
-    Rect playerManaRect;
     bool openElementalSkill;
     bool openWeaponSkill;
     bool openInventory;
@@ -29,36 +27,79 @@ public class UserInterface : MonoBehaviour
         float rectHeight = 40f;
         float rectWidth = Screen.width / 2 - 40;
         elementalSkillRect = new(rectXPos, rectYPos, rectWidth, rectHeight);
-        weaponSkillRect = new(rectXPos, rectYPos + 50f, rectWidth, rectHeight);
         inventoryRect = new(rectXPos, rectYPos + 2 * 50f, rectWidth, rectHeight);
         swapSkillRect = new(rectXPos, rectYPos + 3 * 50f, rectWidth, rectHeight);
         runRect = new(rectXPos, rectYPos + 4 * 50f, rectWidth, rectHeight);
 
-        playerHealthRect = new(40f, Screen.height - 40f, rectWidth * 3 / 4, 30f);
-        enemyHealthRect = new(Screen.width - 3 * rectWidth / 4 - 30, 40f, 3 * rectWidth / 4, 30f);
-        playerManaRect = new(40f, Screen.height - 80f, rectWidth / 2, 30f);
-
+        GameObject.Find("Elemental Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenElementalSkill());
+        GameObject.Find("Weapon Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenWeaponSkill());
 
         FillMoveLists();
     }
 
+    void OpenWeaponSkill() {
+        int i = 0;
+        GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject weaponSkillCanvas = GameObject.Find("Weapon Skill Canvas");
+        foreach (Move move in weaponSkills) {
+            GameObject button = GameObject.Instantiate(Resources.Load<GameObject>("UI/Use Skill Button"));
+            button.GetComponent<Button>().onClick.AddListener(() => UseWeaponSkill(move));
+            button.GetComponent<Button>().onClick.AddListener(() => weaponSkillCanvas.GetComponent<Canvas>().enabled = false);
+            
+            button.GetComponentInChildren<TextMeshProUGUI>().text = move.GetName();
+            button.transform.SetParent(weaponSkillCanvas.transform);
+            button.GetComponent<RectTransform>().anchoredPosition = GameObject.Find("Elemental Skill Button").GetComponent<RectTransform>().anchoredPosition + new Vector2(0, (button.GetComponent<RectTransform>().rect.height + 10) * i);
+            
+            i++;
+        }
+        weaponSkillCanvas.GetComponent<Canvas>().enabled = true;
+    }
+    void UseWeaponSkill(Move move) {
+        if (PlayerStatistics.currentMana >= move.GetManaCost()) {
+            Debug.Log("I used move: " + move.GetName() + " which had: " + move.GetPower() + " power~!");
+            PlayerStatistics.currentMana -= move.GetManaCost();
+            PhysicalAttackEnemy(move);
 
+            TurnDecider.NextTurn();
+        } else {
+            Debug.Log("Not enough mana!");
+        }
+
+    }
+
+    void OpenElementalSkill() {
+        int i = 0;
+        GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject elementalSkillCanvas = GameObject.Find("Elemental Skill Canvas");
+        foreach (Move move in elementalSkills) {
+            GameObject button = GameObject.Instantiate(Resources.Load<GameObject>("UI/Use Skill Button"));
+            button.GetComponent<Button>().onClick.AddListener(() => UseElementalSkill(move));
+            button.GetComponent<Button>().onClick.AddListener(() => elementalSkillCanvas.GetComponent<Canvas>().enabled = false);
+            
+            button.GetComponentInChildren<TextMeshProUGUI>().text = move.GetName();
+            button.transform.SetParent(elementalSkillCanvas.transform);
+            button.GetComponent<RectTransform>().anchoredPosition = GameObject.Find("Elemental Skill Button").GetComponent<RectTransform>().anchoredPosition + new Vector2(0, (button.GetComponent<RectTransform>().rect.height + 10) * i);
+            
+            i++;
+        }
+        elementalSkillCanvas.GetComponent<Canvas>().enabled = true;
+    }
+    void UseElementalSkill(Move move) {
+        if (PlayerStatistics.currentMana >= move.GetManaCost()) {
+            Debug.Log("I used move: " + move.GetName() + " which had: " + move.GetPower() + " power~!");
+            PlayerStatistics.currentMana -= move.GetManaCost();
+            ElementalAttackEnemy(move);
+
+            TurnDecider.NextTurn();
+        } else {
+            Debug.Log("Not enough mana!");
+        }
+
+    }
 
     void OnGUI() {
 
-        GUI.Box (playerHealthRect, PlayerStatistics.currentHP + "/" + PlayerStatistics.totalStats["HP"]);
-        GUI.Box (enemyHealthRect, EnemyStatistics.totalCurrentHP[0] + "/" + EnemyStatistics.allEnemyStats[0]["HP"]);
-        GUI.Box (playerManaRect, PlayerStatistics.currentMana + "/" + PlayerStatistics.totalStats["mana"]);
-
         if (TurnDecider.turnOrder[0] == "player" && !InMenu()) {
-            if (GUI.Button(elementalSkillRect, "Elemental Skill")) {
-                Debug.Log("open elemental skill menu");
-                openElementalSkill = true;
-            }
-            if (GUI.Button(weaponSkillRect, "Weapon Skill")) {
-                Debug.Log("open weapon skill menu");
-                openWeaponSkill = true;
-            }
             if (GUI.Button(inventoryRect, "Inventory")) {
                 Debug.Log("open inventory");
             }
@@ -69,50 +110,6 @@ public class UserInterface : MonoBehaviour
             if (GUI.Button(runRect, "Run")) {
                 SceneManager.LoadScene("firstarea");
                 Debug.Log("Run away!");
-            }
-        }
-        if (openElementalSkill) {
-            float rectXPos = Screen.width / 2 + 20;
-            float rectYPos = Screen.height / 2;
-            float rectHeight = 40f;
-            float rectWidth = Screen.width / 2 - 40;
-            int i = 0;
-            foreach (Move move in elementalSkills) {
-                if (GUI.Button(new(rectXPos, rectYPos + rectHeight * i, rectWidth, rectHeight), move.GetName())) {
-                    if (PlayerStatistics.currentMana > move.GetManaCost()) {
-                        Debug.Log("I used move: " + move.GetName() + " which had: " + move.GetPower() + " power~!");
-                        PlayerStatistics.currentMana -= move.GetManaCost();
-                        ElementalAttackEnemy(move);
-                        openElementalSkill = false;
-                        TurnDecider.NextTurn();
-                    } else {
-                        Debug.Log("Not enough mana!");
-                        openElementalSkill = false;
-                    }
-                }
-                i++;
-            }
-        }
-        if (openWeaponSkill) {
-            float rectXPos = Screen.width / 2 + 20;
-            float rectYPos = Screen.height / 2;
-            float rectHeight = 40f;
-            float rectWidth = Screen.width / 2 - 40;
-            int i = 0;
-            foreach (Move move in weaponSkills) {
-                if (GUI.Button(new(rectXPos, rectYPos + rectHeight * i, rectWidth, rectHeight), move.GetName())) {
-                    if (PlayerStatistics.currentMana > move.GetManaCost()) {
-                        Debug.Log("I used move: " + move.GetName() + " which had: " + move.GetPower() + " power~!");
-                        PlayerStatistics.currentMana -= move.GetManaCost();
-                        PhysicalAttackEnemy(move);
-                        openWeaponSkill = false;
-                        TurnDecider.NextTurn();
-                    } else {
-                        Debug.Log("Not enough mana!");
-                        openWeaponSkill = false;
-                    }
-                }
-                i++;
             }
         }
         if (openInventory) {

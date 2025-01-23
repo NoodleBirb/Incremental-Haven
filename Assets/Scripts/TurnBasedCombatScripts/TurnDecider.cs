@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TurnDecider : MonoBehaviour {
     public static List<string> turnOrder;
-    public Queue currentTurnOrder;
-    float speedPlayer;
-    float speedEnemy;
-    int playerAV;
-    int enemyAV;
+    static float speedPlayer;
+    static float speedEnemy;
+    static int playerAV;
+    static int enemyAV;
 
     void Start() {
         speedPlayer = PlayerPrefs.GetFloat("speed_player");
@@ -21,7 +21,7 @@ public class TurnDecider : MonoBehaviour {
         FillTurnOrder();
     }
 
-    void FillTurnOrder() {
+    static void FillTurnOrder() {
         while(turnOrder.Count < 5) {
             if (playerAV == 0) {
                 turnOrder.Add("player");
@@ -35,17 +35,18 @@ public class TurnDecider : MonoBehaviour {
             enemyAV -= 1;
             playerAV -= 1;
         }
-    }
-
-    void OnGUI() {
-        if (turnOrder.Count == 5) {
-            GUI.Box(new(0, 0, 80, 40), turnOrder[0]);
-            GUI.Box(new(0, 40, 80, 40), turnOrder[1]);
-            GUI.Box(new(0, 80, 80, 40), turnOrder[2]);
-            GUI.Box(new(0, 120, 80, 40), turnOrder[3]);
-            GUI.Box(new(0, 160, 80, 40), turnOrder[4]);
-        } else {
-            FillTurnOrder();
+        GameObject turnOrderCanvas = GameObject.Find("Turn Order Canvas");
+        foreach (Transform transform in turnOrderCanvas.transform) {
+            GameObject.Destroy(transform.gameObject);
+        }
+        for (int i = 0; i < turnOrder.Count; i++) {
+            GameObject image = GameObject.Instantiate(Resources.Load<GameObject>("UI/TurnImage"));
+            if (turnOrder[i] == "player") {
+                image.GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/PlayerIcon");
+            } else {
+                image.GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + EnemyStatistics.enemyNames[0] + "_sprite");
+            }
+            image.transform.SetParent(turnOrderCanvas.transform);
         }
     }
 
@@ -56,6 +57,7 @@ public class TurnDecider : MonoBehaviour {
             SceneManager.LoadScene("firstarea");
         }
         turnOrder.RemoveAt(0);
+        FillTurnOrder();
     }
 
 
