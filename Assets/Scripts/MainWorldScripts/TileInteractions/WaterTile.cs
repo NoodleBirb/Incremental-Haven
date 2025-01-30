@@ -9,22 +9,14 @@ public class WaterTile : MonoBehaviour, InteractableObject
 {
     private readonly int personalGUIHeight = 50;
     private int waterTime;
-    private bool fishingTime;
     public bool isFished;
     GameObject Player;
     
     void Start() {
         isFished = false;
         waterTime = 0;
-        fishingTime = false;
         PlayerMovement.ResetActions += StopCuttingTree;
         Player = GameObject.Find("Player");
-    }
-
-    void Update() {
-        if (fishingTime && Player.GetComponent<PlayerMovement>().movementPath.Count == 0) {
-            StartCoroutine(Fish());
-        }
     }
 
     public void CreateOptions(float previousHeight) {
@@ -46,7 +38,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
             Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
         }
         if (!isFished && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions()["is_fishing_rod"]) {
-            fishingTime = true;
+            StartCoroutine(Fish());
         }
     }
 
@@ -56,11 +48,13 @@ public class WaterTile : MonoBehaviour, InteractableObject
 
 
     IEnumerator Fish() {
+        while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
+            yield return null;
+        }
         waterTime += 1;
-        if (waterTime == 300) {
+        if (waterTime == 30) {
             Skills.skillList["Fishing"].IncreaseEXP(20);
             StopCoroutine(Fish());
-            fishingTime = false;
             waterTime = 0;
             isFished = true;
         }
@@ -69,11 +63,11 @@ public class WaterTile : MonoBehaviour, InteractableObject
 
     public void InteractWith() {
         if (!isFished && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_fishing_rod"))  {
-            fishingTime = true;
+            StartCoroutine(Fish());
         }
     }
     public void StopCuttingTree() {
-        fishingTime = false;
+        StopCoroutine(Fish());
         waterTime = 0;
 
     }

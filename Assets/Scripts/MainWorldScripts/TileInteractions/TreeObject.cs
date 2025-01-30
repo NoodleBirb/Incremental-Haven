@@ -9,22 +9,14 @@ public class TreeObject : MonoBehaviour, InteractableObject
 {
     private readonly int personalGUIHeight = 50;
     private int treeTime;
-    private bool treeCutTime;
     public bool isCut;
     GameObject Player;
     
     void Start() {
         isCut = false;
         treeTime = 0;
-        treeCutTime = false;
         PlayerMovement.ResetActions += StopCuttingTree;
         Player = GameObject.Find("Player");
-    }
-
-    void Update() {
-        if (treeCutTime && Player.GetComponent<PlayerMovement>().movementPath.Count == 0) {
-            StartCoroutine(CutTree());
-        }
     }
 
     public void CreateOptions(float previousHeight) {
@@ -47,7 +39,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
             Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
         }
         if (!isCut && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions()["is_axe"]) {
-            treeCutTime = true;
+            StartCoroutine(CutTree());
         }
     }
 
@@ -57,11 +49,13 @@ public class TreeObject : MonoBehaviour, InteractableObject
 
 
     IEnumerator CutTree() {
+        while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
+            yield return null;
+        }
         treeTime += 1;
-        if (treeTime == 300) {
+        if (treeTime == 30) {
             Skills.skillList["Woodcutting"].IncreaseEXP(20);
             StopCoroutine(CutTree());
-            treeCutTime = false;
             treeTime = 0;
             isCut = true;
         }
@@ -70,11 +64,11 @@ public class TreeObject : MonoBehaviour, InteractableObject
 
     public void InteractWith() {
         if (!isCut && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_axe"))  {
-            treeCutTime = true;
+            StartCoroutine(CutTree());
         }
     }
     public void StopCuttingTree() {
-        treeCutTime = false;
+        StopCoroutine(CutTree());
         treeTime = 0;
 
     }

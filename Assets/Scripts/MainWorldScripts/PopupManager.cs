@@ -16,6 +16,5 @@ public class PopupManager : MonoBehaviour {
         popup.transform.Find("Popup Text").GetComponent<TextMeshProUGUI>().text = text;
         popup.transform.Find("Close Button").GetComponent<Button>().onClick.AddListener(() => GameObject.Destroy(popup));
         popup.transform.SetParent(GameObject.Find("Popup Container").transform);
-
     }
 }
