@@ -8,37 +8,7 @@ using UnityEngine.UI;
 public class Equipment : MonoBehaviour{
 
     private static Dictionary<string, Item> equippedItems;
-    private static Item weaponSlot;
-    private static Item chestplateSlot;
-    private static Item offHandSlot;
-    private static Item necklaceSlot;
-    private static Item bootSlot;
-    private static Item leggingsSlot;
-    private static Item gloveSlot;
-    private static Item headPieceSlot;
-
-    readonly Rect headPieceRect = new(Screen.width / 2 - 100, Screen.height / 2 - 200, 60, 30);
-    readonly Rect chestplateRect = new(Screen.width / 2 - 100, Screen.height / 2 - 100, 60, 30);
-    readonly Rect weaponRect = new(Screen.width / 2 - 100, Screen.height / 2, 60, 30);
-    readonly Rect leggingsRect = new(Screen.width / 2 - 100, Screen.height / 2 + 100, 60, 30);
-    
-
-    readonly Rect necklaceRect = new(50, Screen.height / 2 - 155, 60, 30);
-    readonly Rect offHandRect = new(50, Screen.height / 2 - 55, 60, 30);
-    readonly Rect gloveRect = new(50, Screen.height / 2 + 55, 60, 30);
-    readonly Rect bootRect = new(50, Screen.height / 2 + 155, 60, 30);
-
-    private LineRenderer lineRenderer;
-    private Vector3[] positions;
-    Inventory inventory;
-    GameObject player;
-    GameObject head;
-    GameObject chest;
-    GameObject neck;
-    GameObject rightFoot;
-    GameObject rightArm;
-    GameObject leftArm;
-    GameObject leftLeg;
+    private (GameObject, GameObject)[] slotContainersAndBodyParts;
     void Start() {
         equippedItems ??= new() {
             ["Weapon Slot"] = null,
@@ -50,78 +20,39 @@ public class Equipment : MonoBehaviour{
             ["Head Piece Slot"] = null,
             ["Chestplate Slot"] = null
         };
-        inventory = GetComponent<Inventory>();
-        player = GameObject.Find("player model");
-        head = GameObject.Find("Paper Bag");
-        chest = GameObject.Find("Torso");
-        neck = GameObject.Find("Neck");
-        rightFoot = GameObject.Find("Right Foot");
-        rightArm = GameObject.Find("Right Arm");
-        leftArm = GameObject.Find("Left Arm");
-        leftLeg = GameObject.Find("Left Leg");
-
-        // Get or add the LineRenderer component
-        lineRenderer = GetComponent<LineRenderer>();
-        if (lineRenderer == null)
-            lineRenderer = gameObject.AddComponent<LineRenderer>();
-
-        positions = new Vector3[] {
-            // Headpiece
-            new(), head.transform.position,
-            // Chest
-            new(), chest.transform.position,
-            // Weapon
-            new(), leftArm.transform.position,
-            // Leggings
-            new(), leftLeg.transform.position,
-            // Necklace
-            new(), neck.transform.position,
-            // Boots
-            new(), rightFoot.transform.position,
-            // Off Hand
-            new(), rightArm.transform.position,
-            // Gloves
-            new(), rightArm.transform.position,      
+        slotContainersAndBodyParts = new (GameObject, GameObject)[] {
+            (GameObject.Find("Head Piece Slot Container"), GameObject.Find("Paper Bag")),
+            (GameObject.Find("Chestplate Slot Container"), GameObject.Find("Torso")),
+            (GameObject.Find("Weapon Slot Container"), GameObject.Find("Left Arm")),
+            (GameObject.Find("Leggings Slot Container"), GameObject.Find("Left Leg")),
+            (GameObject.Find("Necklace Slot Container"), GameObject.Find("Neck")),
+            (GameObject.Find("Boots Slot Container"), GameObject.Find("Right Foot")),
+            (GameObject.Find("Off Hand Slot Container"), GameObject.Find("Right Arm")),
+            (GameObject.Find("Glove Slot Container"), GameObject.Find("Right Arm"))
         };
-
-        // Configure the LineRenderer
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
-        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        lineRenderer.positionCount = 16; // 8 lines = 16 points
-        lineRenderer.useWorldSpace = false;
-        lineRenderer.enabled = false;
-        
-        lineRenderer.SetPositions(positions);
     }
 
-    void OnGUI() {
-            Vector3 rightDir = player.transform.right;
-            Vector3 forwardDir = player.transform.forward;
+    void Update() {
+        if (Inventory.fullyOpen) {
+
+            foreach((GameObject container, GameObject bodyPart) in slotContainersAndBodyParts) {
+
+            }
+
+            LineRenderer selectedRenderer = GameObject.Find("Head Piece Slot Container").GetComponent<LineRenderer>();
+
+            selectedRenderer.enabled = true;
+
             
-            lineRenderer.enabled = false;
-            /* positions = new Vector3[] {
-                // Headpiece
-                player.transform.position - rightDir + new Vector3(0, 2f, 0), Camera.main.WorldToScreenPoint(head.transform.position),
-                // Chest
-                player.transform.position - rightDir + new Vector3(0, 1.5f, 0), Camera.main.WorldToScreenPoint(chest.transform.position),
-                // Weapon
-                player.transform.position + rightDir, Camera.main.WorldToScreenPoint(leftArm.transform.position),
-                // Leggings
-                player.transform.position + rightDir, Camera.main.WorldToScreenPoint(leftLeg.transform.position),
-                // Necklace
-                player.transform.position + rightDir + new Vector3(0, 1.8f, 0), Camera.main.WorldToScreenPoint(neck.transform.position),
-                // Boots
-                player.transform.position - rightDir + new Vector3(0, .1f, 0), Camera.main.WorldToScreenPoint(rightFoot.transform.position),
-                // Off Hand
-                player.transform.position + rightDir + new Vector3(0, 2f, 0), Camera.main.WorldToScreenPoint(rightArm.transform.position),
-                // Gloves
-                player.transform.position + rightDir, Camera.main.WorldToScreenPoint(rightArm.transform.position),
-                
-            }; */
-            lineRenderer.SetPositions(positions);
+
+        } else {
+        }
     }
 
+    Vector3 WorldPositionFromUI(RectTransform uiElement) {
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(uiElement, uiElement.position, Camera.main, out Vector3 worldPos);
+        return worldPos;
+    }
 
     public static void SwapEquipmentPiece(Item item, string type) {
         

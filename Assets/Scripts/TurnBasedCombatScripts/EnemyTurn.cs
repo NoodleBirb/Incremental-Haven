@@ -32,7 +32,7 @@ public class EnemyTurn : MonoBehaviour {
         }
         playerHPSlider.value = PlayerStatistics.currentHP;
         Debug.Log("Enemy used move: " + pickedMove.GetName() + " which had: " + pickedMove.GetPower() + " power~!");
-        TurnDecider.NextTurn();
+        GameObject.Find("ScriptHolder").GetComponent<CombatAnimationhandler>().RunAnimation(pickedMove.GetName(), GameObject.Find("Enemy"));
     }
 
 }

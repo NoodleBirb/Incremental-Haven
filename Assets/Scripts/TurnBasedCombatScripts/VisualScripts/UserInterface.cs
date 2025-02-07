@@ -80,7 +80,7 @@ public class UserInterface : MonoBehaviour
             playerManaSlider.value = PlayerStatistics.currentMana;
             PhysicalAttackEnemy(move);
 
-            TurnDecider.NextTurn();
+            GameObject.Find("ScriptHolder").GetComponent<CombatAnimationhandler>().RunAnimation(move.GetName(), GameObject.Find("Player"));
         } else {
             Debug.Log("Not enough mana!");
         }
@@ -112,7 +112,7 @@ public class UserInterface : MonoBehaviour
             playerManaSlider.value = PlayerStatistics.currentMana;
             ElementalAttackEnemy(move);
             GameObject.Find("Elemental Skill Canvas").GetComponent<Canvas>().enabled = false;
-            TurnDecider.NextTurn();
+            GameObject.Find("ScriptHolder").GetComponent<CombatAnimationhandler>().RunAnimation(move.GetName(), GameObject.Find("Player"));
         } else {
             Debug.Log("Not enough mana!");
         }

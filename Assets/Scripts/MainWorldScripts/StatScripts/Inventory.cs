@@ -12,7 +12,6 @@ using UnityEngine.UIElements;
 public class Inventory : MonoBehaviour
 {
     public static bool showInventory = false;
-    public Rect openInventoryRect;
     public bool stillNotCloseEnough;
     public static bool shifting;
     GameObject player;
@@ -22,6 +21,7 @@ public class Inventory : MonoBehaviour
     public static List<Item> inventoryList;
     float startTime;
     Vector3 intitialPos;
+    public static bool fullyOpen;
 
     void Start() {
         startTime = Time.time;
@@ -31,7 +31,7 @@ public class Inventory : MonoBehaviour
         intitialPos = mainCamera.transform.position;
         stillNotCloseEnough = false;
         showInventory = false;
-        openInventoryRect = new(Screen.width - 200, Screen.height - 50, 100, 50);
+        fullyOpen = false;
 
         TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
         Item item = LoadItemFromJson(stoneAxe.text);
@@ -60,6 +60,7 @@ public class Inventory : MonoBehaviour
     }
     public void CloseInventory() {
         showInventory = false;
+        fullyOpen = false;
         GameObject.Find("World Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = false;
@@ -138,6 +139,7 @@ public class Inventory : MonoBehaviour
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Equipment Canvas").GetComponent<Canvas>().enabled = true;
+        fullyOpen = true;
     }
 
     static void EquipItem(Item item, string itemType) {
