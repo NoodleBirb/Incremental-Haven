@@ -64,12 +64,11 @@ public class UserInterface : MonoBehaviour
         GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = false;
         GameObject weaponSkillCanvas = GameObject.Find("Weapon Skill Canvas");
         foreach (Move move in weaponSkills) {
-            GameObject button = GameObject.Instantiate(Resources.Load<GameObject>("UI/Use Skill Button"));
+            GameObject button = GameObject.Instantiate(Resources.Load<GameObject>("UI/Use Skill Button"), GameObject.Find("Weapon Skill Container").transform);
             button.GetComponent<Button>().onClick.AddListener(() => UseWeaponSkill(move));
             button.GetComponent<Button>().onClick.AddListener(() => weaponSkillCanvas.GetComponent<Canvas>().enabled = false);
             
             button.GetComponentInChildren<TextMeshProUGUI>().text = move.GetName();
-            button.transform.SetParent(GameObject.Find("Weapon Skill Container").transform);
             i++;
         }
         weaponSkillCanvas.GetComponent<Canvas>().enabled = true;
@@ -97,11 +96,10 @@ public class UserInterface : MonoBehaviour
         GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = false;
         GameObject elementalSkillCanvas = GameObject.Find("Elemental Skill Canvas");
         foreach (Move move in elementalSkills) {
-            GameObject button = GameObject.Instantiate(Resources.Load<GameObject>("UI/Use Skill Button"));
+            GameObject button = GameObject.Instantiate(Resources.Load<GameObject>("UI/Use Skill Button"), GameObject.Find("Elemental Skill Container").transform);
             button.GetComponent<Button>().onClick.AddListener(() => UseElementalSkill(move));
             
             button.GetComponentInChildren<TextMeshProUGUI>().text = move.GetName();
-            button.transform.SetParent(GameObject.Find("Elemental Skill Container").transform);
             
             i++;
         }
@@ -130,12 +128,11 @@ public class UserInterface : MonoBehaviour
         GameObject.Find("Change Skill Canvas").GetComponent<Canvas>().enabled = true;
         foreach (ISkillInterface skill in Skills.skillList.Values) {
                 if (skill.IsElementalSkill()) {
-                    GameObject skillBox = Instantiate(Resources.Load<GameObject>("UI/Skill Box"));
+                    GameObject skillBox = Instantiate(Resources.Load<GameObject>("UI/Skill Box"), GameObject.Find("Change Skill Container").transform);
 
                     skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
                     skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
                     skillBox.GetComponent<Button>().onClick.AddListener(() => SetNewElementalSkills(skill));
-                    skillBox.transform.SetParent(GameObject.Find("Change Skill Container").transform);
                 }
             }
     }

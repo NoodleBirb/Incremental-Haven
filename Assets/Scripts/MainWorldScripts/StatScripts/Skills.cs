@@ -60,13 +60,12 @@ public class Skills : MonoBehaviour
             Destroy (skill.gameObject);
         }
         foreach (ISkillInterface skill in skillList.Values) {
-            GameObject skillBox = Instantiate(Resources.Load<GameObject>("UI/Skill Box"));
+            GameObject skillBox = Instantiate(Resources.Load<GameObject>("UI/Skill Box"), GameObject.Find("Skill List Content").transform);
             if (isElementalTab) {
                 if (skill.IsElementalSkill()) {
                     skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
                     skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
                     skillBox.GetComponent<Button>().onClick.AddListener(() => ChangeElementalSkill(skill));
-                    skillBox.transform.SetParent(GameObject.Find("Skill List Content").transform);
                 } else {
                     Destroy (skillBox);
                 }
@@ -75,7 +74,6 @@ public class Skills : MonoBehaviour
                     skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
                     skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
                     skillBox.GetComponent<Button>().interactable = false;
-                    skillBox.transform.SetParent(GameObject.Find("Skill List Content").transform);
                 } else {
                     Destroy (skillBox);
                 }

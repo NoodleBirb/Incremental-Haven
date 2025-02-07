@@ -20,6 +20,9 @@ public class Fishing : ISkillInterface {
     public float GetEXP() {
         return fishingEXP;
     }
+    public float GetThreshold() {
+        return nextEXPThreshold;
+    }
     // Increment the exp stored in the Woodcutting object by an 'increase'
     public void IncreaseEXP(float increase) {
         fishingEXP += increase;

@@ -27,10 +27,9 @@ public class InteractableItem : MonoBehaviour, InteractableObject  {
     public void CreateOptions(float previousHeight) {
         GameObject interactionContainer = GameObject.Find("Interaction Container");
         
-        GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"));
+        GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Pick Up";
         interactButton.GetComponent<Button>().onClick.AddListener(() => PickUpItem());
-        interactButton.transform.SetParent(interactionContainer.transform);
         interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -previousHeight);
 
         interactionContainer.GetComponent<RectTransform>().sizeDelta = interactionContainer.GetComponent<RectTransform>().sizeDelta + new Vector2(0, interactButton.GetComponent<RectTransform>().sizeDelta.y);

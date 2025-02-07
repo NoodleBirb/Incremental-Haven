@@ -16,6 +16,9 @@ public class OneHandedCombat : ISkillInterface
     public string GetName() {
         return "OneHandedCombat";
     }
+    public float GetThreshold() {
+        return nextEXPThreshold;
+    }
     public OneHandedCombat() {
         oneHandedCombatEXP = 0f;
         oneHandedCombatLevel = 1;

@@ -5,6 +5,7 @@ using UnityEngine;
 public interface ISkillInterface {
 
     float GetEXP();
+    float GetThreshold();
     void IncreaseEXP(float increase);
     string GetName();
     int GetLevel();

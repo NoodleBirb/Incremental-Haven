@@ -19,12 +19,9 @@ public class TileSettings : MonoBehaviour
         GameObject interactionContainer = GameObject.Find("Interaction Container");
         RectTransform interactionContainerRT = interactionContainer.GetComponent<RectTransform>();
 
-        GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"));
+        GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Walk Towards";
-        Debug.Log($"Listener added. Listener count: {interactButton.GetComponent<Button>().onClick.GetPersistentEventCount()}");
         interactButton.GetComponent<Button>().onClick.AddListener(() => WalkTowards());
-        Debug.Log($"Listener added. Listener count: {interactButton.GetComponent<Button>().onClick.GetPersistentEventCount()}");
-        interactButton.transform.SetParent(interactionContainer.transform);
         interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2 (0, 0);
         interactionContainer.GetComponent<RectTransform>().sizeDelta = new(interactButton.GetComponent<RectTransform>().rect.width, interactButton.GetComponent<RectTransform>().rect.height);
         

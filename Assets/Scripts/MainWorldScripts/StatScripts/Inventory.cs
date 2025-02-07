@@ -112,7 +112,7 @@ public class Inventory : MonoBehaviour
             Destroy(transform.gameObject);         
         }   
         foreach (Item item in inventoryList) {
-            GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"));
+            GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"), GameObject.Find("Inventory List").transform);
             equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
             if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
                 equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Weapon Slot"));
@@ -133,7 +133,6 @@ public class Inventory : MonoBehaviour
             }
             
             equipmentItem.transform.Find("Item Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
-            equipmentItem.transform.SetParent(GameObject.Find("Inventory List").transform);
         }
         PlayerStatistics.UpdateInventoryStats();
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
