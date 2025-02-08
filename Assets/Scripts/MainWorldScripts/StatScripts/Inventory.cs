@@ -7,7 +7,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class Inventory : MonoBehaviour
 {
@@ -61,6 +60,7 @@ public class Inventory : MonoBehaviour
     public void CloseInventory() {
         showInventory = false;
         fullyOpen = false;
+        Equipment.DisableLines();
         GameObject.Find("World Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = false;
@@ -139,14 +139,19 @@ public class Inventory : MonoBehaviour
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Equipment Canvas").GetComponent<Canvas>().enabled = true;
+        Equipment.EnableLines();
         fullyOpen = true;
     }
 
     static void EquipItem(Item item, string itemType) {
         Item previouslyEquippedItem = Equipment.GetEquippedItems()[itemType];
-        GameObject.Find(itemType).GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Equipment.SwapEquipmentPiece(null, itemType));
+        GameObject.Find(itemType).GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(null, itemType));
         GameObject.Find(itemType).GetComponent<UnityEngine.UI.Button>().interactable = true;
-        GameObject.Find(itemType).GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+        if (item == null) {
+            GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/transparentbackground");
+        } else {
+            GameObject.Find(itemType).GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+        }
         GameObject.Find(itemType).GetComponent<MouseOverItem>().SetItem(item);
         inventoryList.Remove(item);
         if (previouslyEquippedItem != null) {
@@ -155,7 +160,16 @@ public class Inventory : MonoBehaviour
         Equipment.GetEquippedItems()[itemType] = item;
         MouseOverItem.ItemVanished();
         PlayerStatistics.UpdateStats();
+        CreateVisualItem(item, itemType);
         LoadInventory();
+    }
+
+    static void CreateVisualItem(Item item, string type) {
+        if (item == null) return;
+        Debug.Log(item.GetName());
+        if (type == "Weapon Slot") {
+            GameObject equippedItem = Instantiate(Resources.Load<GameObject>("ItemModels/" + item.GetName()), GameObject.Find("Left Arm").transform);
+        }
     }
 
     private static Item LoadItemFromJson(string json) {

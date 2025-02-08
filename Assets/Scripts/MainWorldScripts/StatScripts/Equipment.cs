@@ -2,13 +2,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
 
 public class Equipment : MonoBehaviour{
 
     private static Dictionary<string, Item> equippedItems;
-    private (GameObject, GameObject)[] slotContainersAndBodyParts;
+    private static (GameObject, GameObject)[] slotContainersAndBodyParts;
     void Start() {
         equippedItems ??= new() {
             ["Weapon Slot"] = null,
@@ -33,43 +36,24 @@ public class Equipment : MonoBehaviour{
     }
 
     void Update() {
-        if (Inventory.fullyOpen) {
-
-            foreach((GameObject container, GameObject bodyPart) in slotContainersAndBodyParts) {
-
-            }
-
-            LineRenderer selectedRenderer = GameObject.Find("Head Piece Slot Container").GetComponent<LineRenderer>();
-
-            selectedRenderer.enabled = true;
-
-            
-
-        } else {
+        Vector2[] allPoints = new Vector2[16];
+        int i = 0;
+        foreach((GameObject container, GameObject bodyPart) in slotContainersAndBodyParts) {
+            allPoints[i] = container.GetComponent<RectTransform>().position;
+            allPoints[i+1] = Camera.main.WorldToScreenPoint(bodyPart.transform.position);
+            i+=2;
         }
-    }
-
-    Vector3 WorldPositionFromUI(RectTransform uiElement) {
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(uiElement, uiElement.position, Camera.main, out Vector3 worldPos);
-        return worldPos;
-    }
-
-    public static void SwapEquipmentPiece(Item item, string type) {
-        
-        Debug.Log(type);
-        Item tempItem = equippedItems[type];
-        equippedItems[type] = item;
-        Inventory.AddItem(tempItem);
-        GameObject.Find(type).GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.Find(type).GetComponent<Button>().interactable = false;
-        GameObject.Find(type).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/transparentbackground");
-        GameObject.Find(type).GetComponent<MouseOverItem>().SetItem(null);
-        MouseOverItem.ItemVanished();
-        PlayerStatistics.UpdateStats();
-        Inventory.LoadInventory();
+        GameObject.Find("Equipment Line Creator").GetComponent<UILineRenderer>().Points = allPoints;
     }
 
     public static Dictionary<string, Item> GetEquippedItems() {
         return equippedItems;
+    }
+
+    public static void EnableLines() {
+        GameObject.Find("Equipment Line Creator").GetComponent<UILineRenderer>().enabled = true;
+    }
+    public static void DisableLines() {
+        GameObject.Find("Equipment Line Creator").GetComponent<UILineRenderer>().enabled = false;
     }
 }
