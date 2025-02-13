@@ -4,39 +4,39 @@ using System.Collections.Generic;
 using Defective.JSON;
 using UnityEngine;
 
-public class Fishing : ISkillInterface {
+public class Endurance : ISkillInterface {
 
-    float fishingEXP;
-    int fishingLevel;
+    float skillEXP;
+    int skillLevel;
     float nextEXPThreshold;
 
 
-    public Fishing() {
-        fishingEXP = 0f;
-        fishingLevel = 1;
+    public Endurance() {
+        skillEXP = 0f;
+        skillLevel = 1;
         nextEXPThreshold = 40;
     }
-    // Get the exp stored in the Woodcutting object
+    // Get the exp stored in the Endurance object
     public float GetEXP() {
-        return fishingEXP;
+        return skillEXP;
     }
     public float GetThreshold() {
         return nextEXPThreshold;
     }
-    // Increment the exp stored in the Woodcutting object by an 'increase'
+    // Increment the exp stored in the Endurance object by an 'increase'
     public void IncreaseEXP(float increase) {
-        fishingEXP += increase;
-        if (fishingEXP >= nextEXPThreshold) {
+        skillEXP += increase;
+        if (skillEXP >= nextEXPThreshold) {
             LevelUp();
         }
     }
     // Get the name of the skill
     public string GetName() {
-        return "Fishing";
+        return "Endurance";
     }
     void LevelUp() {
-        fishingLevel += 1;
-        fishingEXP -= nextEXPThreshold;
+        skillLevel += 1;
+        skillEXP -= nextEXPThreshold;
         nextEXPThreshold += nextEXPThreshold * (float)Math.Pow(2, 0.1);
         PlayerStatistics.UpdateStats();
         Debug.Log(nextEXPThreshold);
@@ -44,17 +44,17 @@ public class Fishing : ISkillInterface {
 
     public Dictionary<string, float> GetStats() {
         Dictionary<string, float> stats = new();
-        JSONObject statData = new(Resources.Load<TextAsset>("Skills/Fishing").text);
+        JSONObject statData = new(Resources.Load<TextAsset>("Skills/" + GetName()).text);
         int i = 0;
         foreach (string str in statData["stats"].keys) {
-            stats.Add(str, statData["stats"][str][fishingLevel - 1].floatValue);
+            stats.Add(str, statData["stats"][str][skillLevel - 1].floatValue);
             i++;
         }
         
         return stats; 
     }
     public int GetLevel() {
-        return fishingLevel;
+        return skillLevel;
     }
     public bool IsElementalSkill() {
         return true;
