@@ -1,40 +1,12 @@
 {
     "stats": {
-        "strength": {
-            "level_1": 2,
-            "level_2": 4,
-            "level_3": 4
-        },
-        "speed": {
-            "level_1": 2,
-            "level_2": 4,
-            "level_3": 6
-        },
-        "mana": {
-            "level_1": 3,
-            "level_2": 5,
-            "level_3": 8
-        },
-        "resistance": {
-            "level_1": 1,
-            "level_2": 2,
-            "level_3": 2
-        },
-        "defense": {
-            "level_1": 2,
-            "level_2": 3,
-            "level_3": 4
-        },
-        "elemental_defense": {
-            "level_1": 3,
-            "level_2": 4,
-            "level_3": 6
-        },
-        "elemental_affinity": {
-            "level_1": 4,
-            "level_2": 5,
-            "level_3": 7
-        }
+        "strength": 110,
+        "speed": 70,
+        "mana": 50,
+        "resistance": 180,
+        "defense": 100,
+        "elemental_defense": 110,
+        "elemental_affinity": 110
     },
     "moves": {
         "level_1": "Bubble"

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class OneHandedCombat : ISkillInterface
+public class LightRanged : ISkillInterface
 {
     float skillEXP;
     int skillLevel;
@@ -14,12 +14,12 @@ public class OneHandedCombat : ISkillInterface
     }
 
     public string GetName() {
-        return "OneHandedCombat";
+        return "LightRanged";
     }
     public float GetThreshold() {
         return nextEXPThreshold;
     }
-    public OneHandedCombat() {
+    public LightRanged() {
         skillEXP = 0f;
         skillLevel = 1;
         nextEXPThreshold = 40;

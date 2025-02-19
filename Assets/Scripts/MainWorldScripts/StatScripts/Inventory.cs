@@ -149,9 +149,24 @@ public class Inventory : MonoBehaviour
         GameObject.Find(itemType).GetComponent<UnityEngine.UI.Button>().interactable = true;
         if (item == null) {
             GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/transparentbackground");
+            if (itemType == "Weapon Slot") {
+                Skills.currentWeaponSkill = Skills.skillList["MakeshiftCombat"];
+            }
         } else {
             GameObject.Find(itemType).GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+            if (itemType == "Weapon Slot") {
+                if (item.GetSpecificFunctions()["one_handed"]) {
+                    Skills.currentWeaponSkill = Skills.skillList["OneHandedCombat"];
+                } else if (item.GetSpecificFunctions()["two_handed"]) {
+                    Skills.currentWeaponSkill = Skills.skillList["TwoHandedCombat"];
+                } else if (item.GetSpecificFunctions()["light_ranged"]) {
+                    Skills.currentWeaponSkill = Skills.skillList["LightRanged"];
+                } else if (item.GetSpecificFunctions()["heavy_ranged"]) {
+                    Skills.currentWeaponSkill = Skills.skillList["HeavyRanged"];
+                }
+            }
         }
+        
         GameObject.Find(itemType).GetComponent<MouseOverItem>().SetItem(item);
         inventoryList.Remove(item);
         if (previouslyEquippedItem != null) {

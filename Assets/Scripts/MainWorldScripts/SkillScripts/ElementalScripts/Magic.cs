@@ -47,7 +47,7 @@ public class Magic : ISkillInterface {
         JSONObject statData = new(Resources.Load<TextAsset>("Skills/" + GetName()).text);
         int i = 0;
         foreach (string str in statData["stats"].keys) {
-            stats.Add(str, statData["stats"][str][skillLevel - 1].floatValue);
+            stats.Add(str, statData["stats"][str].floatValue * skillLevel / 50);
             i++;
         }
         

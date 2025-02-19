@@ -1,12 +1,12 @@
 {
     "stats": {
-        "strength": 100,
-        "speed": 100,
+        "strength": 90,
+        "speed": 130,
         "mana": 50,
         "resistance": 100,
         "defense": 100,
-        "elemental_defense": 100,
-        "elemental_affinity": 100
+        "elemental_defense": 70,
+        "elemental_affinity": 110
     },
     "moves": {
         "level_1": "Tree Poke"

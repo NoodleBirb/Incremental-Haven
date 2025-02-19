@@ -6,27 +6,27 @@ using UnityEngine;
 
 public class Woodcutting : ISkillInterface {
 
-    float woodcuttingEXP;
-    int woodCuttingLevel;
+    float skillEXP;
+    int skillLevel;
     float nextEXPThreshold;
 
 
     public Woodcutting() {
-        woodcuttingEXP = 0f;
-        woodCuttingLevel = 1;
+        skillEXP = 0f;
+        skillLevel = 1;
         nextEXPThreshold = 40;
     }
     // Get the exp stored in the Woodcutting object
     public float GetEXP() {
-        return woodcuttingEXP;
+        return skillEXP;
     }
     public float GetThreshold() {
         return nextEXPThreshold;
     }
     // Increment the exp stored in the Woodcutting object by an 'increase'
     public void IncreaseEXP(float increase) {
-        woodcuttingEXP += increase;
-        if (woodcuttingEXP >= nextEXPThreshold) {
+        skillEXP += increase;
+        if (skillEXP >= nextEXPThreshold) {
             LevelUp();
         }
     }
@@ -35,8 +35,8 @@ public class Woodcutting : ISkillInterface {
         return "Woodcutting";
     }
     void LevelUp() {
-        woodCuttingLevel += 1;
-        woodcuttingEXP -= nextEXPThreshold;
+        skillLevel += 1;
+        skillEXP -= nextEXPThreshold;
         nextEXPThreshold += nextEXPThreshold * (float)Math.Pow(2, 0.1);
         PlayerStatistics.UpdateStats();
         Debug.Log(nextEXPThreshold);
@@ -47,14 +47,14 @@ public class Woodcutting : ISkillInterface {
         JSONObject statData = new(Resources.Load<TextAsset>("Skills/Woodcutting").text);
         int i = 0;
         foreach (string str in statData["stats"].keys) {
-            stats.Add(str, statData["stats"][str][woodCuttingLevel - 1].floatValue);
+            stats.Add(str, statData["stats"][str].floatValue * skillLevel / 50);
             i++;
         }
         
         return stats; 
     }
     public int GetLevel() {
-        return woodCuttingLevel;
+        return skillLevel;
     }
     public bool IsElementalSkill() {
         return true;

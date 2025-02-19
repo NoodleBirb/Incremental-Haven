@@ -22,13 +22,27 @@ public class Skills : MonoBehaviour
     {
         if (skillList == null) {
             skillList = new() {
-                ["Woodcutting"] = new Woodcutting(),
+                ["Alchemy"] = new Alchemy(),
+                ["Crafting"] = new Crafting(),
+                ["Endurance"] = new Endurance(),
+                ["Farming"] = new Farming(),
                 ["Fishing"] = new Fishing(),
-                ["One Handed Weapon"] = new OneHandedCombat(),
+                ["Forging"] = new Forging(),
+                ["Magic"] = new Magic(),
+                ["Malice"] = new Malice(),
+                ["Mining"] = new Mining(),
+                ["Scavenging"] = new Scavenging(),
+                ["Smelting"] = new Smelting(),
+                ["Woodcutting"] = new Woodcutting(),
+                ["OneHandedCombat"] = new OneHandedCombat(),
+                ["TwoHandedCombat"] = new TwoHandedCombat(),
+                ["LightRanged"] = new LightRanged(),
+                ["HeavyRanged"] = new HeavyRanged(),
+                ["MakeshiftCombat"] = new MakeshiftCombat()
             };
             currentElementalSkill = skillList["Woodcutting"];
             stats = currentElementalSkill.GetStats();
-            currentWeaponSkill = skillList["One Handed Weapon"];
+            currentWeaponSkill = skillList["OneHandedCombat"];
         }
         isElementalTab = true;
         isSkillsInitialized = true;
