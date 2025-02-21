@@ -42,11 +42,11 @@ public class Skills : MonoBehaviour
             };
             currentElementalSkill = skillList["Woodcutting"];
             stats = currentElementalSkill.GetStats();
-            currentWeaponSkill = skillList["OneHandedCombat"];
+            currentWeaponSkill = skillList["MakeshiftCombat"];
         }
         isElementalTab = true;
         isSkillsInitialized = true;
-        GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + currentElementalSkill.GetName());
+        GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + currentElementalSkill.GetName());
         OnSkillsInitialized?.Invoke();
     }
 
@@ -77,7 +77,7 @@ public class Skills : MonoBehaviour
             GameObject skillBox = Instantiate(Resources.Load<GameObject>("UI/Skill Box"), GameObject.Find("Skill List Content").transform);
             if (isElementalTab) {
                 if (skill.IsElementalSkill()) {
-                    skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+                    skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + skill.GetName());
                     skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
                     skillBox.GetComponent<Button>().onClick.AddListener(() => ChangeElementalSkill(skill));
                 } else {
@@ -85,7 +85,7 @@ public class Skills : MonoBehaviour
                 }
             } else if (!isElementalTab) {
                 if (!skill.IsElementalSkill()) {
-                    skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+                    skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + skill.GetName());
                     skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
                     skillBox.GetComponent<Button>().interactable = false;
                 } else {
@@ -102,7 +102,7 @@ public class Skills : MonoBehaviour
     public static void ChangeElementalSkill(ISkillInterface skill) {
         currentElementalSkill = skill;
         if (GameObject.Find("Skill List Canvas") != null) {
-            GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
+            GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + skill.GetName());
         }
         stats = skill.GetStats();
         PlayerStatistics.UpdateStats();
