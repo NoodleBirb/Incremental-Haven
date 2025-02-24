@@ -80,6 +80,7 @@ public class Skills : MonoBehaviour
                     skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + skill.GetName());
                     skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
                     skillBox.GetComponent<Button>().onClick.AddListener(() => ChangeElementalSkill(skill));
+                    skillBox.GetComponent<MouseOverSkill>().SetSkill(skill);
                 } else {
                     Destroy (skillBox);
                 }

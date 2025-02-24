@@ -57,7 +57,6 @@ public class TreeObject : MonoBehaviour, InteractableObject
             yield return null;
         }
         while (treeTime != 30) {
-            Debug.Log("hmmm");
             treeTime += 1;
             yield return new WaitForSeconds(.1f);
         }

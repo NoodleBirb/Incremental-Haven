@@ -155,13 +155,13 @@ public class Inventory : MonoBehaviour
         } else {
             GameObject.Find(itemType).GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             if (itemType == "Weapon Slot") {
-                if (item.GetSpecificFunctions()["one_handed"]) {
+                if (item.GetSpecificFunctions().ContainsKey("one_handed")) {
                     Skills.currentWeaponSkill = Skills.skillList["OneHandedCombat"];
-                } else if (item.GetSpecificFunctions()["two_handed"]) {
+                } else if (item.GetSpecificFunctions().ContainsKey("two_handed")) {
                     Skills.currentWeaponSkill = Skills.skillList["TwoHandedCombat"];
-                } else if (item.GetSpecificFunctions()["light_ranged"]) {
+                } else if (item.GetSpecificFunctions().ContainsKey("light_ranged")) {
                     Skills.currentWeaponSkill = Skills.skillList["LightRanged"];
-                } else if (item.GetSpecificFunctions()["heavy_ranged"]) {
+                } else if (item.GetSpecificFunctions().ContainsKey("heavy_ranged")) {
                     Skills.currentWeaponSkill = Skills.skillList["HeavyRanged"];
                 }
             }
