@@ -32,7 +32,7 @@ public class Skills : MonoBehaviour
                 ["Malice"] = new Malice(),
                 ["Mining"] = new Mining(),
                 ["Scavenging"] = new Scavenging(),
-                ["Smelting"] = new Smelting(),
+                ["Smelting"] = new Ignition(),
                 ["Woodcutting"] = new Woodcutting(),
                 ["OneHandedCombat"] = new OneHandedCombat(),
                 ["TwoHandedCombat"] = new TwoHandedCombat(),

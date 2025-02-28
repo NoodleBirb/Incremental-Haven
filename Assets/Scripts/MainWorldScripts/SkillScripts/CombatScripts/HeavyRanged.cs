@@ -51,7 +51,6 @@ public class HeavyRanged : ISkillInterface
         skillLevel += 1;
         skillEXP -= nextEXPThreshold;
         nextEXPThreshold += nextEXPThreshold * (float)Math.Pow(2, 0.1);
-        Debug.Log(nextEXPThreshold);
     }
     public bool IsElementalSkill() {
         return false;

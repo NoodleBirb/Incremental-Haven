@@ -163,6 +163,8 @@ public class Inventory : MonoBehaviour
                     Skills.currentWeaponSkill = Skills.skillList["LightRanged"];
                 } else if (item.GetSpecificFunctions().ContainsKey("heavy_ranged")) {
                     Skills.currentWeaponSkill = Skills.skillList["HeavyRanged"];
+                } else if (item.GetSpecificFunctions().ContainsKey("magic")) {
+                    Skills.currentWeaponSkill = Skills.skillList["Magic"];
                 }
             }
         }

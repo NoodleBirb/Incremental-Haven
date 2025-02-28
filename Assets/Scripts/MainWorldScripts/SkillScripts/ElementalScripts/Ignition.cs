@@ -4,26 +4,26 @@ using System.Collections.Generic;
 using Defective.JSON;
 using UnityEngine;
 
-public class Magic : ISkillInterface {
+public class Ignition : ISkillInterface {
 
     float skillEXP;
     int skillLevel;
     float nextEXPThreshold;
 
 
-    public Magic() {
+    public Ignition() {
         skillEXP = 0f;
         skillLevel = 1;
         nextEXPThreshold = 40;
     }
-    // Get the exp stored in the Magic object
+    // Get the exp stored in the Ignition object
     public float GetEXP() {
         return skillEXP;
     }
     public float GetThreshold() {
         return nextEXPThreshold;
     }
-    // Increment the exp stored in the Magic object by an 'increase'
+    // Increment the exp stored in the Ignition object by an 'increase'
     public void IncreaseEXP(float increase) {
         skillEXP += increase;
         if (skillEXP >= nextEXPThreshold) {
@@ -32,7 +32,7 @@ public class Magic : ISkillInterface {
     }
     // Get the name of the skill
     public string GetName() {
-        return "Magic";
+        return "Ignition";
     }
     void LevelUp() {
         skillLevel += 1;

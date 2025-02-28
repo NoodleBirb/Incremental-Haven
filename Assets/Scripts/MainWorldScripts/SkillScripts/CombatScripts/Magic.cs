@@ -4,26 +4,26 @@ using System.Collections.Generic;
 using Defective.JSON;
 using UnityEngine;
 
-public class Smelting : ISkillInterface {
+public class Magic : ISkillInterface {
 
     float skillEXP;
     int skillLevel;
     float nextEXPThreshold;
 
 
-    public Smelting() {
+    public Magic() {
         skillEXP = 0f;
         skillLevel = 1;
         nextEXPThreshold = 40;
     }
-    // Get the exp stored in the Smelting object
+    // Get the exp stored in the Magic object
     public float GetEXP() {
         return skillEXP;
     }
     public float GetThreshold() {
         return nextEXPThreshold;
     }
-    // Increment the exp stored in the Smelting object by an 'increase'
+    // Increment the exp stored in the Magic object by an 'increase'
     public void IncreaseEXP(float increase) {
         skillEXP += increase;
         if (skillEXP >= nextEXPThreshold) {
@@ -32,7 +32,7 @@ public class Smelting : ISkillInterface {
     }
     // Get the name of the skill
     public string GetName() {
-        return "Smelting";
+        return "Magic";
     }
     void LevelUp() {
         skillLevel += 1;
@@ -43,20 +43,20 @@ public class Smelting : ISkillInterface {
     }
 
     public Dictionary<string, float> GetStats() {
-        Dictionary<string, float> stats = new();
-        JSONObject statData = new(Resources.Load<TextAsset>("Skills/" + GetName()).text);
-        int i = 0;
-        foreach (string str in statData["stats"].keys) {
-            stats.Add(str, statData["stats"][str].floatValue * skillLevel / 50);
-            i++;
-        }
-        
-        return stats; 
+        return new () {
+            ["strength"] = 0f,
+            ["speed"] = 0f,
+            ["mana"] = 0f,
+            ["resistance"] = 0f,
+            ["defense"] = 0f,
+            ["elemental_defense"] = 0f,
+            ["elemental_affinity"] = 0f
+        };
     }
     public int GetLevel() {
         return skillLevel;
     }
     public bool IsElementalSkill() {
-        return true;
+        return false;
     }
 }
