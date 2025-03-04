@@ -11,19 +11,8 @@ public class BasicTile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (StoreTileMap.isMapInitialized) AccessMap();
-        else StoreTileMap.OnMapInitialized += HandleMapInitialized;
-
-    }
-    void OnDestroy() {
-        StoreTileMap.OnMapInitialized -= HandleMapInitialized;
-    }
-
-    void HandleMapInitialized()
-    {
         AccessMap();
     }
-
 
     void AccessMap() {
         Dictionary<Vector2Int, GameObject> map = StoreTileMap.map;

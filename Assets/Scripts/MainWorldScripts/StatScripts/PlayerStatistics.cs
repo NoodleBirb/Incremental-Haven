@@ -7,8 +7,6 @@ using TMPro;
 
 public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
-    private static Equipment equipment; 
-    private static Inventory inventory;
     public static float currentHP;
     public static float currentMana;
 
@@ -24,31 +22,15 @@ public class PlayerStatistics : MonoBehaviour {
             ["elemental_affinity"] = 1f,
             ["HP"] = 10f
         };
-        if (Inventory.isInventoryInitialized && Skills.isSkillsInitialized) {
-            TryUpdateStats();
-        }
-        else if (!Skills.isSkillsInitialized) {
-            Skills.OnSkillsInitialized += TryUpdateStats;
-        }
-        else if (!Inventory.isInventoryInitialized) {
-            Inventory.OnInventoryInitialized += TryUpdateStats;
-        }
-        else {
-            Skills.OnSkillsInitialized += TryUpdateStats;
-            Inventory.OnInventoryInitialized += TryUpdateStats;
-        }
-    }
-    void TryUpdateStats() {
-        if (Skills.isSkillsInitialized && Inventory.isInventoryInitialized) {
-            equipment = GetComponent<Equipment>();
-            inventory = GetComponent<Inventory>();
-            UpdateStats();
+        UpdateStats();
+        if ((int)(currentHP + 0.5) == 0) {
             currentHP = totalStats["HP"];
             currentMana = totalStats["mana"];
         }
     }
 
     public static void UpdateStats() {
+        Debug.Log(currentHP);
         float oldMaxHP = totalStats["HP"];
         float oldMaxMana = totalStats["mana"];
         totalStats = new()

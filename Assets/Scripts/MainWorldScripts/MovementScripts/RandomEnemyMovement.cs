@@ -13,11 +13,7 @@ public class RandomEnemyMovement : MonoBehaviour {
     void Start() {
         technicalPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         readyToMove = false;
-        if (StoreTileMap.isMapInitialized) {
-            ReadyMovement();
-        } else {
-            StoreTileMap.OnMapInitialized += ReadyMovement;
-        }
+        ReadyMovement();
         movementPath = new();
     }
 

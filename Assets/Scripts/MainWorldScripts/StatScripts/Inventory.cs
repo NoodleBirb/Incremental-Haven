@@ -15,34 +15,32 @@ public class Inventory : MonoBehaviour
     public static bool shifting;
     GameObject player;
     GameObject mainCamera;
-    public static event Action OnInventoryInitialized;
-    public static bool isInventoryInitialized = false;
     public static List<Item> inventoryList;
     float startTime;
     Vector3 intitialPos;
     public static bool fullyOpen;
 
-    void Start() {
+    void Awake() {
         startTime = Time.time;
         shifting = false;
-        player = GameObject.Find("player model");
-        mainCamera = GameObject.Find("Main Camera");
-        intitialPos = mainCamera.transform.position;
         stillNotCloseEnough = false;
         showInventory = false;
         fullyOpen = false;
 
-        TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
-        Item item = LoadItemFromJson(stoneAxe.text);
+        
         inventoryList ??= new() // eventually will be initialized with stuff from the saving system.
         {
                 // Placeholder for testing
-            item,
-            item,
-            item
         }; 
-        isInventoryInitialized = true;
-        OnInventoryInitialized?.Invoke();
+    }
+    void Start() {
+        player = GameObject.Find("player model");
+        mainCamera = GameObject.Find("Main Camera");
+        intitialPos = mainCamera.transform.position;
+
+        TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
+        Item item = LoadItemFromJson(stoneAxe.text);
+        inventoryList.Add(item);
     }
     public void OpenInventory() {
         showInventory = true;

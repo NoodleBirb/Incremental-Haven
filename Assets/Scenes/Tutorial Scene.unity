@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 45648eb3f9167b340bf48b482fb357cc, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -66715,8 +66715,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2011952946}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1482626337
@@ -74408,6 +74407,7 @@ Transform:
   - {fileID: 2078270468}
   - {fileID: 1124879766}
   - {fileID: 1312343925}
+  - {fileID: 2011952946}
   m_Father: {fileID: 1137183849}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &1634818403
@@ -89812,7 +89812,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1481763784}
+    m_TransformParent: {fileID: 1634818402}
     m_Modifications:
     - target: {fileID: 712826664804932984, guid: 4d702f3e578106042b7344a414f85fca, type: 3}
       propertyPath: m_Name
@@ -93365,6 +93365,18 @@ PrefabInstance:
     - target: {fileID: 6235738734124708919, guid: aaae888ecd6d6ee4e8d21357ac65202d, type: 3}
       propertyPath: m_Name
       value: User Interface
+      objectReference: {fileID: 0}
+    - target: {fileID: 7678818682071380051, guid: aaae888ecd6d6ee4e8d21357ac65202d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7678818682071380051, guid: aaae888ecd6d6ee4e8d21357ac65202d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7678818682071380051, guid: aaae888ecd6d6ee4e8d21357ac65202d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8556244550856838908, guid: aaae888ecd6d6ee4e8d21357ac65202d, type: 3}
       propertyPath: m_AnchoredPosition.y

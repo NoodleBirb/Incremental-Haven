@@ -15,10 +15,9 @@ public class Skills : MonoBehaviour
     public static ISkillInterface currentElementalSkill;
     public static ISkillInterface currentWeaponSkill;
     public static Dictionary<string, float> stats;
-    public static event Action OnSkillsInitialized;
     public static bool isSkillsInitialized = false;
     public static float playerIncrementality;
-    void Start()
+    void Awake()
     {
         if (skillList == null) {
             skillList = new() {
@@ -46,8 +45,9 @@ public class Skills : MonoBehaviour
         }
         isElementalTab = true;
         isSkillsInitialized = true;
+    }
+    void Start() {
         GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + currentElementalSkill.GetName());
-        OnSkillsInitialized?.Invoke();
     }
 
     public static void UpdateIncrementality() {

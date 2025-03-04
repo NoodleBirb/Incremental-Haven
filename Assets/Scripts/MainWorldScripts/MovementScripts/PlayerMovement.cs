@@ -21,11 +21,7 @@ public class PlayerMovement : MonoBehaviour
     void Start() {
 
         openGUI = false;
-        if (StoreTileMap.isMapInitialized) {
-            ReadyMovement();
-        } else {
-            StoreTileMap.OnMapInitialized += PlayerMovementInitialized;
-        }
+        ReadyMovement();
         if (technicalPos == new Vector2Int(0, 0)) {
             technicalPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         } else {
@@ -135,11 +131,6 @@ public class PlayerMovement : MonoBehaviour
         if (movementPath.Count > 0) {
             technicalPos = new((int)movementPath[0].transform.position.x, (int)movementPath[0].transform.position.z);
         }
-    }
-
-    // Event call for map initialization
-    void PlayerMovementInitialized() {
-        ReadyMovement();
     }
 
     // Readies the player for movement as the map has been initialized.

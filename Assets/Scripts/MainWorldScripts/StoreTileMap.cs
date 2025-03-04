@@ -7,10 +7,8 @@ using UnityEngine;
 public class StoreTileMap : MonoBehaviour
 {
     public static Dictionary<Vector2Int, GameObject> map;
-    public static event Action OnMapInitialized;
-    public static bool isMapInitialized = false;
     
-    void Start()
+    void Awake()
     {
         
         // I'VE COOKED SO HARD USING A DICTIONARY!!! I HOPE IT'S FAST
@@ -20,12 +18,8 @@ public class StoreTileMap : MonoBehaviour
             map.Add(new Vector2Int((int)child.position.x, (int)child.position.z), child.gameObject);
             count++;
         }
-
-        isMapInitialized = true;
-        OnMapInitialized?.Invoke();
     }
     void OnDestroy() {
-        isMapInitialized = false;
         map = null;
     }
 

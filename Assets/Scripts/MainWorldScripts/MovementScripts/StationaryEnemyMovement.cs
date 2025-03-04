@@ -7,11 +7,7 @@ public class StationaryEnemyMovement : MonoBehaviour {
     Dictionary<Vector2Int, GameObject> map;
 
     void Start() {
-        if (StoreTileMap.isMapInitialized) {
-            SetStartingPosition();
-        } else {
-            StoreTileMap.OnMapInitialized += SetStartingPosition;
-        }
+        SetStartingPosition();
     }
 
     void SetStartingPosition() {
@@ -19,7 +15,6 @@ public class StationaryEnemyMovement : MonoBehaviour {
         Vector3 randomPos = Enumerable.ToList<GameObject>(map.Values)[(int)(Random.value * map.Count)].transform.position;
         technicalPos = new((int)randomPos.x, (int)randomPos.z);
         transform.position = new Vector3(technicalPos.x, 0, technicalPos.y);
-        StoreTileMap.OnMapInitialized -= SetStartingPosition;
     }
 
     void Update() {
