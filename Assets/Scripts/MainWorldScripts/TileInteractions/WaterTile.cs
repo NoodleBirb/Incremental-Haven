@@ -17,7 +17,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
         isFished = false;
         waterTime = 0;
         cor = null;
-        PlayerMovement.ResetActions += StopCuttingTree;
+        PlayerMovement.ResetActions += StopFishing;
         Player = GameObject.Find("Player");
     }
 
@@ -69,7 +69,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
             cor = StartCoroutine(Fish());
         }
     }
-    public void StopCuttingTree() {
+    public void StopFishing() {
         if (cor != null) {
             StopCoroutine(cor);
         }

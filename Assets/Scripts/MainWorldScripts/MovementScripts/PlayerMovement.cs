@@ -14,9 +14,11 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public static bool openGUI;
     GameObject guiTile = null;
-    Vector2 clickPos;
     public static event Action ResetActions;
 
+    void Awake() {
+        ResetActions = null;
+    }
 
     void Start() {
 
@@ -39,12 +41,10 @@ public class PlayerMovement : MonoBehaviour
         if (!Inventory.showInventory) {
             // Left click movement
             if (readyToMove && Input.GetMouseButtonDown(0)) {
-                clickPos = Input.mousePosition;
                 SendRay(0);
             }
             // Right click gui creation
             if (readyToMove && Input.GetMouseButtonUp(1)) {
-                clickPos = Input.mousePosition; 
                 SendRay(1);
             }
             // Checks if a movement path is currently being run through.

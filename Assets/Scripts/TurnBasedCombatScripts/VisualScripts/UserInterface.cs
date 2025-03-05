@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Defective.JSON;
 using TMPro;
 using Unity.VisualScripting;
@@ -9,9 +10,6 @@ using UnityEngine.UI;
 
 public class UserInterface : MonoBehaviour
 {
-    Rect swapSkillRect;
-    bool openSwapSkill;
-
     List<Move> elementalSkills;
     List<Move> weaponSkills;
 
@@ -21,12 +19,6 @@ public class UserInterface : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        float rectXPos = Screen.width / 2 + 20;
-        float rectYPos = Screen.height / 2;
-        float rectHeight = 40f;
-        float rectWidth = Screen.width / 2 - 40;
-        swapSkillRect = new(rectXPos, rectYPos + 3 * 50f, rectWidth, rectHeight);
-
         playerHPSlider = GameObject.Find("Player HP Slider").GetComponent<Slider>();
         playerHPSlider.maxValue = PlayerStatistics.totalStats["HP"];
         playerHPSlider.value = PlayerStatistics.currentHP;
@@ -120,21 +112,79 @@ public class UserInterface : MonoBehaviour
     }
 
     void OpenChangeSkill() {
-        
-        foreach (Transform transform in GameObject.Find("Change Skill Container").transform) {
-            GameObject.Destroy(transform.gameObject);
-        }
         GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Change Skill Canvas").GetComponent<Canvas>().enabled = true;
-        foreach (ISkillInterface skill in Skills.skillList.Values) {
-                if (skill.IsElementalSkill()) {
-                    GameObject skillBox = Instantiate(Resources.Load<GameObject>("UI/Skill Box"), GameObject.Find("Change Skill Container").transform);
+        
+        GameObject.Find("Strength Value Skill").GetComponent<TextMeshProUGUI>().text = Skills.currentElementalSkill.GetStats()["strength"] + "";
+        GameObject.Find("Elemental Affinity Value Skill").GetComponent<TextMeshProUGUI>().text = Skills.currentElementalSkill.GetStats()["elemental_affinity"] + "";
+        GameObject.Find("Speed Value Skill").GetComponent<TextMeshProUGUI>().text = Skills.currentElementalSkill.GetStats()["speed"] + "";
+        GameObject.Find("Mana Value Skill").GetComponent<TextMeshProUGUI>().text = Skills.currentElementalSkill.GetStats()["mana"] + "";
+        GameObject.Find("Defense Value Skill").GetComponent<TextMeshProUGUI>().text = Skills.currentElementalSkill.GetStats()["defense"] + "";
+        GameObject.Find("Elemental Defense Value Skill").GetComponent<TextMeshProUGUI>().text = Skills.currentElementalSkill.GetStats()["elemental_defense"] + "";
+        GameObject.Find("Resistance Value Skill").GetComponent<TextMeshProUGUI>().text = Skills.currentElementalSkill.GetStats()["resistance"] + "";
+        GameObject.Find("Skill Change Name").GetComponent<TextMeshProUGUI>().text = Skills.currentElementalSkill.GetName();
 
-                    skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + skill.GetName());
-                    skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
-                    skillBox.GetComponent<Button>().onClick.AddListener(() => SetNewElementalSkills(skill));
-                }
+        GameObject.Find("Change Skill Function Button").GetComponent<Button>().onClick.RemoveAllListeners();
+        GameObject.Find("Change Skill Function Button").GetComponent<Button>().onClick.AddListener(() => Debug.Log("already using this skill"));
+
+        GameObject.Find("Right Skill Button").GetComponent<Button>().onClick.RemoveAllListeners();
+        GameObject.Find("Left Skill Button").GetComponent<Button>().onClick.RemoveAllListeners();
+        GameObject.Find("Right Skill Button").GetComponent<Button>().onClick.AddListener(() => RightSkillButton(Skills.currentElementalSkill));
+        GameObject.Find("Left Skill Button").GetComponent<Button>().onClick.AddListener(() => LeftSkillButton(Skills.currentElementalSkill));
+    }
+
+    void RightSkillButton(ISkillInterface currentSkill) {
+        List<string> skillDictList = new();
+        foreach (ISkillInterface skill in Skills.skillList.Values) {
+            if (skill.IsElementalSkill()) {
+                skillDictList.Add(skill.GetName());
             }
+        }
+        skillDictList.Sort();
+        int currentIndex = skillDictList.IndexOf(currentSkill.GetName());
+        if (currentIndex + 1 == skillDictList.Count) {
+            UpdateChangeSkill(Skills.skillList[skillDictList[0]]);
+        } else {
+            UpdateChangeSkill(Skills.skillList[skillDictList[currentIndex + 1]]);
+        }
+    }
+
+    void LeftSkillButton(ISkillInterface currentSkill) {
+        List<string> skillDictList = new();
+        foreach (ISkillInterface skill in Skills.skillList.Values) {
+            if (skill.IsElementalSkill()) {
+                skillDictList.Add(skill.GetName());
+            }
+        }
+        skillDictList.Sort();
+        int currentIndex = skillDictList.IndexOf(currentSkill.GetName());
+        if (currentIndex - 1 == -1) {
+            UpdateChangeSkill(Skills.skillList[skillDictList[^1]]);
+        } else {
+            UpdateChangeSkill(Skills.skillList[skillDictList[currentIndex - 1]]);
+        }
+    }
+
+    void UpdateChangeSkill(ISkillInterface updatedSkill) {
+        GameObject.Find("Strength Value Skill").GetComponent<TextMeshProUGUI>().text = updatedSkill.GetStats()["strength"] + "";
+        GameObject.Find("Elemental Affinity Value Skill").GetComponent<TextMeshProUGUI>().text = updatedSkill.GetStats()["elemental_affinity"] + "";
+        GameObject.Find("Speed Value Skill").GetComponent<TextMeshProUGUI>().text = updatedSkill.GetStats()["speed"] + "";
+        GameObject.Find("Mana Value Skill").GetComponent<TextMeshProUGUI>().text = updatedSkill.GetStats()["mana"] + "";
+        GameObject.Find("Defense Value Skill").GetComponent<TextMeshProUGUI>().text = updatedSkill.GetStats()["defense"] + "";
+        GameObject.Find("Elemental Defense Value Skill").GetComponent<TextMeshProUGUI>().text = updatedSkill.GetStats()["elemental_defense"] + "";
+        GameObject.Find("Resistance Value Skill").GetComponent<TextMeshProUGUI>().text = updatedSkill.GetStats()["resistance"] + "";
+        GameObject.Find("Skill Change Name").GetComponent<TextMeshProUGUI>().text = updatedSkill.GetName();
+
+        GameObject.Find("Change Skill Function Button").GetComponent<Button>().onClick.RemoveAllListeners();
+        if (updatedSkill.GetName() != Skills.currentElementalSkill.GetName()) {
+            GameObject.Find("Change Skill Function Button").GetComponent<Button>().onClick.AddListener(() => SetNewElementalSkills(updatedSkill));
+        } else {
+            GameObject.Find("Change Skill Function Button").GetComponent<Button>().onClick.AddListener(() => Debug.Log("already using this skill"));
+        }
+        GameObject.Find("Right Skill Button").GetComponent<Button>().onClick.RemoveAllListeners();
+        GameObject.Find("Left Skill Button").GetComponent<Button>().onClick.RemoveAllListeners();
+        GameObject.Find("Right Skill Button").GetComponent<Button>().onClick.AddListener(() => RightSkillButton(updatedSkill));
+        GameObject.Find("Left Skill Button").GetComponent<Button>().onClick.AddListener(() => LeftSkillButton(updatedSkill));
     }
 
     void FillMoveLists() {
@@ -144,6 +194,7 @@ public class UserInterface : MonoBehaviour
     }
 
     void SetNewElementalSkills(ISkillInterface skill) {
+        Debug.Log("Actually changing skill!");
         Skills.ChangeElementalSkill(skill);
         elementalSkills = ParseMoveNames.GetMoveList(ParseMoveNames.GetMoveNames(Skills.currentElementalSkill));
         GameObject.Find("Change Skill Canvas").GetComponent<Canvas>().enabled = false;
