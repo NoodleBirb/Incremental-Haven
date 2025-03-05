@@ -13,7 +13,7 @@
             "mana_cost": 0,
             "element": "physical",
             "specific_functions": {
-                "one_handed": true
+                "is_attack": true
             }
         },
         "Tree Poke": {
@@ -28,6 +28,38 @@
             "power": 10,
             "mana_cost": 3,
             "element": "fish",
+            "specific_functions": {
+                "is_attack": true
+            }
+        },
+        "Smack": {
+            "power": 5,
+            "mana_cost": 0,
+            "element": "physical",
+            "specific_functions": {
+                "is_attack": true
+            }
+        },
+        "Puncture": {
+            "power": 7,
+            "mana_cost": 0,
+            "element": "ranged",
+            "specific_functions": {
+                "is_attack": true
+            }
+        },
+        "Pierce": {
+            "power": 10,
+            "mana_cost": 0,
+            "element": "ranged",
+            "specific_functions": {
+                "is_attack": true
+            }
+        },
+        "Strong Slash": {
+            "power": 12,
+            "mana_cost": 0,
+            "element": "Physical",
             "specific_functions": {
                 "is_attack": true
             }

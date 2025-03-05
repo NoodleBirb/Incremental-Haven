@@ -4,6 +4,7 @@ using UnityEngine;
 using Defective.JSON;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
@@ -11,28 +12,26 @@ public class PlayerStatistics : MonoBehaviour {
     public static float currentMana;
 
     void Start() {
-        totalStats = new()
-        {
-            ["strength"] = 1f,
-            ["speed"] = 1f,
-            ["mana"] = 1f,
-            ["resistance"] = 1f,
-            ["defense"] = 1f,
-            ["elemental_defense"] = 1f,
-            ["elemental_affinity"] = 1f,
-            ["HP"] = 10f
-        };
         UpdateStats();
+        Debug.Log(currentMana + "start1");
         if ((int)(currentHP + 0.5) == 0) {
             currentHP = totalStats["HP"];
             currentMana = totalStats["mana"];
+            GameObject.Find("Health Bar").GetComponent<Slider>().maxValue = totalStats["HP"];
+            GameObject.Find("Mana Bar").GetComponent<Slider>().maxValue = totalStats["mana"];
         }
+        Debug.Log(currentMana + "start2");
+        GameObject.Find("Health Bar").GetComponent<Slider>().value = currentHP;
+        GameObject.Find("Mana Bar").GetComponent<Slider>().value = currentMana;
+        GameObject.Find("Health Circle Text").GetComponent<TextMeshProUGUI>().text = ((int)currentHP) + "";
+        GameObject.Find("Mana Circle Text").GetComponent<TextMeshProUGUI>().text = ((int)currentMana) + "";
     }
 
     public static void UpdateStats() {
-        Debug.Log(currentHP);
-        float oldMaxHP = totalStats["HP"];
-        float oldMaxMana = totalStats["mana"];
+        float oldMaxMana = 0;
+        if (totalStats != null) {
+            oldMaxMana = totalStats["mana"];
+        }
         totalStats = new()
         {
             ["strength"] = 1f,
@@ -55,8 +54,19 @@ public class PlayerStatistics : MonoBehaviour {
         foreach (string key in Skills.stats.Keys) {
             totalStats[key] += Skills.stats[key];
         }
-        currentHP = totalStats["HP"] * currentHP / oldMaxHP;
-        currentMana = totalStats["mana"] * currentMana / oldMaxMana;
+        Debug.Log(currentMana +"before update");
+        Debug.Log(oldMaxMana + "oldmana");
+        Debug.Log(totalStats["mana"] + "newmax");
+        if (GameObject.Find("Health and Mana Canvas") != null && oldMaxMana != 0) {
+            currentMana = currentMana * totalStats["mana"] / oldMaxMana;
+            Debug.Log(currentMana + "post update");
+            GameObject.Find("Mana Bar").GetComponent<Slider>().maxValue = totalStats["mana"];
+            GameObject.Find("Health Bar").GetComponent<Slider>().maxValue = totalStats["HP"];
+            GameObject.Find("Health Bar").GetComponent<Slider>().value = currentHP;
+            GameObject.Find("Mana Bar").GetComponent<Slider>().value = currentMana;
+            GameObject.Find("Health Circle Text").GetComponent<TextMeshProUGUI>().text = ((int)currentHP) + "";
+            GameObject.Find("Mana Circle Text").GetComponent<TextMeshProUGUI>().text = ((int)currentMana) + "";
+        }
         if (GameObject.Find("Inventory Canvas") != null) {
             UpdateInventoryStats();
         }

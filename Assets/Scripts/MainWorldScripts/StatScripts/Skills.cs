@@ -89,6 +89,7 @@ public class Skills : MonoBehaviour
                     skillBox.transform.Find("Skill Box Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + skill.GetName());
                     skillBox.transform.Find("Skill Box Level Value").GetComponent<TextMeshProUGUI>().text = "" + skill.GetLevel();
                     skillBox.GetComponent<Button>().interactable = false;
+                    skillBox.GetComponent<MouseOverSkill>().SetSkill(skill);
                 } else {
                     Destroy (skillBox);
                 }
@@ -111,12 +112,14 @@ public class Skills : MonoBehaviour
     public void ElementalTab() {
         if (!isElementalTab){
             isElementalTab = true;
+            GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + currentElementalSkill.GetName());
             FillSkillsWindow();
         }
     }
     public void WeaponTab() {
         if (isElementalTab) {
             isElementalTab = false;
+            GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + currentWeaponSkill.GetName());
             FillSkillsWindow();
         }
     }
