@@ -5,13 +5,19 @@ using Defective.JSON;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
     public static float currentHP;
     public static float currentMana;
+    static bool healthCoroutineRunning;
+    static bool manaCoroutineRunning;
+
 
     void Start() {
+        healthCoroutineRunning = false;
+        manaCoroutineRunning = false;
         UpdateStats();
         Debug.Log(currentMana + "start1");
         if ((int)(currentHP + 0.5) == 0) {
@@ -70,6 +76,17 @@ public class PlayerStatistics : MonoBehaviour {
         if (GameObject.Find("Inventory Canvas") != null) {
             UpdateInventoryStats();
         }
+
+        
+    }
+
+    void Update() {
+        if (currentHP < totalStats["HP"] && !healthCoroutineRunning) {
+            StartCoroutine(RegenHealth());
+        }
+        if (currentMana < totalStats["mana"] && !manaCoroutineRunning) {
+            StartCoroutine(RegenMana());
+        }
     }
 
     public static void UpdateInventoryStats() {
@@ -82,4 +99,38 @@ public class PlayerStatistics : MonoBehaviour {
         GameObject.Find("Elemental Defense").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["elemental_defense"];
         GameObject.Find("Elemental Affinity").transform.Find("Data").GetComponent<TextMeshProUGUI>().text = "" + totalStats["elemental_affinity"];
     }
+
+    IEnumerator RegenHealth() {
+        healthCoroutineRunning = true;
+        Slider healthCircleSlider = GameObject.Find("Health Circle").GetComponent<Slider>();
+        while (currentHP < totalStats["HP"]) {
+            while (healthCircleSlider.value < 1) {
+                healthCircleSlider.value += 0.01f;
+                yield return new WaitForSeconds(0.1f);
+            }
+            currentHP += 0.04f * totalStats["HP"];
+            UpdateStats();
+            healthCircleSlider.value = 0;
+        }
+        currentHP = totalStats["HP"];
+        UpdateStats();
+        healthCoroutineRunning = false;
+    }
+    IEnumerator RegenMana() {
+        manaCoroutineRunning = true;
+        Slider manaCircleSlider = GameObject.Find("Mana Circle").GetComponent<Slider>();
+        while (currentMana < totalStats["mana"]) {
+            while (manaCircleSlider.value < 1) {
+                manaCircleSlider.value += 0.01f;
+                yield return new WaitForSeconds(0.1f);
+            }
+            currentMana += 0.1f * totalStats["mana"];
+            UpdateStats();
+            manaCircleSlider.value = 0;
+        }
+        currentMana = totalStats["mana"];
+        UpdateStats();
+        manaCoroutineRunning = false;
+    }
+    
 }

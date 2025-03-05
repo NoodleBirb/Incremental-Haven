@@ -9,12 +9,13 @@ public class Forging : ISkillInterface {
     float skillEXP;
     int skillLevel;
     float nextEXPThreshold;
-
+    List<Move> moveList;
 
     public Forging() {
         skillEXP = 0f;
         skillLevel = 1;
         nextEXPThreshold = 40;
+        moveList = new List<Move>(4);
     }
     // Get the exp stored in the Forging object
     public float GetEXP() {

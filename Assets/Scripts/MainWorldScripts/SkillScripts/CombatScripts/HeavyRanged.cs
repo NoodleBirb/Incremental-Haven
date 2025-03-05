@@ -9,6 +9,7 @@ public class HeavyRanged : ISkillInterface
     float skillEXP;
     int skillLevel;
     float nextEXPThreshold = 40;
+    List<Move> moveList;
     public float GetEXP() {
         return skillEXP;
     }
@@ -23,6 +24,7 @@ public class HeavyRanged : ISkillInterface
         skillEXP = 0f;
         skillLevel = 1;
         nextEXPThreshold = 40;
+        moveList = new List<Move>(4);
     }
 
     public Dictionary<string, float> GetStats() {

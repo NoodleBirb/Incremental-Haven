@@ -10,11 +10,14 @@ public class Fishing : ISkillInterface {
     int skillLevel;
     float nextEXPThreshold;
 
+    List<Move> moveList;
+
 
     public Fishing() {
         skillEXP = 0f;
         skillLevel = 1;
         nextEXPThreshold = 40;
+        moveList = new List<Move>(4);
     }
     // Get the exp stored in the Woodcutting object
     public float GetEXP() {
