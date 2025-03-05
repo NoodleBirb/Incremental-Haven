@@ -19,14 +19,12 @@ public class PlayerStatistics : MonoBehaviour {
         healthCoroutineRunning = false;
         manaCoroutineRunning = false;
         UpdateStats();
-        Debug.Log(currentMana + "start1");
         if ((int)(currentHP + 0.5) == 0) {
             currentHP = totalStats["HP"];
             currentMana = totalStats["mana"];
             GameObject.Find("Health Bar").GetComponent<Slider>().maxValue = totalStats["HP"];
             GameObject.Find("Mana Bar").GetComponent<Slider>().maxValue = totalStats["mana"];
         }
-        Debug.Log(currentMana + "start2");
         GameObject.Find("Health Bar").GetComponent<Slider>().value = currentHP;
         GameObject.Find("Mana Bar").GetComponent<Slider>().value = currentMana;
         GameObject.Find("Health Circle Text").GetComponent<TextMeshProUGUI>().text = ((int)currentHP) + "";
@@ -60,12 +58,8 @@ public class PlayerStatistics : MonoBehaviour {
         foreach (string key in Skills.stats.Keys) {
             totalStats[key] += Skills.stats[key];
         }
-        Debug.Log(currentMana +"before update");
-        Debug.Log(oldMaxMana + "oldmana");
-        Debug.Log(totalStats["mana"] + "newmax");
         if (GameObject.Find("Health and Mana Canvas") != null && oldMaxMana != 0) {
             currentMana = currentMana * totalStats["mana"] / oldMaxMana;
-            Debug.Log(currentMana + "post update");
             GameObject.Find("Mana Bar").GetComponent<Slider>().maxValue = totalStats["mana"];
             GameObject.Find("Health Bar").GetComponent<Slider>().maxValue = totalStats["HP"];
             GameObject.Find("Health Bar").GetComponent<Slider>().value = currentHP;
