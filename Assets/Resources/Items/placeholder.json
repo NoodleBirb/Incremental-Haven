@@ -2,6 +2,7 @@
     "name": "placeholder",
     "id": 0,
     "equippable": true,
+    "consumable": false,
     "stats": {
         "strength": -1,
         "speed": -1,

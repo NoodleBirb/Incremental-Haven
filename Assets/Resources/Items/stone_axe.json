@@ -2,6 +2,7 @@
     "name": "stone_axe",
     "id": 1,
     "equippable": true,
+    "consumable": false,
     "stats": {
         "strength": 5,
         "speed": 0,

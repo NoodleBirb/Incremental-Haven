@@ -2,6 +2,7 @@
     "name": "stone_sword",
     "id": 2,
     "equippable": true,
+    "consumable": false,
     "stats": {
         "strength": 10,
         "speed": 3,

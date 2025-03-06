@@ -39,6 +39,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
             Player.GetComponent<PlayerMovement>().BeginInteractionMovement(transform.parent.gameObject);
         }
         if (!isFished && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions()["is_fishing_rod"]) {
+            Debug.Log("Started fishing coroutine");
             cor = StartCoroutine(Fish());
         }
     }
@@ -54,12 +55,12 @@ public class WaterTile : MonoBehaviour, InteractableObject
             yield return null;
         }
         while (waterTime != 30) {
+           // Debug.Log(waterTime);
             waterTime += 1;
             yield return new WaitForSeconds(.1f);
         }
         EXPGainPopup.CreateEXPGain("Fishing", 20, (int)Skills.skillList["Fishing"].GetEXP() + 20, (int)Skills.skillList["Fishing"].GetThreshold());
         Skills.skillList["Fishing"].IncreaseEXP(20);
-        StopCoroutine(cor);
         waterTime = 0;
         isFished = true;
     }
@@ -74,6 +75,5 @@ public class WaterTile : MonoBehaviour, InteractableObject
             StopCoroutine(cor);
         }
         waterTime = 0;
-
     }
 }

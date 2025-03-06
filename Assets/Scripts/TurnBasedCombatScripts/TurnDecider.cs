@@ -58,6 +58,7 @@ public class TurnDecider : MonoBehaviour {
 
     public static void NextTurn() {
         if (EnemyStatistics.totalCurrentHP[0] <= 0) {
+            CombatVictory.combatVictory = true;
             SceneManager.LoadScene("firstarea");
         } else if (PlayerStatistics.currentHP <= 0) {
             SceneManager.LoadScene("firstarea");

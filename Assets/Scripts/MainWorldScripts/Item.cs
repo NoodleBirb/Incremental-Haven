@@ -7,18 +7,20 @@ public class Item {
     private readonly int id;
     // Stats will not matter if equippable is false
     private readonly bool equippable;
+    private readonly bool consumable;
     private readonly Dictionary<string, float> stats;
     private readonly Dictionary<string, bool> specific_functions;
     private readonly string description;
 
 
-    public Item (string name, int id, bool equippable, Dictionary<string, float> stats, Dictionary<string, bool> specific_functions, string description) {
+    public Item (string name, int id, bool equippable, bool consumable, Dictionary<string, float> stats, Dictionary<string, bool> specific_functions, string description) {
         this.name = name;
         this.id = id;
         this.equippable = equippable;
         this.stats = stats;
         this.specific_functions = specific_functions;
         this.description = description;
+        this.consumable = consumable;
     }
 
     public string GetName() {
@@ -66,6 +68,9 @@ public class Item {
     }
     public string GetDescription() {
         return description;
+    }
+    public bool IsConsumable() {
+        return consumable;
     }
 
 

@@ -15,10 +15,11 @@ public class Inventory : MonoBehaviour
     public static bool shifting;
     GameObject player;
     GameObject mainCamera;
-    public static List<Item> inventoryList;
+    public static List<List<Item>> inventoryList;
     float startTime;
     Vector3 intitialPos;
     public static bool fullyOpen;
+    public static int tab = 0;
 
     void Awake() {
         startTime = Time.time;
@@ -40,7 +41,7 @@ public class Inventory : MonoBehaviour
 
         TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
         Item item = LoadItemFromJson(stoneAxe.text);
-        inventoryList.Add(item);
+        inventoryList[0].Add(item);
     }
     public void OpenInventory() {
         showInventory = true;
@@ -110,28 +111,35 @@ public class Inventory : MonoBehaviour
         foreach (Transform transform in content) { 
             Destroy(transform.gameObject);         
         }   
-        foreach (Item item in inventoryList) {
-            GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"), GameObject.Find("Inventory List").transform);
-            equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
-            if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
-                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Weapon Slot"));
-            } else if (item.GetSpecificFunctions()["chestplate_slot"] == true) {
-                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Chestplate Slot"));
-            } else if (item.GetSpecificFunctions()["headpiece_slot"] == true) {
-                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Head Piece Slot"));
-            } else if (item.GetSpecificFunctions()["offhand_slot"] == true) {
-                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Off Hand Slot"));
-            } else if (item.GetSpecificFunctions()["necklace_slot"] == true) {
-                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Necklace Slot"));
-            } else if (item.GetSpecificFunctions()["leggings_slot"] == true) {
-                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Leggings Slot"));
-            } else if (item.GetSpecificFunctions()["gloves_slot"] == true) {
-                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Glove Slot"));
-            } else if (item.GetSpecificFunctions()["boots_slot"] == true) {
-                equipmentItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(item, "Boots Slot"));
+        
+        foreach (Item item in inventoryList[tab]) {
+            if (tab == 1) {
+                GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"), GameObject.Find("Inventory List").transform);
+                equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
+                if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
+                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Weapon Slot"));
+                } else if (item.GetSpecificFunctions()["chestplate_slot"] == true) {
+                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Chestplate Slot"));
+                } else if (item.GetSpecificFunctions()["headpiece_slot"] == true) {
+                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Head Piece Slot"));
+                } else if (item.GetSpecificFunctions()["offhand_slot"] == true) {
+                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Off Hand Slot"));
+                } else if (item.GetSpecificFunctions()["necklace_slot"] == true) {
+                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Necklace Slot"));
+                } else if (item.GetSpecificFunctions()["leggings_slot"] == true) {
+                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Leggings Slot"));
+                } else if (item.GetSpecificFunctions()["gloves_slot"] == true) {
+                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Glove Slot"));
+                } else if (item.GetSpecificFunctions()["boots_slot"] == true) {
+                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Boots Slot"));
+                }
+                equipmentItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+            } else {
+                GameObject inventoryItem = Instantiate(Resources.Load<GameObject>("UI/Consumable Item"), GameObject.Find("Inventory List").transform);
+                inventoryItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             }
             
-            equipmentItem.transform.Find("Item Image").GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+            
         }
         PlayerStatistics.UpdateInventoryStats();
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
@@ -143,15 +151,15 @@ public class Inventory : MonoBehaviour
 
     static void EquipItem(Item item, string itemType) {
         Item previouslyEquippedItem = Equipment.GetEquippedItems()[itemType];
-        GameObject.Find(itemType).GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => EquipItem(null, itemType));
-        GameObject.Find(itemType).GetComponent<UnityEngine.UI.Button>().interactable = true;
+        GameObject.Find(itemType).GetComponent<Button>().onClick.AddListener(() => EquipItem(null, itemType));
+        GameObject.Find(itemType).GetComponent<Button>().interactable = true;
         if (item == null) {
             GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/transparentbackground");
             if (itemType == "Weapon Slot") {
                 Skills.currentWeaponSkill = Skills.skillList["MakeshiftCombat"];
             }
         } else {
-            GameObject.Find(itemType).GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+            GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             if (itemType == "Weapon Slot") {
                 if (item.GetSpecificFunctions().ContainsKey("one_handed")) {
                     Skills.currentWeaponSkill = Skills.skillList["OneHandedCombat"];
@@ -168,9 +176,9 @@ public class Inventory : MonoBehaviour
         }
         
         GameObject.Find(itemType).GetComponent<MouseOverItem>().SetItem(item);
-        inventoryList.Remove(item);
+        inventoryList[0].Remove(item);
         if (previouslyEquippedItem != null) {
-            inventoryList.Add(previouslyEquippedItem);
+            inventoryList[0].Add(previouslyEquippedItem);
         }
         Equipment.GetEquippedItems()[itemType] = item;
         MouseOverItem.ItemVanished();
@@ -215,13 +223,22 @@ public class Inventory : MonoBehaviour
             i++;
         }
 
-        return new Item(obj["name"].stringValue, obj["id"].intValue, obj["equippable"].boolValue, statsDict, specificFunctionDict, obj["description"].stringValue);
+        return new Item(obj["name"].stringValue, obj["id"].intValue, obj["equippable"].boolValue, obj["consumable"].boolValue, statsDict, specificFunctionDict, obj["description"].stringValue);
     }
 
     public static void AddItem(Item newItem) {
-        inventoryList.Add(newItem);
+        if (newItem.IsEquippable()) {
+            inventoryList[0].Add(newItem);
+        } else if (newItem.IsConsumable()) {
+            inventoryList[1].Add(newItem);
+        }
     }
     public static void AddItem(string json) {
-        inventoryList.Add(LoadItemFromJson(json));
+        Item newItem = LoadItemFromJson(json);
+        if (newItem.IsEquippable()) {
+            inventoryList[0].Add(newItem);
+        } else if (newItem.IsConsumable()) {
+            inventoryList[1].Add(newItem);
+        }
     }
 }

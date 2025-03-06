@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public static event Action ResetActions;
 
     void Awake() {
-        ResetActions = null;
+        //ResetActions = null;
     }
 
     void Start() {
@@ -113,6 +113,9 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void BeginInteractionMovement (GameObject endTile) {
+
+        ResetActions?.Invoke();
+
         Vector2Int playerPos = new(technicalPos.x, technicalPos.y);
                 
         // Pathfind to the point found by the ray.
