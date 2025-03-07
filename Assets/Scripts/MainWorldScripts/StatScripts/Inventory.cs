@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Defective.JSON;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ public class Inventory : MonoBehaviour
     GameObject player;
     GameObject mainCamera;
     public static List<List<Item>> inventoryList;
+    static Dictionary<Item, GameObject> currentInventoryItems;
     float startTime;
     Vector3 intitialPos;
     public static bool fullyOpen;
@@ -28,11 +30,13 @@ public class Inventory : MonoBehaviour
         showInventory = false;
         fullyOpen = false;
 
+        currentInventoryItems = new();
         
-        inventoryList ??= new() // eventually will be initialized with stuff from the saving system.
-        {
-                // Placeholder for testing
-        }; 
+        inventoryList ??= new(3) { // eventually will be initialized with stuff from the saving system.
+            new List<Item>(),
+            new List<Item>(),
+            new List<Item>()
+        };
     }
     void Start() {
         player = GameObject.Find("player model");
@@ -42,6 +46,7 @@ public class Inventory : MonoBehaviour
         TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
         Item item = LoadItemFromJson(stoneAxe.text);
         inventoryList[0].Add(item);
+        inventoryList[1].Add(LoadItemFromJson(Resources.Load<TextAsset>("Items/basic_health_potion").text));
     }
     public void OpenInventory() {
         showInventory = true;
@@ -108,38 +113,49 @@ public class Inventory : MonoBehaviour
     public static void LoadInventory() {
         
         Transform content = GameObject.Find("Inventory List").transform;
+        currentInventoryItems = new ();
         foreach (Transform transform in content) { 
-            Destroy(transform.gameObject);         
+            Destroy(transform.gameObject);
         }   
         
         foreach (Item item in inventoryList[tab]) {
-            if (tab == 1) {
-                GameObject equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"), GameObject.Find("Inventory List").transform);
-                equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
-                if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
-                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Weapon Slot"));
-                } else if (item.GetSpecificFunctions()["chestplate_slot"] == true) {
-                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Chestplate Slot"));
-                } else if (item.GetSpecificFunctions()["headpiece_slot"] == true) {
-                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Head Piece Slot"));
-                } else if (item.GetSpecificFunctions()["offhand_slot"] == true) {
-                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Off Hand Slot"));
-                } else if (item.GetSpecificFunctions()["necklace_slot"] == true) {
-                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Necklace Slot"));
-                } else if (item.GetSpecificFunctions()["leggings_slot"] == true) {
-                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Leggings Slot"));
-                } else if (item.GetSpecificFunctions()["gloves_slot"] == true) {
-                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Glove Slot"));
-                } else if (item.GetSpecificFunctions()["boots_slot"] == true) {
-                    equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Boots Slot"));
+            if (tab == 0) {
+                GameObject equipmentItem;
+                if (!currentInventoryItems.Keys.Contains(item)) {
+                    equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"), GameObject.Find("Inventory List").transform);
+                    currentInventoryItems[item] = equipmentItem;
+                    equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text = 1 + "";
+                    equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
+                    if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
+                        equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Weapon Slot"));
+                    } else if (item.GetSpecificFunctions()["chestplate_slot"] == true) {
+                        equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Chestplate Slot"));
+                    } else if (item.GetSpecificFunctions()["headpiece_slot"] == true) {
+                        equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Head Piece Slot"));
+                    } else if (item.GetSpecificFunctions()["offhand_slot"] == true) {
+                        equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Off Hand Slot"));
+                    } else if (item.GetSpecificFunctions()["necklace_slot"] == true) {
+                        equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Necklace Slot"));
+                    } else if (item.GetSpecificFunctions()["leggings_slot"] == true) {
+                        equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Leggings Slot"));
+                    } else if (item.GetSpecificFunctions()["gloves_slot"] == true) {
+                        equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Glove Slot"));
+                    } else if (item.GetSpecificFunctions()["boots_slot"] == true) {
+                        equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Boots Slot"));
+                    }
+                    equipmentItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+                } else {
+                    equipmentItem = currentInventoryItems[item];
+                    equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text = int.Parse(equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text) + 1 + "";
                 }
-                equipmentItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+            } else if (tab == 1) {
+                GameObject consumableItem = Instantiate(Resources.Load<GameObject>("UI/Consumable Item"), GameObject.Find("Inventory List").transform);
+                consumableItem.GetComponent<Button>().onClick.AddListener(() => Consumables.UseConsumable(item));
+                consumableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             } else {
-                GameObject inventoryItem = Instantiate(Resources.Load<GameObject>("UI/Consumable Item"), GameObject.Find("Inventory List").transform);
+                GameObject inventoryItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
                 inventoryItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             }
-            
-            
         }
         PlayerStatistics.UpdateInventoryStats();
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
@@ -147,6 +163,11 @@ public class Inventory : MonoBehaviour
         GameObject.Find("Equipment Canvas").GetComponent<Canvas>().enabled = true;
         Equipment.EnableLines();
         fullyOpen = true;
+    }
+
+    public static void OpenTab(int tab) {
+        Inventory.tab = tab;
+        LoadInventory();
     }
 
     static void EquipItem(Item item, string itemType) {
@@ -204,7 +225,7 @@ public class Inventory : MonoBehaviour
         Dictionary<string, float> statsDict;
 
         int i = 0;
-        if (obj["equippable"].boolValue) {
+        if (obj["equippable"].boolValue || obj["consumable"].boolValue) {
             statsDict = new();
             var stats = obj["stats"];
             foreach (string val in stats.keys) {
@@ -223,7 +244,7 @@ public class Inventory : MonoBehaviour
             i++;
         }
 
-        return new Item(obj["name"].stringValue, obj["id"].intValue, obj["equippable"].boolValue, obj["consumable"].boolValue, statsDict, specificFunctionDict, obj["description"].stringValue);
+        return new Item(obj["name"].stringValue, obj["id"].intValue, obj["equippable"].boolValue, obj["consumable"].boolValue, obj["material"].boolValue, statsDict, specificFunctionDict, obj["description"].stringValue);
     }
 
     public static void AddItem(Item newItem) {

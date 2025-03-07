@@ -3,6 +3,7 @@
     "id": 1,
     "equippable": true,
     "consumable": false,
+    "material": false,
     "stats": {
         "strength": 5,
         "speed": 0,

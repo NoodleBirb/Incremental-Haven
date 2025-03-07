@@ -13,6 +13,7 @@ public class PlayerStatistics : MonoBehaviour {
     public static float currentMana;
     static bool healthCoroutineRunning;
     static bool manaCoroutineRunning;
+    static Coroutine healthCoroutine;
 
 
     void Start() {
@@ -58,6 +59,21 @@ public class PlayerStatistics : MonoBehaviour {
         foreach (string key in Skills.stats.Keys) {
             totalStats[key] += Skills.stats[key];
         }
+        if (Consumables.GetCurrentConsumables() != null && Consumables.GetCurrentConsumables().Count > 0) {
+            foreach (Item item in Consumables.GetCurrentConsumables()) {
+                totalStats["strength"] += item.GetStrength();
+                totalStats["speed"] += item.GetSpeed();
+                currentMana += item.GetMana();
+                totalStats["resistance"] += item.GetResistance();
+                totalStats["defense"] += item.GetDefense();
+                totalStats["elemental_defense"] += item.GetElementalDefense();
+                totalStats["elemental_affinity"] += item.GetElementalAffinity();
+                currentHP += item.GetHealth();
+                if (currentHP > totalStats["HP"]) {
+                    currentHP = totalStats["HP"];
+                }
+            }
+        }
         if (GameObject.Find("Health and Mana Canvas") != null && oldMaxMana != 0) {
             currentMana = currentMana * totalStats["mana"] / oldMaxMana;
             GameObject.Find("Mana Bar").GetComponent<Slider>().maxValue = totalStats["mana"];
@@ -76,10 +92,14 @@ public class PlayerStatistics : MonoBehaviour {
 
     void Update() {
         if (currentHP < totalStats["HP"] && !healthCoroutineRunning) {
-            StartCoroutine(RegenHealth());
+            healthCoroutine = StartCoroutine(RegenHealth());
         }
         if (currentMana < totalStats["mana"] && !manaCoroutineRunning) {
             StartCoroutine(RegenMana());
+        }
+        if (currentHP == totalStats["HP"] && healthCoroutineRunning) {
+            GameObject.Find("Health Circle").GetComponent<Slider>().value = 0;
+            StopCoroutine(healthCoroutine);
         }
     }
 
