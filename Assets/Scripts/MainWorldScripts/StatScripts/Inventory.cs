@@ -145,18 +145,33 @@ public class Inventory : MonoBehaviour
                     }
                     equipmentItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
                 } else {
-                   
                     equipmentItem = currentInventoryItems[item.GetName()];
                     equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text =  int.Parse(equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text) + 1 + "";
                 }
             } else if (tab == 1) {
-                GameObject consumableItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
-                consumableItem.GetComponent<Button>().onClick.AddListener(() => Consumables.UseConsumable(item));
-                consumableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+                GameObject consumableItem;
+                if (!currentInventoryItems.Keys.Contains(item.GetName())) {
+                    consumableItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
+                    currentInventoryItems[item.GetName()] = consumableItem;
+                    consumableItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
+                    consumableItem.GetComponent<Button>().onClick.AddListener(() => Consumables.UseConsumable(item));
+                    consumableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+                } else {
+                    consumableItem = currentInventoryItems[item.GetName()];
+                    consumableItem.GetComponentInChildren<TextMeshProUGUI>().text =  int.Parse(consumableItem.GetComponentInChildren<TextMeshProUGUI>().text) + 1 + "";
+                }
             } else {
-                GameObject inventoryItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
-                inventoryItem.GetComponent<Button>().enabled = false;
-                inventoryItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+                GameObject inventoryItem;
+                if (!currentInventoryItems.Keys.Contains(item.GetName())) {
+                    inventoryItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
+                    currentInventoryItems[item.GetName()] = inventoryItem;
+                    inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
+                    inventoryItem.GetComponent<Button>().enabled = false;
+                    inventoryItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+                } else {
+                    inventoryItem = currentInventoryItems[item.GetName()];
+                    inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text =  int.Parse(inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text) + 1 + "";
+                }
             }
         }
         foreach (GameObject inventoryItem in currentInventoryItems.Values) {
