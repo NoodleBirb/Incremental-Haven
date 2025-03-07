@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour
     GameObject player;
     GameObject mainCamera;
     public static List<List<Item>> inventoryList;
-    static Dictionary<Item, GameObject> currentInventoryItems;
+    static Dictionary<string, GameObject> currentInventoryItems;
     float startTime;
     Vector3 intitialPos;
     public static bool fullyOpen;
@@ -121,10 +121,10 @@ public class Inventory : MonoBehaviour
         foreach (Item item in inventoryList[tab]) {
             if (tab == 0) {
                 GameObject equipmentItem;
-                if (!currentInventoryItems.Keys.Contains(item)) {
-                    equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Equippable Item"), GameObject.Find("Inventory List").transform);
-                    currentInventoryItems[item] = equipmentItem;
-                    equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text = 1 + "";
+                if (!currentInventoryItems.Keys.Contains(item.GetName())) {
+                    equipmentItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
+                    currentInventoryItems[item.GetName()] = equipmentItem;
+                    equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
                     equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
                     if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
                         equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Weapon Slot"));
@@ -145,17 +145,22 @@ public class Inventory : MonoBehaviour
                     }
                     equipmentItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
                 } else {
-                    equipmentItem = currentInventoryItems[item];
-                    equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text = int.Parse(equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text) + 1 + "";
+                   
+                    equipmentItem = currentInventoryItems[item.GetName()];
+                    equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text =  int.Parse(equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text) + 1 + "";
                 }
             } else if (tab == 1) {
-                GameObject consumableItem = Instantiate(Resources.Load<GameObject>("UI/Consumable Item"), GameObject.Find("Inventory List").transform);
+                GameObject consumableItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
                 consumableItem.GetComponent<Button>().onClick.AddListener(() => Consumables.UseConsumable(item));
                 consumableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             } else {
                 GameObject inventoryItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
+                inventoryItem.GetComponent<Button>().enabled = false;
                 inventoryItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             }
+        }
+        foreach (GameObject inventoryItem in currentInventoryItems.Values) {
+            inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text = inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text + "x";
         }
         PlayerStatistics.UpdateInventoryStats();
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
