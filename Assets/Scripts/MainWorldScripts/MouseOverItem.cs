@@ -22,18 +22,19 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     public void SetItem(Item item) {
+        Debug.Log("I am setting the item to" + item.GetName());
         this.item = item;
     }
     void UpdateTooltipStats() {
-        tooltipRect.transform.Find("Item Name Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetName() + "";
-        tooltipRect.transform.Find("Description Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetDescription() + "";
-        tooltipRect.transform.Find("Strength Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetStrength() + "";
-        tooltipRect.transform.Find("Speed Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetSpeed() + "";
-        tooltipRect.transform.Find("Resistance Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetResistance() + "";
-        tooltipRect.transform.Find("Mana Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetMana() + "";
-        tooltipRect.transform.Find("Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetDefense() + "";
-        tooltipRect.transform.Find("Elemental Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetElementalDefense() + "";
-        tooltipRect.transform.Find("Elemental Affinity Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetElementalAffinity() + "";
+        tooltipRect.transform.Find("Item Name Tooltip").GetComponent<TextMeshProUGUI>().text = "" + item.GetName();
+        tooltipRect.transform.Find("Description Tooltip").GetComponent<TextMeshProUGUI>().text = "" + item.GetDescription();
+        tooltipRect.transform.Find("Strength Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetStrength();
+        tooltipRect.transform.Find("Speed Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetSpeed();
+        tooltipRect.transform.Find("Resistance Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetResistance();
+        tooltipRect.transform.Find("Mana Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetMana();
+        tooltipRect.transform.Find("Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetDefense();
+        tooltipRect.transform.Find("Elemental Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetElementalDefense();
+        tooltipRect.transform.Find("Elemental Affinity Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetElementalAffinity();
     }
     public void OnPointerEnter(PointerEventData eventData) {
         if (item == null) {
