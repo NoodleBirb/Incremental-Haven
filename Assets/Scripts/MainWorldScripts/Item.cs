@@ -44,31 +44,31 @@ public class Item {
         return specific_functions;
     }
     public float GetStrength() {
-        if (!equippable || !consumable) return 0;
+        if (!equippable && !consumable) return 0;
         return stats["strength"];
     }
     public float GetSpeed() {
-        if (!equippable || !consumable) return 0;
+        if (!equippable && !consumable) return 0;
         return stats["speed"];
     }
     public float GetMana() {
-        if (!equippable || !consumable) return 0;
+        if (!equippable && !consumable) return 0;
         return stats["mana"];
     }
     public float GetResistance() {
-        if (!equippable || !consumable) return 0;
+        if (!equippable && !consumable) return 0;
         return stats["resistance"];
     }
     public float GetDefense() {
-        if (!equippable || !consumable) return 0;
+        if (!equippable && !consumable) return 0;
         return stats["defense"];
     }
     public float GetElementalDefense() {
-        if (!equippable || !consumable) return 0;
+        if (!equippable && !consumable) return 0;
         return stats["elemental_defense"];
     }
     public float GetElementalAffinity() {
-        if (!equippable || !consumable) return 0;
+        if (!equippable && !consumable) return 0;
         return stats["elemental_affinity"];
     }
     public float GetHealth() {
