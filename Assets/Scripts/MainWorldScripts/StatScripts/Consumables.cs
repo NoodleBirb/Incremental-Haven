@@ -6,7 +6,6 @@ using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UI.Extensions;
 
 public class Consumables : MonoBehaviour{
 
