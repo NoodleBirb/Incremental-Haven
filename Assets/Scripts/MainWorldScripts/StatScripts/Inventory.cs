@@ -153,6 +153,7 @@ public class Inventory : MonoBehaviour
                 if (!currentInventoryItems.Keys.Contains(item.GetName())) {
                     consumableItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
                     currentInventoryItems[item.GetName()] = consumableItem;
+                    consumableItem.GetComponent<MouseOverItem>().SetItem(item);
                     consumableItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
                     consumableItem.GetComponent<Button>().onClick.AddListener(() => Consumables.UseConsumable(item));
                     consumableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
@@ -192,10 +193,12 @@ public class Inventory : MonoBehaviour
 
     static void EquipItem(Item item, string itemType) {
         Item previouslyEquippedItem = Equipment.GetEquippedItems()[itemType];
+        GameObject.Find(itemType).GetComponent<Button>().onClick.RemoveAllListeners();
         GameObject.Find(itemType).GetComponent<Button>().onClick.AddListener(() => EquipItem(null, itemType));
         GameObject.Find(itemType).GetComponent<Button>().interactable = true;
         if (item == null) {
             GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/transparentbackground");
+            GameObject.Find(itemType).GetComponent<Button>().interactable = false;
             if (itemType == "Weapon Slot") {
                 Skills.currentWeaponSkill = Skills.skillList["MakeshiftCombat"];
             }
