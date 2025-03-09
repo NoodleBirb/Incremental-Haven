@@ -4,6 +4,8 @@
     "consumable": false,
     "material": true,
     "stats": null,
-    "specific_functions": null,
+    "specific_functions": {
+        "smeltable": true
+    },
     "description": "Most common of all ores."
 }
