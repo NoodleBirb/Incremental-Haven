@@ -196,6 +196,7 @@ public class Inventory : MonoBehaviour
                     inventoryItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
                     currentInventoryItems[item.GetName()] = inventoryItem;
                     inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
+                    inventoryItem.GetComponent<MouseOverItem>().SetItem(item);
                     inventoryItem.GetComponent<Button>().enabled = false;
                     inventoryItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
                 } else {
@@ -293,13 +294,15 @@ public class Inventory : MonoBehaviour
         
         Dictionary<string, bool> specificFunctionDict = new();
         var functions = obj["specific_functions"];
-        i = 0;
-        foreach (string str in functions.keys) {
-            specificFunctionDict[str] = obj["specific_functions"][i].boolValue;
-            i++;
+        if (!functions.isNull) {
+            i = 0;
+            foreach (string str in functions.keys) {
+                specificFunctionDict[str] = obj["specific_functions"][i].boolValue;
+                i++;
+            }
         }
 
-        return new Item(obj["name"].stringValue, obj["id"].intValue, obj["equippable"].boolValue, obj["consumable"].boolValue, obj["material"].boolValue, statsDict, specificFunctionDict, obj["description"].stringValue);
+        return new Item(obj["name"].stringValue, obj["equippable"].boolValue, obj["consumable"].boolValue, obj["material"].boolValue, statsDict, specificFunctionDict, obj["description"].stringValue);
     }
 
     public static void AddItem(Item newItem) {
@@ -307,14 +310,11 @@ public class Inventory : MonoBehaviour
             inventoryList[0].Add(newItem);
         } else if (newItem.IsConsumable()) {
             inventoryList[1].Add(newItem);
+        } else if (newItem.IsMaterial()) {
+            inventoryList[2].Add(newItem);
         }
     }
     public static void AddItem(string json) {
-        Item newItem = LoadItemFromJson(json);
-        if (newItem.IsEquippable()) {
-            inventoryList[0].Add(newItem);
-        } else if (newItem.IsConsumable()) {
-            inventoryList[1].Add(newItem);
-        }
+        AddItem(LoadItemFromJson(json));
     }
 }

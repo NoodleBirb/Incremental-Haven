@@ -29,6 +29,9 @@ public class Consumables : MonoBehaviour{
     public static void UseConsumable(Item consumable) {
         currentConsumables[consumable] = false;
         Inventory.inventoryList[1].Remove(consumable);
+        if (!Inventory.inventoryList[1].Contains(consumable)) {
+            MouseOverItem.ItemVanished();
+        }
         Inventory.LoadInventory();
         PlayerStatistics.UpdateStats();
     }

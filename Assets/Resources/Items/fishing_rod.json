@@ -1,6 +1,5 @@
 {
     "name": "fishing_rod",
-    "id": 3,
     "equippable": true,
     "consumable": false,
     "material": false,

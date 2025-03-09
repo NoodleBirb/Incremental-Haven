@@ -1,0 +1,9 @@
+{
+    "name": "oak_log",
+    "equippable": false,
+    "consumable": false,
+    "material": true,
+    "stats": null,
+    "specific_functions": null,
+    "description": "Most common of all woods."
+}

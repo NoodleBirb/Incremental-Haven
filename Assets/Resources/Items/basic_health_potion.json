@@ -1,6 +1,5 @@
 {
     "name": "basic_health_potion",
-    "id": 4,
     "equippable": false,
     "consumable": true,
     "material": false,
@@ -14,8 +13,6 @@
         "elemental_affinity": 0,
         "HP": 5
     },
-    "specific_functions": {
-        "drinkable": true
-    },
+    "specific_functions": null,
     "description": "Heals the user 5 HP."
 }

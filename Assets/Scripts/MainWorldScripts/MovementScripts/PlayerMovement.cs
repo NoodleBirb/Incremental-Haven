@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public static event Action ResetActions;
 
     void Awake() {
-        //ResetActions = null;
+        ResetActions = null;
     }
 
     void Start() {

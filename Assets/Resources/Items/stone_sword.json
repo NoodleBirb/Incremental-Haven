@@ -1,6 +1,5 @@
 {
     "name": "stone_sword",
-    "id": 2,
     "equippable": true,
     "consumable": false,
     "material": false,

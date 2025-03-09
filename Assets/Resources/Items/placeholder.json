@@ -1,6 +1,5 @@
 {
     "name": "placeholder",
-    "id": 0,
     "equippable": true,
     "consumable": false,
     "material": false,

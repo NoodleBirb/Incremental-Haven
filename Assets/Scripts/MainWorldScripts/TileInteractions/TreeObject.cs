@@ -60,9 +60,9 @@ public class TreeObject : MonoBehaviour, InteractableObject
             treeTime += 1;
             yield return new WaitForSeconds(.1f);
         }
+        Inventory.AddItem(Resources.Load<TextAsset>("Items/oak_log").text);
         EXPGainPopup.CreateEXPGain("Woodcutting", 20, (int)Skills.skillList["Woodcutting"].GetEXP() + 20, (int)Skills.skillList["Woodcutting"].GetThreshold());
         Skills.skillList["Woodcutting"].IncreaseEXP(20);
-        StopCoroutine(cor);
         treeTime = 0;
         isCut = true;
     }
