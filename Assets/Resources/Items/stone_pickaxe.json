@@ -1,0 +1,21 @@
+{
+    "name": "stone_pickaxe",
+    "equippable": true,
+    "consumable": false,
+    "material": false,
+    "stats": {
+        "strength": 3,
+        "speed": 0,
+        "mana": 0,
+        "resistance": 0,
+        "defense": 2,
+        "elemental_defense": 0,
+        "elemental_affinity": 0
+    },
+    "specific_functions": {
+        "is_pickaxe": true,
+        "weapon_slot": true,
+        "two_handed": true
+    },
+    "description": "Allows the user to cut down basic oak trees. Doubles as a weapon."
+}

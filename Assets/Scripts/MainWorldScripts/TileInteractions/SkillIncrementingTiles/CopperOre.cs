@@ -5,42 +5,39 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WaterTile : MonoBehaviour, InteractableObject
+public class CopperOre : MonoBehaviour, InteractableObject
 {
     private readonly int personalGUIHeight = 50;
-    private int waterTime;
-    public bool isFished;
+    private int interactTime;
+    public bool isInteracted;
     Coroutine cor;
     GameObject Player;
     
     void Start() {
-        isFished = false;
-        waterTime = 0;
+        isInteracted = false;
         cor = null;
-        PlayerMovement.ResetActions += StopFishing;
+        interactTime = 0;
+        PlayerMovement.ResetActions += StopInteraction;
         Player = GameObject.Find("Player");
     }
 
     public void CreateOptions(float previousHeight) {
+        
         GameObject interactionContainer = GameObject.Find("Interaction Container");
         
         GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
-        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Fish";
-        interactButton.GetComponent<Button>().onClick.AddListener(() => BeginFishing());
+        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Mine";
+        interactButton.GetComponent<Button>().onClick.AddListener(() => GUIInteract());
         interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -previousHeight);
 
         interactionContainer.GetComponent<RectTransform>().sizeDelta = interactionContainer.GetComponent<RectTransform>().sizeDelta + new Vector2(0, interactButton.GetComponent<RectTransform>().sizeDelta.y);
     }
 
-    void BeginFishing() {
+    void GUIInteract() {
         InteractableObject.ResetGUI();
         Vector2Int pos = GetComponentInParent<BasicTile>().pos;
         if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
-            Player.GetComponent<PlayerMovement>().BeginInteractionMovement(transform.parent.gameObject);
-        }
-        if (!isFished && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions()["is_fishing_rod"]) {
-            Debug.Log("Started fishing coroutine");
-            cor = StartCoroutine(Fish());
+            Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
         }
     }
 
@@ -49,31 +46,33 @@ public class WaterTile : MonoBehaviour, InteractableObject
     }
 
 
-    IEnumerator Fish() {
+    IEnumerator StartInteraction() {
+        
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             
             yield return null;
         }
-        while (waterTime != 30) {
-           // Debug.Log(waterTime);
-            waterTime += 1;
+        while (interactTime != 30) {
+            interactTime += 1;
             yield return new WaitForSeconds(.1f);
         }
-        EXPGainPopup.CreateEXPGain("Fishing", 20, (int)Skills.skillList["Fishing"].GetEXP() + 20, (int)Skills.skillList["Fishing"].GetThreshold());
-        Skills.skillList["Fishing"].IncreaseEXP(20);
-        waterTime = 0;
-        isFished = true;
+        Inventory.AddItem(Resources.Load<TextAsset>("Items/copper_ore").text);
+        EXPGainPopup.CreateEXPGain("Mining", 20, (int)Skills.skillList["Mining"].GetEXP() + 20, (int)Skills.skillList["Mining"].GetThreshold());
+        Skills.skillList["Mining"].IncreaseEXP(20);
+        interactTime = 0;
+        isInteracted = true;
     }
 
     public void InteractWith() {
-        if (!isFished && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_fishing_rod"))  {
-            cor = StartCoroutine(Fish());
+        if (!isInteracted && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_pickaxe"))  {
+            cor = StartCoroutine(StartInteraction());
         }
     }
-    public void StopFishing() {
+    public void StopInteraction() {
         if (cor != null) {
             StopCoroutine(cor);
         }
-        waterTime = 0;
+        interactTime = 0;
+
     }
 }

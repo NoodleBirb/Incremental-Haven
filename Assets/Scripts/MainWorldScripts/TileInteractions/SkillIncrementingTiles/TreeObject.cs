@@ -8,16 +8,16 @@ using UnityEngine.UI;
 public class TreeObject : MonoBehaviour, InteractableObject
 {
     private readonly int personalGUIHeight = 50;
-    private int treeTime;
-    public bool isCut;
+    private int interactTime;
+    public bool isInteracted;
     Coroutine cor;
     GameObject Player;
     
     void Start() {
-        isCut = false;
+        isInteracted = false;
         cor = null;
-        treeTime = 0;
-        PlayerMovement.ResetActions += StopCuttingTree;
+        interactTime = 0;
+        PlayerMovement.ResetActions += StopInteraction;
         Player = GameObject.Find("Player");
     }
 
@@ -27,21 +27,17 @@ public class TreeObject : MonoBehaviour, InteractableObject
         
         GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Chop Tree";
-        interactButton.GetComponent<Button>().onClick.AddListener(() => ChopTree());
+        interactButton.GetComponent<Button>().onClick.AddListener(() => GUIInteract());
         interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -previousHeight);
 
         interactionContainer.GetComponent<RectTransform>().sizeDelta = interactionContainer.GetComponent<RectTransform>().sizeDelta + new Vector2(0, interactButton.GetComponent<RectTransform>().sizeDelta.y);
     }
 
-    void ChopTree() {
+    void GUIInteract() {
         InteractableObject.ResetGUI();
         Vector2Int pos = GetComponentInParent<BasicTile>().pos;
         if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
-            Player.GetComponent<PlayerMovement>().BeginInteractionMovement(transform.parent.gameObject);
-        }
-        if (!isCut && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions()["is_axe"]) {
-            Debug.Log("I should be running only once");
-            cor = StartCoroutine(CutTree());
+            Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
         }
     }
 
@@ -50,33 +46,33 @@ public class TreeObject : MonoBehaviour, InteractableObject
     }
 
 
-    IEnumerator CutTree() {
+    IEnumerator StartInteraction() {
         
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             
             yield return null;
         }
-        while (treeTime != 30) {
-            treeTime += 1;
+        while (interactTime != 30) {
+            interactTime += 1;
             yield return new WaitForSeconds(.1f);
         }
         Inventory.AddItem(Resources.Load<TextAsset>("Items/oak_log").text);
         EXPGainPopup.CreateEXPGain("Woodcutting", 20, (int)Skills.skillList["Woodcutting"].GetEXP() + 20, (int)Skills.skillList["Woodcutting"].GetThreshold());
         Skills.skillList["Woodcutting"].IncreaseEXP(20);
-        treeTime = 0;
-        isCut = true;
+        interactTime = 0;
+        isInteracted = true;
     }
 
     public void InteractWith() {
-        if (!isCut && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_axe"))  {
-            cor = StartCoroutine(CutTree());
+        if (!isInteracted && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_axe"))  {
+            cor = StartCoroutine(StartInteraction());
         }
     }
-    public void StopCuttingTree() {
+    public void StopInteraction() {
         if (cor != null) {
             StopCoroutine(cor);
         }
-        treeTime = 0;
+        interactTime = 0;
 
     }
 }

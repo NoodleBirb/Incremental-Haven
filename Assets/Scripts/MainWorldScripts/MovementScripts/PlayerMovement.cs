@@ -112,22 +112,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void BeginInteractionMovement (GameObject endTile) {
-
-        ResetActions?.Invoke();
-
-        Vector2Int playerPos = new(technicalPos.x, technicalPos.y);
-                
-        // Pathfind to the point found by the ray.
-        movementPath = Pathfinding.GetAStarPath(map[playerPos], endTile);
-        if(Vector3.Distance(transform.position, new(technicalPos.x, 0, technicalPos.y)) > 0.00001f){
-            movementPath.Insert(0, map[new(technicalPos.x, technicalPos.y)]);
-        }
-        if (movementPath.Count > 0){       
-            technicalPos = new((int)movementPath[0].transform.position.x, (int)movementPath[0].transform.position.z);
-        }
-    }
-
     // Readies the next piece of the path.
     void ReadyNextMovement() {
         movementPath.Remove(movementPath[0]);
