@@ -22,7 +22,6 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     public void SetItem(Item item) {
-        Debug.Log("I am setting the item to" + item.GetName());
         this.item = item;
     }
     void UpdateTooltipStats() {

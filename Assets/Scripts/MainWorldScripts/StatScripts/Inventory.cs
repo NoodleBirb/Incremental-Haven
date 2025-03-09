@@ -220,7 +220,10 @@ public class Inventory : MonoBehaviour
         }
         
         GameObject.Find(itemType).GetComponent<MouseOverItem>().SetItem(item);
-        inventoryList[0].Remove(item);
+        if (item != null) {
+            
+            inventoryList[0].Remove(item);
+        }
         if (previouslyEquippedItem != null) {
             inventoryList[0].Add(previouslyEquippedItem);
         }
