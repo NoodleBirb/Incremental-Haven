@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Unity.VisualStudio.Editor;
@@ -11,13 +12,17 @@ public class TurnDecider : MonoBehaviour {
     static float speedEnemy;
     static int playerAV;
     static int enemyAV;
+    static int tempEnemyAV;
+    static int tempPlayerAV;
 
     void Start() {
-        speedPlayer = PlayerPrefs.GetFloat("speed_player");
-        speedEnemy = PlayerPrefs.GetFloat("speed_enemy");
+        speedPlayer = PlayerStatistics.totalStats["speed"];
+        speedEnemy = EnemyStatistics.allEnemyStats[0]["speed"];
         turnOrder = new List<string>();
         playerAV = (int)(10000 / speedPlayer);
         enemyAV = (int)(10000 / speedEnemy);
+        tempEnemyAV = enemyAV;
+        tempPlayerAV = playerAV;
         FillTurnOrder();
 
         if (turnOrder[0] == "player") {
@@ -28,18 +33,25 @@ public class TurnDecider : MonoBehaviour {
     }
 
     static void FillTurnOrder() {
+        
         while(turnOrder.Count < 5) {
-            if (playerAV == 0) {
+            Debug.Log("PlayerTemp" + tempPlayerAV);
+            Debug.Log("EnemyTemp" + tempEnemyAV);
+            if (tempPlayerAV <= tempEnemyAV) {
                 turnOrder.Add("player");
-                playerAV = (int)(10000 / speedPlayer);
-                continue;
-            } 
-            if (enemyAV == 0) {
+                tempEnemyAV -= tempPlayerAV; // Reduce enemy AV by the player's AV
+                tempPlayerAV = playerAV;
+                if (tempEnemyAV <= 0) {
+                    tempEnemyAV += enemyAV; // Reset AV correctly
+                }
+            } else {
                 turnOrder.Add("enemy");
-                enemyAV = (int)(10000 / speedEnemy);
+                tempPlayerAV -= tempEnemyAV; // Reduce player AV by the enemy's AV
+                tempEnemyAV = enemyAV;
+                if (tempPlayerAV <= 0) {
+                    tempPlayerAV += playerAV; // Reset AV correctly
+                }
             }
-            enemyAV -= 1;
-            playerAV -= 1;
         }
         GameObject turnOrderContainer = GameObject.Find("Turn Order Container");
         foreach (Transform transform in turnOrderContainer.transform) {

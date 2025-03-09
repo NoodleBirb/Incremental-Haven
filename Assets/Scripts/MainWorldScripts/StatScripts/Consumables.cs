@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class Consumables : MonoBehaviour{
 
-    private static List<Item> currentConsumables;
+    private static Dictionary<Item, bool> currentConsumables;
     void Awake() {
         currentConsumables ??= new() {
 
@@ -21,13 +21,27 @@ public class Consumables : MonoBehaviour{
     }
 
     public static List<Item> GetCurrentConsumables() {
+        return currentConsumables.Keys.ToList<Item>();
+    }
+    public static Dictionary<Item, bool> GetConsumableDict() {
         return currentConsumables;
     }
     public static void UseConsumable(Item consumable) {
-        Debug.Log(currentConsumables);
-        currentConsumables.Add(consumable);
+        currentConsumables[consumable] = false;
         Inventory.inventoryList[1].Remove(consumable);
         Inventory.LoadInventory();
         PlayerStatistics.UpdateStats();
+    }
+    public static void UseCombatConsumable(Item consumable) {
+        currentConsumables[consumable] = false;
+        Inventory.inventoryList[1].Remove(consumable);
+        PlayerStatistics.UpdateStats();
+        GameObject.Find("Player HP Slider").GetComponent<Slider>().value = PlayerStatistics.currentHP;
+        if (!Inventory.inventoryList[1].Contains(consumable)) {
+            MouseOverItem.ItemVanished();
+        }
+        Inventory.LoadCombatInventory();
+        GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = false;
+        TurnDecider.NextTurn();
     }
 }

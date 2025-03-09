@@ -20,7 +20,7 @@ public class PlayerStatistics : MonoBehaviour {
         healthCoroutineRunning = false;
         manaCoroutineRunning = false;
         UpdateStats();
-        if ((int)(currentHP + 0.5) == 0) {
+        if ((int)(currentHP + 0.5) <= 0) {
             currentHP = totalStats["HP"];
             currentMana = totalStats["mana"];
             GameObject.Find("Health Bar").GetComponent<Slider>().maxValue = totalStats["HP"];
@@ -68,7 +68,10 @@ public class PlayerStatistics : MonoBehaviour {
                 totalStats["defense"] += item.GetDefense();
                 totalStats["elemental_defense"] += item.GetElementalDefense();
                 totalStats["elemental_affinity"] += item.GetElementalAffinity();
-                currentHP += item.GetHealth();
+                if (!Consumables.GetConsumableDict()[item]) {
+                    currentHP += item.GetHealth();
+                    Consumables.GetConsumableDict()[item] = true;
+                }
                 if (currentHP > totalStats["HP"]) {
                     currentHP = totalStats["HP"];
                 }

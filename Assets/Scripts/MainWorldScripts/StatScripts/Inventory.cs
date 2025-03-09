@@ -124,7 +124,7 @@ public class Inventory : MonoBehaviour
                 currentInventoryItems[item.GetName()] = consumableItem;
                 consumableItem.GetComponent<MouseOverItem>().SetItem(item);
                 consumableItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
-                consumableItem.GetComponent<Button>().onClick.AddListener(() => Consumables.UseConsumable(item));
+                consumableItem.GetComponent<Button>().onClick.AddListener(() => Consumables.UseCombatConsumable(item));
                 consumableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             } else {
                 consumableItem = currentInventoryItems[item.GetName()];
