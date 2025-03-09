@@ -25,7 +25,7 @@ public class EXPGainPopup : MonoBehaviour
 
     public static void CreateEXPGain(string name, int gain, int current, int needed) {
         GameObject expGain = GameObject.Instantiate(Resources.Load<GameObject>("UI/EXP Gain Popup"), GameObject.Find("EXP Gain Container").transform);
-        expGain.transform.Find("EXP Gain Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + name);
+        expGain.transform.Find("EXP Gain Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + name);
         expGain.transform.Find("EXP Gain Value").GetComponent<TextMeshProUGUI>().text = "+" + gain;
         expGain.transform.Find("EXP Gain Percentage").GetComponent<TextMeshProUGUI>().text = (current / needed) + "%";
     }

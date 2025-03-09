@@ -230,24 +230,22 @@ public class Inventory : MonoBehaviour
             GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/transparentbackground");
             GameObject.Find(itemType).GetComponent<Button>().interactable = false;
             if (itemType == "Weapon Slot") {
-                Skills.currentWeaponSkill = Skills.skillList["MakeshiftCombat"];
+                Skills.ChangeWeaponSkill(Skills.skillList["MakeshiftCombat"]);
             }
-            Skills.ResetSkillsWindow();
         } else {
             GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             if (itemType == "Weapon Slot") {
                 if (item.GetSpecificFunctions().ContainsKey("one_handed")) {
-                    Skills.currentWeaponSkill = Skills.skillList["OneHandedCombat"];
+                    Skills.ChangeWeaponSkill(Skills.skillList["OneHandedCombat"]);
                 } else if (item.GetSpecificFunctions().ContainsKey("two_handed")) {
-                    Skills.currentWeaponSkill = Skills.skillList["TwoHandedCombat"];
+                    Skills.ChangeWeaponSkill(Skills.skillList["TwoHandedCombat"]);
                 } else if (item.GetSpecificFunctions().ContainsKey("light_ranged")) {
-                    Skills.currentWeaponSkill = Skills.skillList["LightRanged"];
+                    Skills.ChangeWeaponSkill(Skills.skillList["LightRanged"]);
                 } else if (item.GetSpecificFunctions().ContainsKey("heavy_ranged")) {
-                    Skills.currentWeaponSkill = Skills.skillList["HeavyRanged"];
+                    Skills.ChangeWeaponSkill(Skills.skillList["HeavyRanged"]);
                 } else if (item.GetSpecificFunctions().ContainsKey("magic")) {
-                    Skills.currentWeaponSkill = Skills.skillList["Magic"];
+                    Skills.ChangeWeaponSkill(Skills.skillList["Magic"]);
                 }
-                Skills.ResetSkillsWindow();
             }
         }
         

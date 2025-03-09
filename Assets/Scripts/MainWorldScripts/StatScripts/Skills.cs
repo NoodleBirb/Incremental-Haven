@@ -60,7 +60,6 @@ public class Skills : MonoBehaviour
     public void OpenOrCloseSkillsWindow() {
         bool isEnabled = GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled;
         if (!isEnabled) {
-            
             FillSkillsWindow();
             GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled = true;
         } else {
@@ -100,17 +99,20 @@ public class Skills : MonoBehaviour
     public static void UpdateElementalSkillStats() {
         stats = currentElementalSkill.GetStats();
     }
-    public static void ResetSkillsWindow(){
-        Skills.FillSkillsWindow();
-    }
 
     public static void ChangeElementalSkill(ISkillInterface skill) {
         currentElementalSkill = skill;
-        if (GameObject.Find("Skill List Canvas") != null) {
+        if (GameObject.Find("Skill List Canvas") != null && isElementalTab) {
             GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + skill.GetName());
         }
         stats = skill.GetStats();
         PlayerStatistics.UpdateStats();
+    }
+    public static void ChangeWeaponSkill(ISkillInterface skill) {
+        currentWeaponSkill = skill;
+        if (GameObject.Find("Skill List Canvas") != null && !isElementalTab) {
+            GameObject.Find("Equipped Skill Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + skill.GetName());
+        }
     }
     public void ElementalTab() {
         if (!isElementalTab){
