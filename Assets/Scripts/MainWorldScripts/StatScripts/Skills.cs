@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class Skills : MonoBehaviour
 {
     public bool showSkillList = false;
-    public bool isElementalTab;
+    public static bool isElementalTab;
     public static Dictionary<string, ISkillInterface> skillList;
     // The position on of the scrolling viewport
     public static ISkillInterface currentElementalSkill;
@@ -69,7 +69,7 @@ public class Skills : MonoBehaviour
         
     }
 
-    void FillSkillsWindow() {
+    static void FillSkillsWindow() {
         foreach (Transform skill in GameObject.Find("Skill List Content").transform) {
             Destroy (skill.gameObject);
         }
@@ -99,6 +99,9 @@ public class Skills : MonoBehaviour
     }
     public static void UpdateElementalSkillStats() {
         stats = currentElementalSkill.GetStats();
+    }
+    public static void ResetSkillsWindow(){
+        Skills.FillSkillsWindow();
     }
 
     public static void ChangeElementalSkill(ISkillInterface skill) {

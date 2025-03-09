@@ -232,6 +232,7 @@ public class Inventory : MonoBehaviour
             if (itemType == "Weapon Slot") {
                 Skills.currentWeaponSkill = Skills.skillList["MakeshiftCombat"];
             }
+            Skills.ResetSkillsWindow();
         } else {
             GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             if (itemType == "Weapon Slot") {
@@ -246,6 +247,7 @@ public class Inventory : MonoBehaviour
                 } else if (item.GetSpecificFunctions().ContainsKey("magic")) {
                     Skills.currentWeaponSkill = Skills.skillList["Magic"];
                 }
+                Skills.ResetSkillsWindow();
             }
         }
         
