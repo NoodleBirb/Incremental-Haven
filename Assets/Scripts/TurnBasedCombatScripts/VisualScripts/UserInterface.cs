@@ -35,8 +35,8 @@ public class UserInterface : MonoBehaviour
 
         GameObject.Find("Elemental Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenElementalSkill());
         GameObject.Find("Weapon Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenWeaponSkill());
-
         GameObject.Find("Change Skill Button").GetComponent<Button>().onClick.AddListener(() => OpenChangeSkill());
+        GameObject.Find("Inventory Button").GetComponent<Button>().onClick.AddListener(() => OpenInventory());
         GameObject.Find("Run Button").GetComponent<Button>().onClick.AddListener(() => SceneManager.LoadScene("firstarea"));
 
         FillMoveLists();
@@ -109,6 +109,11 @@ public class UserInterface : MonoBehaviour
             Debug.Log("Not enough mana!");
         }
 
+    }
+
+    void OpenInventory() {
+        GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = false;
+        Inventory.LoadCombatInventory();
     }
 
     void OpenChangeSkill() {
@@ -212,6 +217,7 @@ public class UserInterface : MonoBehaviour
     public static void CloseAllMenus() {
         GameObject.Find("Weapon Skill Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Elemental Skill Canvas").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Change Skill Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Player Choices Canvas").GetComponent<Canvas>().enabled = true;
     }

@@ -110,6 +110,35 @@ public class Inventory : MonoBehaviour
         
     }
 
+    public static void LoadCombatInventory() {
+        Transform content = GameObject.Find("Inventory List").transform;
+        currentInventoryItems = new ();
+        foreach (Transform transform in content) { 
+            Destroy(transform.gameObject);
+        }   
+        
+        foreach (Item item in inventoryList[1]) {
+            GameObject consumableItem;
+            if (!currentInventoryItems.Keys.Contains(item.GetName())) {
+                consumableItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Inventory List").transform);
+                currentInventoryItems[item.GetName()] = consumableItem;
+                consumableItem.GetComponent<MouseOverItem>().SetItem(item);
+                consumableItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
+                consumableItem.GetComponent<Button>().onClick.AddListener(() => Consumables.UseConsumable(item));
+                consumableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+            } else {
+                consumableItem = currentInventoryItems[item.GetName()];
+                consumableItem.GetComponentInChildren<TextMeshProUGUI>().text =  int.Parse(consumableItem.GetComponentInChildren<TextMeshProUGUI>().text) + 1 + "";
+            }
+        }
+        foreach (GameObject inventoryItem in currentInventoryItems.Values) {
+            inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text = inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text + "x";
+        }
+        PlayerStatistics.UpdateInventoryStats();
+        GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = true;
+    }
+
     public static void LoadInventory() {
         
         Transform content = GameObject.Find("Inventory List").transform;
