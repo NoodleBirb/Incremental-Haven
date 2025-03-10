@@ -35,10 +35,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
 
     void GUIInteract() {
         InteractableObject.ResetGUI();
-        Vector2Int pos = GetComponentInParent<BasicTile>().pos;
-        if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
-            Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
-        }
+        Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
     }
 
     public int GetGUIHeight() {
@@ -49,8 +46,12 @@ public class TreeObject : MonoBehaviour, InteractableObject
     IEnumerator StartInteraction() {
         
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
-            
             yield return null;
+        }
+        if (Equipment.GetEquippedItems()["Weapon Slot"] == null || !Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_axe")) {
+            PopupManager.AddPopup("Missing", "You need to equip an axe!");
+            StopInteraction();
+            yield break;
         }
         while (interactTime != 30) {
             interactTime += 1;
@@ -64,7 +65,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
     }
 
     public void InteractWith() {
-        if (!isInteracted && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_axe"))  {
+        if (!isInteracted)  {
             cor = StartCoroutine(StartInteraction());
         }
     }

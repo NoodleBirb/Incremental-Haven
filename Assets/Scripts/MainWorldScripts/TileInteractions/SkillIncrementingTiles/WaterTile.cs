@@ -24,7 +24,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
     public void CreateOptions(float previousHeight) {
         GameObject interactionContainer = GameObject.Find("Interaction Container");
         
-        GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
+        GameObject interactButton = Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Fish";
         interactButton.GetComponent<Button>().onClick.AddListener(() => GUIInteract());
         interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -previousHeight);
@@ -34,10 +34,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
 
     void GUIInteract() {
         InteractableObject.ResetGUI();
-        Vector2Int pos = GetComponentInParent<BasicTile>().pos;
-        if (Vector3.Distance(Player.transform.position, new(pos.x, 0, pos.y)) > 1){
-            Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
-        }
+        Player.GetComponent<PlayerMovement>().BeginMovement(transform.parent.gameObject);
     }
 
     public int GetGUIHeight() {
@@ -47,8 +44,12 @@ public class WaterTile : MonoBehaviour, InteractableObject
 
     IEnumerator StartInteraction() {
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
-            
             yield return null;
+        }
+        if (Equipment.GetEquippedItems()["Weapon Slot"] == null || !Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_fishing_rod")) {
+            PopupManager.AddPopup("Missing", "You need to equip a fishing rod!");
+            StopInteraction();
+            yield break;
         }
         while (interactTime != 30) {
             interactTime += 1;
@@ -62,7 +63,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
     }
 
     public void InteractWith() {
-        if (!isInteracted && Equipment.GetEquippedItems()["Weapon Slot"] != null && Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_fishing_rod"))  {
+        if (!isInteracted)  {
             cor = StartCoroutine(StartInteraction());
         }
     }
@@ -70,6 +71,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
         if (cor != null) {
             StopCoroutine(cor);
         }
+        cor = null;
         interactTime = 0;
     }
 }

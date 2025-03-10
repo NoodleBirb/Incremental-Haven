@@ -116,7 +116,11 @@ public class PlayerMovement : MonoBehaviour
     void ReadyNextMovement() {
         movementPath.Remove(movementPath[0]);
         if (movementPath.Count > 0) {
-            technicalPos = new((int)movementPath[0].transform.position.x, (int)movementPath[0].transform.position.z);
+            if (movementPath[0].GetComponent<TileSettings>().walkable) {
+                technicalPos = new((int)movementPath[0].transform.position.x, (int)movementPath[0].transform.position.z);
+            } else {
+                movementPath = new();
+            }
         }
     }
 

@@ -64,7 +64,6 @@ public class Inventory : MonoBehaviour
     public void CloseInventory() {
         showInventory = false;
         fullyOpen = false;
-        Equipment.DisableLines();
         GameObject.Find("World Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = false;
@@ -212,7 +211,6 @@ public class Inventory : MonoBehaviour
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Equipment Canvas").GetComponent<Canvas>().enabled = true;
-        Equipment.EnableLines();
         fullyOpen = true;
     }
 
@@ -260,7 +258,6 @@ public class Inventory : MonoBehaviour
         Equipment.GetEquippedItems()[itemType] = item;
         MouseOverItem.ItemVanished();
         PlayerStatistics.UpdateStats();
-        CreateVisualItem(item, itemType);
         LoadInventory();
     }
 

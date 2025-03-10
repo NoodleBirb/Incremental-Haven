@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class SummonPlayerModel : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        Instantiate (Resources.Load<GameObject>("PlayerModel/IHmaincharacter"), gameObject.transform);
+    GameObject player;
+    void Awake() {
+        player = Instantiate (Resources.Load<GameObject>("PlayerModel/IHmaincharacter"), gameObject.transform);
+    }
+    void Start() {
+        player.transform.LookAt(GameObject.Find("Enemy").transform);
     }
 }

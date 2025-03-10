@@ -36,24 +36,9 @@ public class Equipment : MonoBehaviour{
     }
 
     void Update() {
-        Vector2[] allPoints = new Vector2[16];
-        int i = 0;
-        foreach((GameObject container, GameObject bodyPart) in slotContainersAndBodyParts) {
-            allPoints[i] = container.GetComponent<RectTransform>().position;
-            allPoints[i+1] = Camera.main.WorldToScreenPoint(bodyPart.transform.position);
-            i+=2;
-        }
-        GameObject.Find("Equipment Line Creator").GetComponent<UILineRenderer>().Points = allPoints;
     }
 
     public static Dictionary<string, Item> GetEquippedItems() {
         return equippedItems;
-    }
-
-    public static void EnableLines() {
-        GameObject.Find("Equipment Line Creator").GetComponent<UILineRenderer>().enabled = true;
-    }
-    public static void DisableLines() {
-        GameObject.Find("Equipment Line Creator").GetComponent<UILineRenderer>().enabled = false;
     }
 }
