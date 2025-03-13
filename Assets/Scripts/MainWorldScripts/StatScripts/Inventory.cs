@@ -47,6 +47,8 @@ public class Inventory : MonoBehaviour
         Item item = LoadItemFromJson(stoneAxe.text);
         inventoryList[0].Add(item);
         inventoryList[1].Add(LoadItemFromJson(Resources.Load<TextAsset>("Items/basic_health_potion").text));
+        inventoryList[2].Add(LoadItemFromJson(Resources.Load<TextAsset>("Items/copper_ore").text));
+        inventoryList[2].Add(LoadItemFromJson(Resources.Load<TextAsset>("Items/oak_log").text));
     }
     public void OpenInventory() {
         showInventory = true;
