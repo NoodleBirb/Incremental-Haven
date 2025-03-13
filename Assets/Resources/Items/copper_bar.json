@@ -1,0 +1,11 @@
+{
+    "name": "copper_bar",
+    "equippable": false,
+    "consumable": false,
+    "material": true,
+    "stats": null,
+    "specific_functions": {
+        "none": true
+    },
+    "description": "Weakest of all metals."
+}

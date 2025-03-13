@@ -23,10 +23,10 @@ public class EXPGainPopup : MonoBehaviour
         GameObject.Destroy(gameObject);   
     }
 
-    public static void CreateEXPGain(string name, int gain, int current, int needed) {
+    public static void CreateEXPGain(string name, int gain, float current, float needed) {
         GameObject expGain = GameObject.Instantiate(Resources.Load<GameObject>("UI/EXP Gain Popup"), GameObject.Find("EXP Gain Container").transform);
         expGain.transform.Find("EXP Gain Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/SkillSprites/" + name);
         expGain.transform.Find("EXP Gain Value").GetComponent<TextMeshProUGUI>().text = "+" + gain;
-        expGain.transform.Find("EXP Gain Percentage").GetComponent<TextMeshProUGUI>().text = (current / needed) + "%";
+        expGain.transform.Find("EXP Gain Percentage").GetComponent<TextMeshProUGUI>().text = (int)(100 * current / needed) + "%";
     }
 }

@@ -50,6 +50,8 @@ public class Furnace : MonoBehaviour, InteractableObject
             if (itemSmelting == "copper_ore") {
                 Inventory.AddItem(Resources.Load<TextAsset>("Items/copper_bar").text);
             }
+            Skills.skillList["Ignition"].IncreaseEXP(20);
+            EXPGainPopup.CreateEXPGain("Ignition", 20, Skills.skillList["Ignition"].GetEXP() + 20, Skills.skillList["Ignition"].GetThreshold());
             yield break;
         } else if (smelting) {
             PopupManager.AddPopup("Wait", "Furnace is still smelting!"); 
@@ -83,6 +85,7 @@ public class Furnace : MonoBehaviour, InteractableObject
         GameObject.Find("Inventory and Skill Button Canvas").GetComponent<Canvas>().enabled = false;
     }
     IEnumerator StartSmelting(string item) {
+        StopInteraction();
         smelting = true;
         itemSmelting = item;
         while (interactTime < 30) {

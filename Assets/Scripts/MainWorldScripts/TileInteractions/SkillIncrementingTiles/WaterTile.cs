@@ -56,8 +56,8 @@ public class WaterTile : MonoBehaviour, InteractableObject
             yield return new WaitForSeconds(.1f);
         }
         Inventory.AddItem(Resources.Load<TextAsset>("Items/cod").text);
-        EXPGainPopup.CreateEXPGain("Fishing", 20, (int)Skills.skillList["Fishing"].GetEXP() + 20, (int)Skills.skillList["Fishing"].GetThreshold());
         Skills.skillList["Fishing"].IncreaseEXP(20);
+        EXPGainPopup.CreateEXPGain("Fishing", 20, Skills.skillList["Fishing"].GetEXP(), Skills.skillList["Fishing"].GetThreshold());
         interactTime = 0;
         isInteracted = true;
     }

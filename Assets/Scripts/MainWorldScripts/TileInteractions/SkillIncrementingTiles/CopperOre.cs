@@ -58,8 +58,8 @@ public class CopperOre : MonoBehaviour, InteractableObject
             yield return new WaitForSeconds(.1f);
         }
         Inventory.AddItem(Resources.Load<TextAsset>("Items/copper_ore").text);
-        EXPGainPopup.CreateEXPGain("Mining", 20, (int)Skills.skillList["Mining"].GetEXP() + 20, (int)Skills.skillList["Mining"].GetThreshold());
         Skills.skillList["Mining"].IncreaseEXP(20);
+        EXPGainPopup.CreateEXPGain("Mining", 20, Skills.skillList["Mining"].GetEXP(), Skills.skillList["Mining"].GetThreshold());
         interactTime = 0;
         isInteracted = true;
     }

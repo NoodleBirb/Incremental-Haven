@@ -172,6 +172,11 @@ public class PlayerMovement : MonoBehaviour
         if (GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled && skillListRect.rect.Contains(localMousePosition)) {
             return true;
         }
+        RectTransform furnaceWindowRect = GameObject.Find("Smelting Window").GetComponent<RectTransform>();
+        localMousePosition = furnaceWindowRect.InverseTransformPoint(Input.mousePosition);
+        if (GameObject.Find("Furnace Canvas").GetComponent<Canvas>().enabled && furnaceWindowRect.rect.Contains(localMousePosition)) {
+            return true;
+        }
         return false;
     }
 
