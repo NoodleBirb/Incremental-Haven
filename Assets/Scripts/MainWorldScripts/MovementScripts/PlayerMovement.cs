@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
             }
             if (mouseInput == 0) {
                 openGUI = false;
-                BeginMovement(GetActualRayTile(hit));
+                BeginMovement(hit.collider.transform.parent.gameObject);
                 /* test that each tile has a value set correctly for its neighbors
                 foreach (GameObject tile in map.Values) {
                     Debug.Log("New Tile: ");
@@ -132,22 +132,9 @@ public class PlayerMovement : MonoBehaviour
 
     // Readies the screen to have a gui, giving it the proper information.
     void ReadyGUI (RaycastHit hit) {
-        guiTile = GetActualRayTile(hit);
+        guiTile = hit.collider.transform.parent.gameObject;
         guiTile.GetComponent<TileSettings>().GuiOptions();
         openGUI = true;
-    }
-
-    // Fix rounding errors when converting the hit to integer.
-    GameObject GetActualRayTile(RaycastHit hit) {
-        if (hit.point.x < 0 && hit.point.z < 0) {
-            return map[new Vector2Int((int)hit.point.x - 1, (int)hit.point.z - 1)];
-        } else if (hit.point.x < 0) {
-            return map[new Vector2Int((int)hit.point.x - 1, (int)hit.point.z)];
-        } else if (hit.point.z < 0) {
-            return map[new Vector2Int((int)hit.point.x, (int)hit.point.z - 1)];
-        } else {
-            return map[new Vector2Int((int)hit.point.x, (int)hit.point.z)];
-        }
     }
 
     bool InsideGUIBox() {

@@ -12,6 +12,7 @@ public class Furnace : MonoBehaviour, InteractableObject
     bool smelting;
     bool fueling;
     bool attemptSmelting;
+    string action;
     string itemSmelting;
     int burnTime;
     Coroutine cor;
@@ -39,7 +40,7 @@ public class Furnace : MonoBehaviour, InteractableObject
         GameObject interactButton = Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Add Fuel";
         interactButton.GetComponent<Button>().onClick.AddListener(() => {
-            fueling = true;
+            action = "fueling";
             GUIInteract();
         });
         interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -previousHeight);
@@ -49,7 +50,7 @@ public class Furnace : MonoBehaviour, InteractableObject
         interactButton = Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Smelt Item";
         interactButton.GetComponent<Button>().onClick.AddListener(() => {
-            attemptSmelting = true;
+            action = "attemptSmelting";
             GUIInteract();
         });
         interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -2 * previousHeight);
@@ -59,6 +60,7 @@ public class Furnace : MonoBehaviour, InteractableObject
         interactButton = Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Pickup Item";
         interactButton.GetComponent<Button>().onClick.AddListener(() => {
+            action = null;
             GUIInteract();
         });
         interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -3 * previousHeight);
@@ -76,6 +78,10 @@ public class Furnace : MonoBehaviour, InteractableObject
     }
 
     IEnumerator StartInteraction() {
+        Debug.Log("smelting: " + smelting);
+        Debug.Log("smelted" + smelted);
+        Debug.Log("fueling: " + fueling);
+        Debug.Log("attemptSmelting: " + attemptSmelting);
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             yield return null;
         }
@@ -101,16 +107,16 @@ public class Furnace : MonoBehaviour, InteractableObject
         foreach (Item item in Inventory.inventoryList[2]) {
             GameObject smeltableItem;
             if (!smeltableItems.Keys.Contains(item.GetName())) {
-                if ((burnTime == 0 || fueling) && item.GetSpecificFunctions().ContainsKey("fuel")) {
+                if (((burnTime == 0 && !attemptSmelting) || fueling) && item.GetSpecificFunctions().ContainsKey("fuel")) {
                     smeltableItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Smeltable Items Container").transform);
                     smeltableItems[item.GetName()] = smeltableItem;
                     smeltableItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
                     smeltableItem.GetComponent<MouseOverItem>().SetItem(item);
-                    smeltableItem.GetComponent<Button>().onClick.AddListener(() => AddFuel(item.GetName()));
+                    smeltableItem.GetComponent<Button>().onClick.AddListener(() => AddFuel(item));
                     smeltableItem.GetComponent<Button>().enabled = true;
                     smeltableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
                 }
-                else if ((burnTime > 0 || attemptSmelting) && item.GetSpecificFunctions().ContainsKey("smeltable") && !smeltableItems.Keys.Contains(item.GetName())) {
+                else if (((burnTime > 0 && !fueling) || attemptSmelting) && item.GetSpecificFunctions().ContainsKey("smeltable")) {
                     smeltableItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Smeltable Items Container").transform);
                     smeltableItems[item.GetName()] = smeltableItem;
                     smeltableItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
@@ -127,12 +133,16 @@ public class Furnace : MonoBehaviour, InteractableObject
         foreach (GameObject inventoryItem in smeltableItems.Values) {
             inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text = inventoryItem.GetComponentInChildren<TextMeshProUGUI>().text + "x";
         }
+        fueling = false;
+        attemptSmelting = false;
         GameObject.Find("Furnace Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Inventory and Skill Button Canvas").GetComponent<Canvas>().enabled = false;
     }
 
-    void AddFuel(string item) {
-        if (item == "oak_log") {
+    void AddFuel(Item item) {
+        StopInteraction();
+        Inventory.inventoryList[2].Remove(item);
+        if (item.GetName() == "oak_log") {
             burnTime += 30;
         }
     }
@@ -149,6 +159,7 @@ public class Furnace : MonoBehaviour, InteractableObject
             interactTime++;
             yield return new WaitForSeconds(0.1f);
         }
+        smelting = false;
         smelted = true;
     }
 
@@ -161,6 +172,13 @@ public class Furnace : MonoBehaviour, InteractableObject
     }
 
     public void InteractWith() {
+        if (action == "fueling") {
+            fueling = true;
+            action = null;
+        } else if (action == "attemptSmelting") {
+            attemptSmelting = true;
+            action = null;
+        }
         cor = StartCoroutine(StartInteraction());
     }
     public void StopInteraction() {
