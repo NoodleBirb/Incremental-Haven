@@ -171,6 +171,12 @@ public class PlayerMovement : MonoBehaviour
         if (GameObject.Find("Furnace Canvas").GetComponent<Canvas>().enabled && furnaceWindowRect.rect.Contains(localMousePosition)) {
             return true;
         }
+        foreach (Transform popup in GameObject.Find("Popup Container").transform) {
+            localMousePosition = popup.gameObject.GetComponent<RectTransform>().InverseTransformPoint(Input.mousePosition);
+             if (popup.gameObject.GetComponent<RectTransform>().rect.Contains(localMousePosition)) {
+                return true;
+             }
+        }
         return false;
     }
 

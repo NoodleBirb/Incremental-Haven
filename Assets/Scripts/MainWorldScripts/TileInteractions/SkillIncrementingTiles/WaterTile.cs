@@ -52,6 +52,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
             interactTime += 1;
             yield return new WaitForSeconds(.1f);
         }
+        gameObject.transform.parent.Find("Plane").GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/Materials/WaterTileTexture");
         Inventory.AddItem(Resources.Load<TextAsset>("Items/cod").text);
         Skills.skillList["Fishing"].IncreaseEXP(20);
         EXPGainPopup.CreateEXPGain("Fishing", 20, Skills.skillList["Fishing"].GetEXP(), Skills.skillList["Fishing"].GetThreshold());

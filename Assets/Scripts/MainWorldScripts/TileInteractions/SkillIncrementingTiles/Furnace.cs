@@ -83,6 +83,7 @@ public class Furnace : MonoBehaviour, InteractableObject
                 Skills.skillList["Ignition"].IncreaseEXP(20);
                 EXPGainPopup.CreateEXPGain("Ignition", 20, Skills.skillList["Ignition"].GetEXP() + 20, Skills.skillList["Ignition"].GetThreshold());
                 smelted = false;
+
                 itemSmelting = null;
                 yield break;
             } else if (smelting) {
@@ -145,6 +146,7 @@ public class Furnace : MonoBehaviour, InteractableObject
         StopInteraction();
         Inventory.inventoryList[2].Remove(item);
         smelting = true;
+        interactTime = 0;
         itemSmelting = item.GetName();
         while (interactTime < 30) {
             while (burnTime == 0) {

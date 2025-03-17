@@ -27,7 +27,7 @@ public class Campfire : MonoBehaviour, InteractableObject
         GameObject interactionContainer = GameObject.Find("Interaction Container");
         
         GameObject interactButton = Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
-        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Fish";
+        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Fuel";
         interactButton.GetComponent<Button>().onClick.AddListener(() => GUIInteract());
     }
 
@@ -64,6 +64,7 @@ public class Campfire : MonoBehaviour, InteractableObject
     void AddFuel(Item item) {
         StopInteraction();
         Inventory.inventoryList[2].Remove(item);
+        gameObject.transform.parent.GetComponent<TileSettings>().walkable = true;
         Skills.skillList["Ignition"].IncreaseEXP(10);
         EXPGainPopup.CreateEXPGain("Ignition", 10, Skills.skillList["Ignition"].GetEXP(), Skills.skillList["Ignition"].GetThreshold());
         if (item.GetName() == "oak_log") {

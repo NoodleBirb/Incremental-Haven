@@ -63,7 +63,7 @@ public class Pathfinding : MonoBehaviour
             }
             // Check every neighbor of the currentTile to see if they can find a good path.
             foreach (GameObject neighbor in currentTile.GetComponent<BasicTile>().neighbors) {
-                if (closedList.Contains(neighbor)) continue;
+                if (closedList.Contains(neighbor) || !neighbor.GetComponent<TileSettings>().walkable) continue;
                 
                 // Checks if we've used this tile before
                 if (!openList.Contains(neighbor)) {
