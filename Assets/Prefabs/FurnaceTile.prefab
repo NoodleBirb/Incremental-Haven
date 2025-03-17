@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkable: 0
+  baseTile: 1
   heldObject: {fileID: 4844154923562753022}
 --- !u!1 &2552951508082988978
 GameObject:
@@ -522,6 +523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkable: 0
+  baseTile: 0
   heldObject: {fileID: 0}
 --- !u!114 &7612281420726606379
 MonoBehaviour:

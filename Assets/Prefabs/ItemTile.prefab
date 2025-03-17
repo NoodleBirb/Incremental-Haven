@@ -107,15 +107,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkable: 1
+  baseTile: 1
   heldObject: {fileID: 2252248367986645116}
-  guiHeight: 0
-  guiPos: {x: -1, y: -1}
-  fullRectSize:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
 --- !u!1 &8848151085227502222
 GameObject:
   m_ObjectHideFlags: 0

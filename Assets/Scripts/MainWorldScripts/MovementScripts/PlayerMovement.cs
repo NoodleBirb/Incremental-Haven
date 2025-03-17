@@ -75,7 +75,11 @@ public class PlayerMovement : MonoBehaviour
             }
             if (mouseInput == 0) {
                 openGUI = false;
-                BeginMovement(hit.collider.transform.parent.gameObject);
+                GameObject tile = hit.collider.transform.parent.gameObject;
+                while (tile.GetComponent<TileSettings>() == null || (tile.GetComponent<TileSettings>() != null && !tile.GetComponent<TileSettings>().baseTile)) {
+                    tile = tile.transform.parent.gameObject;
+                }
+                BeginMovement(tile);
                 /* test that each tile has a value set correctly for its neighbors
                 foreach (GameObject tile in map.Values) {
                     Debug.Log("New Tile: ");
@@ -133,6 +137,9 @@ public class PlayerMovement : MonoBehaviour
     // Readies the screen to have a gui, giving it the proper information.
     void ReadyGUI (RaycastHit hit) {
         guiTile = hit.collider.transform.parent.gameObject;
+        while (guiTile.GetComponent<TileSettings>() == null || (guiTile.GetComponent<TileSettings>() != null && !guiTile.GetComponent<TileSettings>().baseTile)) {
+            guiTile = guiTile.transform.parent.gameObject;
+        }
         guiTile.GetComponent<TileSettings>().GuiOptions();
         openGUI = true;
     }

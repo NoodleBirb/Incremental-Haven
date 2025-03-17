@@ -105,15 +105,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkable: 0
+  baseTile: 1
   heldObject: {fileID: 2516472864106599739}
-  guiHeight: 0
-  guiPos: {x: -1, y: -1}
-  fullRectSize:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
 --- !u!1 &3249819346114822974
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,7 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19b9804ba2dbf3488cfd938e3fc0a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isFished: 0
+  isInteracted: 0
 --- !u!4 &5785049757565103498 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6473568094550733014, guid: 48ab51885eeed9549ad1b90489edc0da, type: 3}

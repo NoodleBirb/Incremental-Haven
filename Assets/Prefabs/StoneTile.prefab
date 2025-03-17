@@ -105,6 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkable: 1
+  baseTile: 1
   heldObject: {fileID: 2516472864106599739}
 --- !u!1 &3249819346114822974
 GameObject:

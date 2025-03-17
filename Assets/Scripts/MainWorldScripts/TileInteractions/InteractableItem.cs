@@ -13,6 +13,7 @@ public class InteractableItem : MonoBehaviour, InteractableObject  {
     private readonly int personalGUIHeight = 50;
     void Start() {
         pickingUpItem = false;
+        PlayerMovement.ResetActions += StopInteraction;
         jsonDATA = Resources.Load<TextAsset>("Items/" + itemName).text;
         Player = GameObject.Find("Player");
         Instantiate (Resources.Load<GameObject>("ItemModels/" + itemName), gameObject.transform);
@@ -50,5 +51,9 @@ public class InteractableItem : MonoBehaviour, InteractableObject  {
 
     public void InteractWith() {
         pickingUpItem = true;
+    }
+
+    public void StopInteraction() {
+        pickingUpItem = false;
     }
 }
