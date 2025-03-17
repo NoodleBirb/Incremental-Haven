@@ -54,6 +54,10 @@ public class TreeObject : MonoBehaviour, InteractableObject
             interactTime += 1;
             yield return new WaitForSeconds(.1f);
         }
+        foreach (Transform model in transform) {
+            Destroy(model.gameObject);
+        }
+        Instantiate(Resources.Load<GameObject>("DecorationModels/treestump"), transform);
         Inventory.AddItem(Resources.Load<TextAsset>("Items/oak_log").text);
         Skills.skillList["Woodcutting"].IncreaseEXP(20);
         EXPGainPopup.CreateEXPGain("Woodcutting", 20, Skills.skillList["Woodcutting"].GetEXP(), Skills.skillList["Woodcutting"].GetThreshold());

@@ -32,8 +32,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5197129243780534781}
-  - {fileID: 2173371813481325962}
   - {fileID: 3640994892473524212}
   - {fileID: 6743036312888318282}
   m_Father: {fileID: 0}
@@ -137,11 +135,11 @@ Transform:
   m_GameObject: {fileID: 1977127453025309431}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0.5}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7753697543486731193}
+  m_Father: {fileID: 6743036312888318282}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7055112862720705956
 MeshFilter:
@@ -349,11 +347,11 @@ Transform:
   m_GameObject: {fileID: 3745485882303572650}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0.5}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7753697543486731193}
+  m_Father: {fileID: 6743036312888318282}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6766209105327059705
 MeshFilter:
@@ -495,7 +493,13 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 906458264303379226, guid: 7e1a5b61f23090845851ac160aedf3be, type: 3}
     - {fileID: 1076156785367152655, guid: 7e1a5b61f23090845851ac160aedf3be, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5209682460516989556, guid: 7e1a5b61f23090845851ac160aedf3be, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5197129243780534781}
+    - targetCorrespondingSourceObject: {fileID: 5209682460516989556, guid: 7e1a5b61f23090845851ac160aedf3be, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2173371813481325962}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4829919509089542350, guid: 7e1a5b61f23090845851ac160aedf3be, type: 3}
       insertIndex: -1

@@ -145,10 +145,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
     bool InsideGUIBox() {
-        RectTransform interactionRect = GameObject.Find("Interaction Container").GetComponent<RectTransform>();
-        Vector2 localMousePosition = interactionRect.InverseTransformPoint(Input.mousePosition);
-        if (GameObject.Find("Tile Interaction").GetComponent<Canvas>().enabled && interactionRect.rect.Contains(localMousePosition)) {
-            return true;
+        Vector2 localMousePosition;
+        foreach (Transform popup in GameObject.Find("InteractionContainer").transform) {
+            localMousePosition = popup.gameObject.GetComponent<RectTransform>().InverseTransformPoint(Input.mousePosition);
+            if (popup.gameObject.GetComponent<RectTransform>().rect.Contains(localMousePosition)) {
+                return true;
+            }
         }
         InteractableObject.ResetGUI();
         RectTransform inventoryRect = GameObject.Find("Inventory Button").GetComponent<RectTransform>();
