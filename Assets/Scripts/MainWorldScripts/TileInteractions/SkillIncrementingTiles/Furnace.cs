@@ -43,9 +43,6 @@ public class Furnace : MonoBehaviour, InteractableObject
             action = "fueling";
             GUIInteract();
         });
-        interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -previousHeight);
-
-        interactionContainer.GetComponent<RectTransform>().sizeDelta = interactionContainer.GetComponent<RectTransform>().sizeDelta + new Vector2(0, interactButton.GetComponent<RectTransform>().sizeDelta.y);
         
         interactButton = Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Smelt Item";
@@ -53,20 +50,13 @@ public class Furnace : MonoBehaviour, InteractableObject
             action = "attemptSmelting";
             GUIInteract();
         });
-        interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -2 * previousHeight);
-                
-        interactionContainer.GetComponent<RectTransform>().sizeDelta = interactionContainer.GetComponent<RectTransform>().sizeDelta + new Vector2(0, interactButton.GetComponent<RectTransform>().sizeDelta.y);
-
+        
         interactButton = Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Pickup Item";
         interactButton.GetComponent<Button>().onClick.AddListener(() => {
             action = null;
             GUIInteract();
         });
-        interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -3 * previousHeight);
-                
-        interactionContainer.GetComponent<RectTransform>().sizeDelta = interactionContainer.GetComponent<RectTransform>().sizeDelta + new Vector2(0, interactButton.GetComponent<RectTransform>().sizeDelta.y);
-
     }
 
     public int GetGUIHeight() {
@@ -144,6 +134,8 @@ public class Furnace : MonoBehaviour, InteractableObject
     void AddFuel(Item item) {
         StopInteraction();
         Inventory.inventoryList[2].Remove(item);
+        Skills.skillList["Ignition"].IncreaseEXP(10);
+        EXPGainPopup.CreateEXPGain("Ignition", 10, Skills.skillList["Ignition"].GetEXP(), Skills.skillList["Ignition"].GetThreshold());
         if (item.GetName() == "oak_log") {
             burnTime += 30;
         }

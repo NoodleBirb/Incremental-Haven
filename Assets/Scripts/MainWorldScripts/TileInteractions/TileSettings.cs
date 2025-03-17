@@ -23,9 +23,6 @@ public class TileSettings : MonoBehaviour
         GameObject interactButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Walk Towards";
         interactButton.GetComponent<Button>().onClick.AddListener(() => WalkTowards());
-        interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2 (0, 0);
-        interactionContainer.GetComponent<RectTransform>().sizeDelta = new(interactButton.GetComponent<RectTransform>().rect.width, interactButton.GetComponent<RectTransform>().rect.height);
-        
             
         if (heldObject != null) {
             InteractableObject interactable = heldObject.GetComponent<InteractableObject>();

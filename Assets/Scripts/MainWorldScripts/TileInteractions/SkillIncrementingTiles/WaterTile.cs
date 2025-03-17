@@ -27,9 +27,6 @@ public class WaterTile : MonoBehaviour, InteractableObject
         GameObject interactButton = Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Fish";
         interactButton.GetComponent<Button>().onClick.AddListener(() => GUIInteract());
-        interactButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -previousHeight);
-
-        interactionContainer.GetComponent<RectTransform>().sizeDelta = interactionContainer.GetComponent<RectTransform>().sizeDelta + new Vector2(0, interactButton.GetComponent<RectTransform>().sizeDelta.y);
     }
 
     void GUIInteract() {
