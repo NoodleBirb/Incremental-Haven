@@ -17,6 +17,8 @@ public class Campfire : MonoBehaviour, InteractableObject
     bool actuallyFueling;
     Coroutine tickCor;
     Coroutine interactCor;
+    Coroutine fuelingCor;
+    Coroutine notBurningPopupCor;
     bool playerBurning;
     static Dictionary<string, GameObject> smeltableItems;
     
@@ -38,15 +40,21 @@ public class Campfire : MonoBehaviour, InteractableObject
     }
 
     void Update() {
-        if (burnTime > 0 && Player.GetComponent<PlayerMovement>().GetTechnicalPos() == new Vector2Int((int)baseTile.transform.position.x, (int)baseTile.transform.position.z)) {
-            playerBurning = true;
-            tickCor ??= StartCoroutine(FireTick());
+        if (Player.GetComponent<PlayerMovement>().GetTechnicalPos() == new Vector2Int((int)baseTile.transform.position.x, (int)baseTile.transform.position.z)) {
+            if (burnTime > 0) {
+                playerBurning = true;
+                tickCor ??= StartCoroutine(FireTick());
+            } else {
+                playerBurning = false;
+                notBurningPopupCor ??= StartCoroutine(NotBurning());
+            }
         } else {
-            tickCor = null;
             playerBurning = false;
         }
         if (burnTime == 0) {
             baseTile.GetComponent<TileSettings>().walkable = false;
+        } else  {
+            fuelingCor ??= StartCoroutine(StartFueling());
         }
     }
 
@@ -140,6 +148,22 @@ public class Campfire : MonoBehaviour, InteractableObject
             }
             yield return new WaitForSeconds(0.1f);
         }
+        tickCor = null;
+    }
+
+    IEnumerator NotBurning() {
+        while (!playerBurning && Player.GetComponent<PlayerMovement>().GetTechnicalPos() == new Vector2Int((int)baseTile.transform.position.x, (int)baseTile.transform.position.z)) {
+            PopupManager.AddPopup("Error", "No fuel");
+            yield return new WaitForSeconds(1f);
+        }
+        notBurningPopupCor = null;
+    }
+    IEnumerator StartFueling() {
+        while (burnTime > 0) {
+            burnTime--;
+            yield return new WaitForSeconds(.1f);
+        }
+        fuelingCor = null;
     }
 
     void AddFuel(Item item) {
