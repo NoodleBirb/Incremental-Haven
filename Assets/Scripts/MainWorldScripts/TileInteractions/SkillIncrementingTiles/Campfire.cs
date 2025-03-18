@@ -14,6 +14,7 @@ public class Campfire : MonoBehaviour, InteractableObject
     GameObject Player;
     GameObject baseTile;
     bool fueling;
+    bool actuallyFueling;
     Coroutine tickCor;
     Coroutine interactCor;
     bool playerBurning;
@@ -31,6 +32,7 @@ public class Campfire : MonoBehaviour, InteractableObject
             baseTile = baseTile.transform.parent.gameObject;
         }
         fueling = false;
+        actuallyFueling = false;
         baseTile.GetComponent<TileSettings>().walkable = false;
         smeltableItems = new();
     }
@@ -57,7 +59,8 @@ public class Campfire : MonoBehaviour, InteractableObject
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             yield return null;
         }
-        if (burnTime == 0 || fueling) {
+        if (burnTime == 0 || actuallyFueling) {
+            actuallyFueling = false;
             foreach (GameObject item in smeltableItems.Values) {
                 Destroy(item);
             }
@@ -91,6 +94,12 @@ public class Campfire : MonoBehaviour, InteractableObject
             StopCoroutine(interactCor);
             interactCor = null;
         }
+        if (actuallyFueling) {
+            actuallyFueling = false;
+        }
+        if (fueling) {
+            actuallyFueling = true;
+        }
         fueling = false;
         GameObject.Find("Campfire Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Inventory and Skill Button Canvas").GetComponent<Canvas>().enabled = true;
@@ -107,11 +116,11 @@ public class Campfire : MonoBehaviour, InteractableObject
     void GUIInteract() {
         InteractableObject.ResetGUI();
         baseTile.GetComponent<TileSettings>().walkable = false;
+        fueling = true;
         Player.GetComponent<PlayerMovement>().BeginMovement(baseTile);
         if (burnTime > 0) {
             baseTile.GetComponent<TileSettings>().walkable = true;
         }
-        fueling = true;
     }
 
     public int GetGUIHeight() {
