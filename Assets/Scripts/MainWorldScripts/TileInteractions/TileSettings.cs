@@ -10,7 +10,6 @@ public class TileSettings : MonoBehaviour
 
     // For usage in pathfinding.
     public bool walkable = true;
-    public bool baseTile = false;
     // For logic with GUIBoxes
     public GameObject heldObject = null;
 

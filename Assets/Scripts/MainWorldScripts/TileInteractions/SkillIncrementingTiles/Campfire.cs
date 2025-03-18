@@ -24,7 +24,10 @@ public class Campfire : MonoBehaviour, InteractableObject
         Player = GameObject.Find("Player");
         PlayerMovement.ResetActions += StopInteraction;
         baseTile = gameObject.transform.parent.gameObject;
-        while (baseTile.GetComponent<TileSettings>() == null || (baseTile.GetComponent<TileSettings>() != null && !baseTile.GetComponent<TileSettings>().baseTile)) {
+        while (baseTile != null) {
+            if (baseTile.CompareTag("ParentTile")) {
+                break;
+            }
             baseTile = baseTile.transform.parent.gameObject;
         }
         fueling = false;
@@ -40,6 +43,9 @@ public class Campfire : MonoBehaviour, InteractableObject
             tickCor = null;
             playerBurning = false;
         }
+        if (burnTime == 0) {
+            baseTile.GetComponent<TileSettings>().walkable = false;
+        }
     }
 
     public void InteractWith() {
@@ -47,10 +53,11 @@ public class Campfire : MonoBehaviour, InteractableObject
     }
 
     IEnumerator StartInteraction() {
+        Debug.Log("running");
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             yield return null;
         }
-        if (burnTime == 0) {
+        if (burnTime == 0 || fueling) {
             foreach (GameObject item in smeltableItems.Values) {
                 Destroy(item);
             }
@@ -77,15 +84,14 @@ public class Campfire : MonoBehaviour, InteractableObject
             }
             GameObject.Find("Campfire Canvas").GetComponent<Canvas>().enabled = true;
             GameObject.Find("Inventory and Skill Button Canvas").GetComponent<Canvas>().enabled = false;
-        } else {
-            baseTile.GetComponent<TileSettings>().walkable = false;
-        }
+        } 
     }
     public void StopInteraction() {
         if (interactCor != null) {
             StopCoroutine(interactCor);
             interactCor = null;
         }
+        fueling = false;
         GameObject.Find("Campfire Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Inventory and Skill Button Canvas").GetComponent<Canvas>().enabled = true;
     }
@@ -100,7 +106,12 @@ public class Campfire : MonoBehaviour, InteractableObject
 
     void GUIInteract() {
         InteractableObject.ResetGUI();
-        Player.GetComponent<PlayerMovement>().BeginMovement(baseTile, campfire: true);
+        baseTile.GetComponent<TileSettings>().walkable = false;
+        Player.GetComponent<PlayerMovement>().BeginMovement(baseTile);
+        if (burnTime > 0) {
+            baseTile.GetComponent<TileSettings>().walkable = true;
+        }
+        fueling = true;
     }
 
     public int GetGUIHeight() {
@@ -111,10 +122,12 @@ public class Campfire : MonoBehaviour, InteractableObject
         tickTime = 0;
         while (playerBurning) {
             tickTime++;
-            if (tickTime == 30) {
+            if (tickTime == 10) {
                 Skills.skillList["Endurance"].IncreaseEXP(20);
                 EXPGainPopup.CreateEXPGain("Endurance", 20, Skills.skillList["Endurance"].GetEXP(), Skills.skillList["Endurance"].GetThreshold());
                 PlayerStatistics.currentHP -= PlayerStatistics.totalStats["HP"] * 0.1f;
+                PlayerStatistics.UpdateHPAndManaVisual();
+                tickTime = 0;
             }
             yield return new WaitForSeconds(0.1f);
         }

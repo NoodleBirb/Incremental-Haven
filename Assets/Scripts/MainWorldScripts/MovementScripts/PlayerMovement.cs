@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     static Vector2Int technicalPos; // arbitrary numbers that are most definitely impossible to reach
     public float speed;
     public static bool openGUI;
-    GameObject guiTile = null;
     public static event Action ResetActions;
 
     void Awake() {
@@ -73,31 +72,30 @@ public class PlayerMovement : MonoBehaviour
             if (InsideGUIBox()) {
                 return;
             }
-            if (mouseInput == 0) {
-                openGUI = false;
-                GameObject tile = hit.collider.transform.parent.gameObject;
-                while (tile.GetComponent<TileSettings>() == null || (tile.GetComponent<TileSettings>() != null && !tile.GetComponent<TileSettings>().baseTile)) {
-                    tile = tile.transform.parent.gameObject;
+            openGUI = false;
+            GameObject clickedObject = hit.collider.transform.parent.gameObject;
+            while (clickedObject != null) {
+                if (clickedObject.CompareTag("ParentTile")) {
+                    break;
                 }
-                BeginMovement(tile);
-                /* test that each tile has a value set correctly for its neighbors
-                foreach (GameObject tile in map.Values) {
-                    Debug.Log("New Tile: ");
-                    Debug.Log("x pos: " + tile.transform.position.x + " z pos: " + tile.transform.position.z);
-                    Debug.Log("Neighbors: ");
-                    foreach (GameObject neighbor in tile.GetComponent<BasicTile>().neighbors) {
-                        Debug.Log("x pos: " + neighbor.transform.position.x + " z pos: " + neighbor.transform.position.z);
-                    }
-                } */
+                if (clickedObject.CompareTag("NPC") || clickedObject.CompareTag("Player")) {
+                    clickedObject = map[new((int)clickedObject.transform.position.x, (int)clickedObject.transform.position.z)];
+                    break;
+                }
+                clickedObject = clickedObject.transform.parent.gameObject;
+            }
+                
+            if (mouseInput == 0) {
+                BeginMovement(clickedObject);
             }
             else if (mouseInput == 1) {
-                ReadyGUI(hit);
+                ReadyGUI(clickedObject);
             }
         }
     }
 
     // Move to the raycasted tile.
-    public void BeginMovement(GameObject endTile, bool gui = false, bool campfire = false) {
+    public void BeginMovement(GameObject endTile, bool gui = false) {
        
         ResetActions?.Invoke();
         
@@ -114,9 +112,7 @@ public class PlayerMovement : MonoBehaviour
         if (endTile.GetComponent<TileSettings>().heldObject != null && !gui) {
             endTile.GetComponent<TileSettings>().heldObject.GetComponent<InteractableObject>().InteractWith();
         }
-        if (campfire && movementPath.Count > 0) {
-            movementPath.RemoveAt(movementPath.Count - 1);
-        }
+        
     }
 
     // Readies the next piece of the path.
@@ -138,11 +134,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Readies the screen to have a gui, giving it the proper information.
-    void ReadyGUI (RaycastHit hit) {
-        guiTile = hit.collider.transform.parent.gameObject;
-        while (guiTile.GetComponent<TileSettings>() == null || (guiTile.GetComponent<TileSettings>() != null && !guiTile.GetComponent<TileSettings>().baseTile)) {
-            guiTile = guiTile.transform.parent.gameObject;
-        }
+    void ReadyGUI (GameObject guiTile) {
         guiTile.GetComponent<TileSettings>().GuiOptions();
         openGUI = true;
     }

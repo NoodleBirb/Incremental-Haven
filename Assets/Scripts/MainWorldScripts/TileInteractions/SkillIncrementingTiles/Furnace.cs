@@ -12,6 +12,7 @@ public class Furnace : MonoBehaviour, InteractableObject
     bool smelting;
     bool fueling;
     bool attemptSmelting;
+    bool pickingUp;
     string action;
     string itemSmelting;
     int burnTime;
@@ -54,7 +55,7 @@ public class Furnace : MonoBehaviour, InteractableObject
         interactButton = Instantiate(Resources.Load<GameObject>("UI/Interaction Menu Button"), interactionContainer.transform);
         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "Pickup Item";
         interactButton.GetComponent<Button>().onClick.AddListener(() => {
-            action = null;
+            action = "pickingUp";
             GUIInteract();
         });
     }
@@ -68,10 +69,6 @@ public class Furnace : MonoBehaviour, InteractableObject
     }
 
     IEnumerator StartInteraction() {
-        Debug.Log("smelting: " + smelting);
-        Debug.Log("smelted" + smelted);
-        Debug.Log("fueling: " + fueling);
-        Debug.Log("attemptSmelting: " + attemptSmelting);
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             yield return null;
         }
@@ -86,10 +83,13 @@ public class Furnace : MonoBehaviour, InteractableObject
 
                 itemSmelting = null;
                 yield break;
-            } else if (smelting) {
+            } else if (smelting && burnTime != 0) {
                 PopupManager.AddPopup("Wait", "Furnace is still smelting!"); 
                 yield break;
-            } 
+            } else if (pickingUp) {
+                PopupManager.AddPopup("Add", "No ore is smelting"); 
+                yield break;
+            }
         }
         foreach (GameObject item in smeltableItems.Values) {
             Destroy(item);
@@ -174,6 +174,9 @@ public class Furnace : MonoBehaviour, InteractableObject
         } else if (action == "attemptSmelting") {
             attemptSmelting = true;
             action = null;
+        } else if (action == "pickingUp") {
+            pickingUp = true;
+            action = null;
         }
         cor = StartCoroutine(StartInteraction());
     }
@@ -186,5 +189,4 @@ public class Furnace : MonoBehaviour, InteractableObject
         GameObject.Find("Furnace Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Inventory and Skill Button Canvas").GetComponent<Canvas>().enabled = true;
     }
-
 }

@@ -50,7 +50,7 @@ GameObject:
   - component: {fileID: 5489270674961765639}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,7 +98,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showSkillList: 0
-  isElementalTab: 0
 --- !u!114 &2845065744822018343
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -93,6 +93,13 @@ public class PlayerStatistics : MonoBehaviour {
         
     }
 
+    public static void UpdateHPAndManaVisual() {
+        GameObject.Find("Health Bar").GetComponent<Slider>().value = currentHP;
+        GameObject.Find("Mana Bar").GetComponent<Slider>().value = currentMana;
+        GameObject.Find("Health Circle Text").GetComponent<TextMeshProUGUI>().text = ((int)currentHP) + "";
+        GameObject.Find("Mana Circle Text").GetComponent<TextMeshProUGUI>().text = ((int)currentMana) + "";
+    }
+
     void Update() {
         if (currentHP < totalStats["HP"] && !healthCoroutineRunning) {
             healthCoroutine = StartCoroutine(RegenHealth());
