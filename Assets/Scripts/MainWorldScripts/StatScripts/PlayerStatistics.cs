@@ -6,6 +6,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerStatistics : MonoBehaviour {
     public static Dictionary<string, float> totalStats;
@@ -101,6 +102,9 @@ public class PlayerStatistics : MonoBehaviour {
     }
 
     void Update() {
+        if (currentHP <= 0) {
+            SceneManager.LoadScene("Death Scene");
+        }
         if (currentHP < totalStats["HP"] && !healthCoroutineRunning) {
             healthCoroutine = StartCoroutine(RegenHealth());
         }

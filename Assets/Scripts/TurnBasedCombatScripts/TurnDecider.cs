@@ -73,7 +73,7 @@ public class TurnDecider : MonoBehaviour {
             CombatVictory.combatVictory = true;
             SceneManager.LoadScene("firstarea");
         } else if (PlayerStatistics.currentHP <= 0) {
-            SceneManager.LoadScene("firstarea");
+            SceneManager.LoadScene("Death Scene");
         } else {
             turnOrder.RemoveAt(0);
             FillTurnOrder();
