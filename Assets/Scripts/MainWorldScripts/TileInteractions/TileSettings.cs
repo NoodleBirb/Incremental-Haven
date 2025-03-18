@@ -34,6 +34,6 @@ public class TileSettings : MonoBehaviour
 
     void WalkTowards() {
         InteractableObject.ResetGUI();
-        GameObject.Find("Player").GetComponent<PlayerMovement>().BeginMovement(gameObject);
+        GameObject.Find("Player").GetComponent<PlayerMovement>().BeginMovement(gameObject, gui: true);
     }
 }

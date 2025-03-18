@@ -97,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Move to the raycasted tile.
-    public void BeginMovement(GameObject endTile) {
+    public void BeginMovement(GameObject endTile, bool gui = false, bool campfire = false) {
        
         ResetActions?.Invoke();
         
@@ -111,8 +111,11 @@ public class PlayerMovement : MonoBehaviour
         if (movementPath.Count > 0){       
             technicalPos = new((int)movementPath[0].transform.position.x, (int)movementPath[0].transform.position.z);
         }
-        if (endTile.GetComponent<TileSettings>().heldObject != null) {
+        if (endTile.GetComponent<TileSettings>().heldObject != null && !gui) {
             endTile.GetComponent<TileSettings>().heldObject.GetComponent<InteractableObject>().InteractWith();
+        }
+        if (campfire && movementPath.Count > 0) {
+            movementPath.RemoveAt(movementPath.Count - 1);
         }
     }
 
@@ -146,7 +149,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool InsideGUIBox() {
         Vector2 localMousePosition;
-        foreach (Transform popup in GameObject.Find("InteractionContainer").transform) {
+        foreach (Transform popup in GameObject.Find("Interaction Container").transform) {
             localMousePosition = popup.gameObject.GetComponent<RectTransform>().InverseTransformPoint(Input.mousePosition);
             if (popup.gameObject.GetComponent<RectTransform>().rect.Contains(localMousePosition)) {
                 return true;
@@ -171,6 +174,11 @@ public class PlayerMovement : MonoBehaviour
         RectTransform furnaceWindowRect = GameObject.Find("Smelting Window").GetComponent<RectTransform>();
         localMousePosition = furnaceWindowRect.InverseTransformPoint(Input.mousePosition);
         if (GameObject.Find("Furnace Canvas").GetComponent<Canvas>().enabled && furnaceWindowRect.rect.Contains(localMousePosition)) {
+            return true;
+        }
+        RectTransform campfireWindowRect = GameObject.Find("Smelting Window").GetComponent<RectTransform>();
+        localMousePosition = campfireWindowRect.InverseTransformPoint(Input.mousePosition);
+        if (GameObject.Find("Campfire Canvas").GetComponent<Canvas>().enabled && furnaceWindowRect.rect.Contains(localMousePosition)) {
             return true;
         }
         foreach (Transform popup in GameObject.Find("Popup Container").transform) {

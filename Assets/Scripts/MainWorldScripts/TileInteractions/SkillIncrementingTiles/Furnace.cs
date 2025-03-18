@@ -135,8 +135,8 @@ public class Furnace : MonoBehaviour, InteractableObject
     void AddFuel(Item item) {
         StopInteraction();
         Inventory.inventoryList[2].Remove(item);
-        Skills.skillList["Ignition"].IncreaseEXP(10);
-        EXPGainPopup.CreateEXPGain("Ignition", 10, Skills.skillList["Ignition"].GetEXP(), Skills.skillList["Ignition"].GetThreshold());
+        Skills.skillList["Ignition"].IncreaseEXP(4);
+        EXPGainPopup.CreateEXPGain("Ignition", 4, Skills.skillList["Ignition"].GetEXP(), Skills.skillList["Ignition"].GetThreshold());
         if (item.GetName() == "oak_log") {
             burnTime += 30;
         }

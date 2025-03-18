@@ -63,6 +63,8 @@ public class WaterTile : MonoBehaviour, InteractableObject
     public void InteractWith() {
         if (!isInteracted)  {
             cor = StartCoroutine(StartInteraction());
+        } else {
+            PopupManager.AddPopup("Empty", "No fish left here");
         }
     }
     public void StopInteraction() {
