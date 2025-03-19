@@ -161,7 +161,7 @@ public class Campfire : MonoBehaviour, InteractableObject
     IEnumerator StartFueling() {
         while (burnTime > 0) {
             burnTime--;
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(1f);
         }
         fuelingCor = null;
     }

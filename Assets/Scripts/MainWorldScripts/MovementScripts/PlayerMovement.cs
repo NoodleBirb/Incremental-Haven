@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,6 +16,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake() {
         ResetActions = null;
+        if (Death.died) {
+            technicalPos = Vector2Int.zero;
+            transform.position = new(technicalPos.x, 0, technicalPos.y);
+        }
     }
 
     void Start() {

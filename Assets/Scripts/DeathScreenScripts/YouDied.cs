@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class YouDied : MonoBehaviour
 {
     public void Respawn() {
+        Death.died = true;
         SceneManager.LoadScene("firstarea");
     }
     public void TitleScreen() {
