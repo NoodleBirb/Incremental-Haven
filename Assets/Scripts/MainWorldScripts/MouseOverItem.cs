@@ -1,9 +1,12 @@
 // from https://discussions.unity.com/t/onmouseover-ui-button-c/166886/2 by user AP124526435
 // Edited for my own use
+using System;
+using System.Globalization;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
     Item item;
@@ -31,10 +34,10 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
     void UpdateTooltipStats() {
         if (item.IsMaterial()) {
-            materialTooltipRect.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text = "" + item.GetName();
+            materialTooltipRect.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text = UpperCaseFirstLetter(String.Join(" ", item.GetName().Split('_')));
             materialTooltipRect.transform.Find("Description Tooltip").GetComponent<TextMeshProUGUI>().text = "" + item.GetDescription();
         } else {
-            tooltipRect.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text = "" + item.GetName();
+            tooltipRect.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text = UpperCaseFirstLetter(String.Join(" ", item.GetName().Split('_')));
             tooltipRect.transform.Find("Description Tooltip").GetComponent<TextMeshProUGUI>().text = "" + item.GetDescription();
             tooltipRect.transform.Find("Strength Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetStrength();
             tooltipRect.transform.Find("Speed Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetSpeed();
@@ -44,6 +47,10 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             tooltipRect.transform.Find("Elemental Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetElementalDefense();
             tooltipRect.transform.Find("Elemental Affinity Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetElementalAffinity();
         }
+    }
+    string UpperCaseFirstLetter(string str) {
+        TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+        return textInfo.ToTitleCase(str);
     }
     public void OnPointerEnter(PointerEventData eventData) {
         if (item == null) {
