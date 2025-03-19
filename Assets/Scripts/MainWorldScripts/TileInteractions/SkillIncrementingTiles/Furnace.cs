@@ -74,8 +74,13 @@ public class Furnace : MonoBehaviour, InteractableObject
         }
         if (!fueling && !attemptSmelting) {
             if (smelted) {
-                if (itemSmelting == "copper_ore") {
-                    Inventory.AddItem(Resources.Load<TextAsset>("Items/copper_bar").text);
+                switch (itemSmelting) {
+                    case "copper_ore":
+                        Inventory.AddItem(Resources.Load<TextAsset>("Items/copper_bar").text);
+                        break;
+                    case "cod":
+                        Inventory.AddItem(Resources.Load<TextAsset>("Items/cooked_cod").text);
+                        break;
                 }
                 Skills.skillList["Ignition"].IncreaseEXP(20);
                 EXPGainPopup.CreateEXPGain("Ignition", 20, Skills.skillList["Ignition"].GetEXP() + 20, Skills.skillList["Ignition"].GetThreshold());

@@ -1,0 +1,18 @@
+{
+    "name": "cooked_cod",
+    "equippable": false,
+    "consumable": true,
+    "material": false,
+    "stats": {
+        "strength": 0,
+        "speed": 0,
+        "mana": 0,
+        "resistance": 0,
+        "defense": 0,
+        "elemental_defense": 0,
+        "elemental_affinity": 0,
+        "HP": 3
+    },
+    "specific_functions": null,
+    "description": "Heals the user 3 HP. Smells fishy."
+}
