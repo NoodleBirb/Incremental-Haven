@@ -9,6 +9,6 @@ public class SummonPlayerModel : MonoBehaviour
         player = Instantiate (Resources.Load<GameObject>("PlayerModel/IHmaincharacter"), gameObject.transform);
     }
     void Start() {
-        player.transform.LookAt(GameObject.Find("Enemy").transform);
+        GameObject.Find("Player").transform.LookAt(GameObject.Find("Enemy").transform);
     }
 }
