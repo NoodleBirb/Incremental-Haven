@@ -225,6 +225,9 @@ public class Inventory : MonoBehaviour
 
     static void EquipItem(Item item, string itemType) {
         Item previouslyEquippedItem = Equipment.GetEquippedItems()[itemType];
+        if (previouslyEquippedItem != null) {
+            GameObject.Find(previouslyEquippedItem.GetName()).GetComponent<MeshRenderer>().enabled = false;
+        }
         GameObject.Find(itemType).GetComponent<Button>().onClick.RemoveAllListeners();
         GameObject.Find(itemType).GetComponent<Button>().onClick.AddListener(() => EquipItem(null, itemType));
         GameObject.Find(itemType).GetComponent<Button>().interactable = true;
@@ -235,6 +238,9 @@ public class Inventory : MonoBehaviour
                 Skills.ChangeWeaponSkill(Skills.skillList["MakeshiftCombat"]);
             }
         } else {
+            if (GameObject.Find(item.GetName()) != null) {
+                GameObject.Find(item.GetName()).GetComponent<MeshRenderer>().enabled = true;
+            }
             GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
             if (itemType == "Weapon Slot") {
                 if (item.GetSpecificFunctions().ContainsKey("one_handed")) {

@@ -73,6 +73,7 @@ public class WaterTile : MonoBehaviour, InteractableObject
     public void StopInteraction() {
         if (cor != null) {
             StopCoroutine(cor);
+            AnimationPlayerController.EndHoldTwoHanded();
         }
         cor = null;
         interactTime = 0;

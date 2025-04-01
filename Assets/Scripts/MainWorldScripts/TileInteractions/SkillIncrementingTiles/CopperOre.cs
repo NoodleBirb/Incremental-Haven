@@ -72,8 +72,8 @@ public class CopperOre : MonoBehaviour, InteractableObject
     public void StopInteraction() {
         if (cor != null) {
             StopCoroutine(cor);
+            AnimationPlayerController.EndOneHandedSwingingAnimation();
         }
-        AnimationPlayerController.EndOneHandedSwingingAnimation();
         interactTime = 0;
 
     }
