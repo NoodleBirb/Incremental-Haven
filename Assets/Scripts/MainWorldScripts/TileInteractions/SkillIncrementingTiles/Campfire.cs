@@ -63,10 +63,10 @@ public class Campfire : MonoBehaviour, InteractableObject
     }
 
     IEnumerator StartInteraction() {
-        Debug.Log("running");
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             yield return null;
         }
+        GameObject.Find("player model").transform.LookAt(transform);
         if (burnTime == 0 || actuallyFueling) {
             actuallyFueling = false;
             foreach (GameObject item in smeltableItems.Values) {

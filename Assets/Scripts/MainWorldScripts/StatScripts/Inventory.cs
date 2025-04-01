@@ -59,6 +59,7 @@ public class Inventory : MonoBehaviour
         GameObject.Find("World Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Skill List Canvas").GetComponent<Canvas>().enabled = false;
         player.transform.LookAt(new Vector3(mainCamera.transform.position.x, 0, mainCamera.transform.position.z));
+        AnimationPlayerController.PauseAnimations();
         StartCoroutine(ZoomIntoPlayer());
         // List the items. Coordinates begin in the corner of the ScrollView.
         
@@ -66,6 +67,7 @@ public class Inventory : MonoBehaviour
     public void CloseInventory() {
         showInventory = false;
         fullyOpen = false;
+        AnimationPlayerController.ResumeAnimations();
         GameObject.Find("World Canvas").GetComponent<Canvas>().enabled = true;
         GameObject.Find("Inventory Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Stats Canvas").GetComponent<Canvas>().enabled = false;

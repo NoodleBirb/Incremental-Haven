@@ -45,15 +45,18 @@ public class CopperOre : MonoBehaviour, InteractableObject
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             yield return null;
         }
+        GameObject.Find("player model").transform.LookAt(transform);
         if (Equipment.GetEquippedItems()["Weapon Slot"] == null || !Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_pickaxe")) {
             PopupManager.AddPopup("Missing", "You need to equip a pickaxe!");
             StopInteraction();
             yield break;
         }
+        AnimationPlayerController.StartOneHandedSwingingAnimation();
         while (interactTime != 30) {
             interactTime += 1;
             yield return new WaitForSeconds(.1f);
         }
+        AnimationPlayerController.EndOneHandedSwingingAnimation();
         Inventory.AddItem(Resources.Load<TextAsset>("Items/copper_ore").text);
         Skills.skillList["Mining"].IncreaseEXP(20);
         EXPGainPopup.CreateEXPGain("Mining", 20, Skills.skillList["Mining"].GetEXP(), Skills.skillList["Mining"].GetThreshold());
@@ -70,6 +73,7 @@ public class CopperOre : MonoBehaviour, InteractableObject
         if (cor != null) {
             StopCoroutine(cor);
         }
+        AnimationPlayerController.EndOneHandedSwingingAnimation();
         interactTime = 0;
 
     }

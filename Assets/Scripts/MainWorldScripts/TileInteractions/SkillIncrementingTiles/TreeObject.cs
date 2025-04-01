@@ -45,11 +45,13 @@ public class TreeObject : MonoBehaviour, InteractableObject
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             yield return null;
         }
+        GameObject.Find("player model").transform.LookAt(transform);
         if (Equipment.GetEquippedItems()["Weapon Slot"] == null || !Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_axe")) {
             PopupManager.AddPopup("Missing", "You need to equip an axe!");
             StopInteraction();
             yield break;
         }
+        AnimationPlayerController.StartOneHandedSwingingAnimation();
         while (interactTime != 30) {
             interactTime += 1;
             yield return new WaitForSeconds(.1f);
@@ -57,6 +59,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
         foreach (Transform model in transform) {
             Destroy(model.gameObject);
         }
+        AnimationPlayerController.EndOneHandedSwingingAnimation();
         Instantiate(Resources.Load<GameObject>("DecorationModels/treestump"), transform);
         Inventory.AddItem(Resources.Load<TextAsset>("Items/oak_log").text);
         Skills.skillList["Woodcutting"].IncreaseEXP(20);
@@ -74,6 +77,7 @@ public class TreeObject : MonoBehaviour, InteractableObject
         if (cor != null) {
             StopCoroutine(cor);
         }
+        AnimationPlayerController.EndOneHandedSwingingAnimation();
         interactTime = 0;
 
     }

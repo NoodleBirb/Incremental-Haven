@@ -43,15 +43,18 @@ public class WaterTile : MonoBehaviour, InteractableObject
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             yield return null;
         }
+        GameObject.Find("player model").transform.LookAt(transform);
         if (Equipment.GetEquippedItems()["Weapon Slot"] == null || !Equipment.GetEquippedItems()["Weapon Slot"].GetSpecificFunctions().ContainsKey("is_fishing_rod")) {
             PopupManager.AddPopup("Missing", "You need to equip a fishing rod!");
             StopInteraction();
             yield break;
         }
+        AnimationPlayerController.StartHoldTwoHanded();
         while (interactTime != 30) {
             interactTime += 1;
             yield return new WaitForSeconds(.1f);
         }
+        AnimationPlayerController.EndHoldTwoHanded();
         gameObject.transform.parent.Find("Plane").GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/Materials/WaterTileTexture");
         Inventory.AddItem(Resources.Load<TextAsset>("Items/cod").text);
         Skills.skillList["Fishing"].IncreaseEXP(20);

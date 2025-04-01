@@ -57,6 +57,8 @@ public class PlayerMovement : MonoBehaviour
                     ReadyNextMovement();
                 }
                 
+            } else {
+                AnimationPlayerController.EndMovementAnimation();
             }
         }
     }
@@ -115,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
         if (endTile.GetComponent<TileSettings>().heldObject != null && !gui) {
             endTile.GetComponent<TileSettings>().heldObject.GetComponent<InteractableObject>().InteractWith();
         }
+        AnimationPlayerController.StartMovementAnimation();
         
     }
 

@@ -72,6 +72,7 @@ public class Furnace : MonoBehaviour, InteractableObject
         while (Player.GetComponent<PlayerMovement>().movementPath.Count != 0) {
             yield return null;
         }
+        GameObject.Find("player model").transform.LookAt(transform);
         if (!fueling && !attemptSmelting) {
             if (smelted) {
                 switch (itemSmelting) {
