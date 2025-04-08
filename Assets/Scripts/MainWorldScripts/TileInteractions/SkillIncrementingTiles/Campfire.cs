@@ -46,10 +46,12 @@ public class Campfire : MonoBehaviour, InteractableObject
                 tickCor ??= StartCoroutine(FireTick());
             } else {
                 playerBurning = false;
+                AnimationPlayerController.EndBurning();
                 notBurningPopupCor ??= StartCoroutine(NotBurning());
             }
         } else {
             playerBurning = false;
+            AnimationPlayerController.EndBurning();
         }
         if (burnTime == 0) {
             baseTile.GetComponent<TileSettings>().walkable = false;
@@ -137,6 +139,7 @@ public class Campfire : MonoBehaviour, InteractableObject
 
     IEnumerator FireTick() {
         tickTime = 0;
+        AnimationPlayerController.StartBurning();
         while (playerBurning) {
             tickTime++;
             if (tickTime == 10) {
@@ -167,6 +170,7 @@ public class Campfire : MonoBehaviour, InteractableObject
     }
 
     void AddFuel(Item item) {
+        AnimationPlayerController.PutAway();
         Inventory.inventoryList[2].Remove(item);
         baseTile.GetComponent<TileSettings>().walkable = true;
         Skills.skillList["Ignition"].IncreaseEXP(4);

@@ -225,7 +225,7 @@ public class Inventory : MonoBehaviour
 
     static void EquipItem(Item item, string itemType) {
         Item previouslyEquippedItem = Equipment.GetEquippedItems()[itemType];
-        if (previouslyEquippedItem != null) {
+        if (previouslyEquippedItem != null && GameObject.Find(previouslyEquippedItem.GetName()) != null) {
             GameObject.Find(previouslyEquippedItem.GetName()).GetComponent<MeshRenderer>().enabled = false;
         }
         GameObject.Find(itemType).GetComponent<Button>().onClick.RemoveAllListeners();

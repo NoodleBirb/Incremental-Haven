@@ -83,6 +83,7 @@ public class Furnace : MonoBehaviour, InteractableObject
                         Inventory.AddItem(Resources.Load<TextAsset>("Items/cooked_cod").text);
                         break;
                 }
+                AnimationPlayerController.PutAway();
                 Skills.skillList["Ignition"].IncreaseEXP(20);
                 EXPGainPopup.CreateEXPGain("Ignition", 20, Skills.skillList["Ignition"].GetEXP() + 20, Skills.skillList["Ignition"].GetThreshold());
                 smelted = false;
@@ -140,6 +141,7 @@ public class Furnace : MonoBehaviour, InteractableObject
 
     void AddFuel(Item item) {
         StopInteraction();
+        AnimationPlayerController.PutAway();
         Inventory.inventoryList[2].Remove(item);
         Skills.skillList["Ignition"].IncreaseEXP(4);
         EXPGainPopup.CreateEXPGain("Ignition", 4, Skills.skillList["Ignition"].GetEXP(), Skills.skillList["Ignition"].GetThreshold());
@@ -150,6 +152,7 @@ public class Furnace : MonoBehaviour, InteractableObject
     
     IEnumerator StartSmelting(Item item) {
         StopInteraction();
+        AnimationPlayerController.PutAway();
         Inventory.inventoryList[2].Remove(item);
         smelting = true;
         interactTime = 0;

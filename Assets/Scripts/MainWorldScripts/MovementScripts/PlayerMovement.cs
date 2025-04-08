@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
                     ReadyNextMovement();
                 }
                 
-            } else {
+            } else if (AnimationPlayerController.IsWalkingEnabled()){
                 AnimationPlayerController.EndMovementAnimation();
             }
         }
