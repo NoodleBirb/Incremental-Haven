@@ -105,7 +105,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkable: 0
-  baseTile: 1
   heldObject: {fileID: 6259936826097976304}
 --- !u!1 &1977127453025309431
 GameObject:
@@ -210,7 +209,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5374495170012773032, guid: 4c74172a345a1af4b973635af7a18caa, type: 3}
 --- !u!1 &3249819346114822974
@@ -422,7 +421,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -6167010266400939002, guid: 4c74172a345a1af4b973635af7a18caa, type: 3}
 --- !u!1001 &1574167861523784510
@@ -526,7 +525,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkable: 1
-  baseTile: 0
   heldObject: {fileID: 0}
 --- !u!114 &6900554397520900525
 MonoBehaviour:
