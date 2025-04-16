@@ -1,5 +1,6 @@
 // Code found on https://web.archive.org/web/20201112011806/https://wiki.unity3d.com/index.php/MouseOrbitImproved
 // Author: Veli V & highway900
+// Edited by me
 
 using UnityEngine;
 using System.Collections;

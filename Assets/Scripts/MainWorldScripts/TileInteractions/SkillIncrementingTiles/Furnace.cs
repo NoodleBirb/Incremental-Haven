@@ -21,12 +21,16 @@ public class Furnace : MonoBehaviour, InteractableObject
     GameObject Player;
     static Dictionary<string, GameObject> smeltableItems;
     readonly int guiHeight = 150;
+    ParticleSystem burningEffect;
+    ParticleSystem smokeEffect;
     
     void Start() {
         smelting = false;
         smeltableItems = new();
         PlayerMovement.ResetActions += StopInteraction;
         Player = GameObject.Find("Player");
+        burningEffect = transform.Find("burning effect").GetComponent<ParticleSystem>();
+        smokeEffect = transform.Find("smoke effect").GetComponent<ParticleSystem>();
     }
 
     void Update() {
@@ -155,6 +159,7 @@ public class Furnace : MonoBehaviour, InteractableObject
 
     void AddFuel(Item item) {
         StopInteraction();
+        StartParticles();
         AnimationPlayerController.PutAway();
         Inventory.inventoryList[2].Remove(item);
         Skills.skillList["Ignition"].IncreaseEXP(4);
@@ -188,6 +193,7 @@ public class Furnace : MonoBehaviour, InteractableObject
             burnTime--;
             yield return new WaitForSeconds(1f);
         }
+        EndParticles();
         smeltingCor = null;
     }
 
@@ -212,5 +218,14 @@ public class Furnace : MonoBehaviour, InteractableObject
         attemptSmelting = false;
         GameObject.Find("Furnace Canvas").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Inventory and Skill Button Canvas").GetComponent<Canvas>().enabled = true;
+    }
+
+    void StartParticles() {
+        burningEffect.Play();
+        smokeEffect.Play();
+    }
+    void EndParticles() {
+        burningEffect.Stop();
+        smokeEffect.Stop();
     }
 }
