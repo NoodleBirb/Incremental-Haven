@@ -61,9 +61,6 @@ public class MouseOrbitImproved : MonoBehaviour {
             Vector3 tempPosition = rotation * tempNegDistance + target.position;
             RaycastHit[] hitBuffer = new RaycastHit[10];
 
-            // Debug.Log("Saved Distance: " + savedDistance);
-            // Debug.Log("Current Distance: " + distance);
-
             if (TryGetFurthestObstruction(tempPosition, target.position, out RaycastHit tempHit, hitBuffer)) {
                 distance = savedDistance - tempHit.distance;
             } else {
@@ -98,7 +95,6 @@ public class MouseOrbitImproved : MonoBehaviour {
                 .Take(hitCount)
                 .OrderByDescending(h => h.distance)
                 .First();
-            Debug.Log("Hit Distance: " + furthestHit.distance);
             return true;
         }
 
