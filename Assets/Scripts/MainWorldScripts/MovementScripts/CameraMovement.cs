@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Linq;
  
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class MouseOrbitImproved : MonoBehaviour {
@@ -17,6 +18,8 @@ public class MouseOrbitImproved : MonoBehaviour {
  
     public float distanceMin = 2.5f;
     public float distanceMax = 15f;
+
+    float savedDistance = 5.0f;
  
     private Rigidbody rigid;
  
@@ -51,13 +54,19 @@ public class MouseOrbitImproved : MonoBehaviour {
             y = ClampAngle(y, yMinLimit, yMaxLimit);
  
             Quaternion rotation = Quaternion.Euler(y, x, 0);
- 
-            distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel")*5, distanceMin, distanceMax);
 
-            if (Physics.Linecast(target.position, transform.position, out RaycastHit hit))
-            {
-                distance -= hit.distance;
+            savedDistance = Mathf.Clamp(savedDistance - Input.GetAxis("Mouse ScrollWheel")*5, distanceMin, distanceMax);
+
+            Vector3 tempNegDistance = new(0.0f, 0.0f, -savedDistance);
+            Vector3 tempPosition = rotation * tempNegDistance + target.position;
+            RaycastHit[] hitBuffer = new RaycastHit[10];
+
+            if (TryGetFurthestObstruction(target.position, tempPosition, out RaycastHit tempHit, hitBuffer)) {
+                distance = savedDistance - tempHit.distance - 0.1f;
+            } else {
+                distance = savedDistance;
             }
+
             Vector3 negDistance = new(0.0f, 0.0f, -distance);
             Vector3 position = rotation * negDistance + target.position;
  
@@ -72,5 +81,25 @@ public class MouseOrbitImproved : MonoBehaviour {
         if (angle > 360F)
             angle -= 360F;
         return Mathf.Clamp(angle, min, max);
+    }
+
+    public static bool TryGetFurthestObstruction(Vector3 start, Vector3 end, out RaycastHit furthestHit, RaycastHit[] hitBuffer, int layerMask = Physics.DefaultRaycastLayers, QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.Ignore)
+    {
+        Vector3 direction = (end - start).normalized;
+        float maxDistance = Vector3.Distance(start, end);
+
+        int hitCount = Physics.RaycastNonAlloc(start, direction, hitBuffer, maxDistance, layerMask, triggerInteraction);
+
+        if (hitCount > 0)
+        {
+            furthestHit = hitBuffer
+                .Take(hitCount)
+                .OrderByDescending(h => h.distance)
+                .First();
+            return true;
+        }
+
+        furthestHit = default;
+        return false;
     }
 }

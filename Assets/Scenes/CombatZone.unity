@@ -251,6 +251,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: player model
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 1f62416518dbf37468c35cf76d47e27b, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a74100a8b81186d45a1b4d59f7b00077, type: 2}
     - target: {fileID: 8733836661097490628, guid: 1f62416518dbf37468c35cf76d47e27b, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -4141,7 +4145,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1894293803}
   m_HandleRect: {fileID: 1894293802}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
