@@ -39,13 +39,13 @@ public class MouseOverItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         } else {
             tooltipRect.transform.Find("Item Name").GetComponent<TextMeshProUGUI>().text = UpperCaseFirstLetter(String.Join(" ", item.GetName().Split('_')));
             tooltipRect.transform.Find("Description Tooltip").GetComponent<TextMeshProUGUI>().text = "" + item.GetDescription();
-            tooltipRect.transform.Find("Strength Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetStrength();
-            tooltipRect.transform.Find("Speed Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetSpeed();
-            tooltipRect.transform.Find("Resistance Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetResistance();
-            tooltipRect.transform.Find("Mana Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetMana();
-            tooltipRect.transform.Find("Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetDefense();
-            tooltipRect.transform.Find("Elemental Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetElementalDefense();
-            tooltipRect.transform.Find("Elemental Affinity Value Tooltip").GetComponent<TextMeshProUGUI>().text = "+" + item.GetElementalAffinity();
+            tooltipRect.transform.Find("Strength Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetStrength() < 0 ? item.GetStrength() + "" : "+" + item.GetStrength();
+            tooltipRect.transform.Find("Speed Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetSpeed() < 0 ? "" + item.GetSpeed() : "+" + item.GetSpeed();
+            tooltipRect.transform.Find("Resistance Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetResistance() < 0 ? "" + item.GetResistance() : "+" + item.GetResistance();
+            tooltipRect.transform.Find("Mana Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetMana() < 0 ? "" + item.GetMana() : "+" + item.GetMana();
+            tooltipRect.transform.Find("Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetDefense() < 0 ? "" + item.GetDefense() : "+" + item.GetDefense();
+            tooltipRect.transform.Find("Elemental Defense Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetElementalDefense() < 0 ? "" + item.GetElementalDefense() : "+" + item.GetElementalDefense();
+            tooltipRect.transform.Find("Elemental Affinity Value Tooltip").GetComponent<TextMeshProUGUI>().text = item.GetElementalAffinity() < 0 ? "" + item.GetElementalAffinity() : "+" + item.GetElementalAffinity();
         }
     }
     string UpperCaseFirstLetter(string str) {

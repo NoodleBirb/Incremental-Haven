@@ -90,6 +90,9 @@ public class Furnace : MonoBehaviour, InteractableObject
 
                 itemSmelting = null;
                 yield break;
+            } else if (smelting && burnTime == 0) {
+                PopupManager.AddPopup("Add", "Furnace needs fuel!"); 
+                yield break;
             } else if (smelting && burnTime != 0) {
                 PopupManager.AddPopup("Wait", "Furnace is still smelting!"); 
                 yield break;
@@ -101,7 +104,20 @@ public class Furnace : MonoBehaviour, InteractableObject
         foreach (GameObject item in smeltableItems.Values) {
             Destroy(item);
         }
-        smeltableItems = new();
+        smeltableItems = new(); 
+        if (attemptSmelting) {
+            if (smelting) {
+                if (burnTime == 0) {
+                    PopupManager.AddPopup("Add", "Furnace needs fuel!"); 
+                } else {
+                    PopupManager.AddPopup("Wait", "Furnace is still smelting!"); 
+                }
+                yield break;
+            } else if (smelted) {
+                PopupManager.AddPopup("Pick Up", "Pick up your smelted resource!"); 
+                yield break;
+            }
+        }
         foreach (Item item in Inventory.inventoryList[2]) {
             GameObject smeltableItem;
             if (!smeltableItems.Keys.Contains(item.GetName())) {
@@ -114,7 +130,7 @@ public class Furnace : MonoBehaviour, InteractableObject
                     smeltableItem.GetComponent<Button>().enabled = true;
                     smeltableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
                 }
-                else if (((burnTime > 0 && !fueling) || attemptSmelting) && item.GetSpecificFunctions().ContainsKey("smeltable") && !smelting) {
+                else if (((burnTime > 0 && !fueling) || attemptSmelting) && item.GetSpecificFunctions().ContainsKey("smeltable")) {
                     smeltableItem = Instantiate(Resources.Load<GameObject>("UI/Inventory Item"), GameObject.Find("Smeltable Items Container").transform);
                     smeltableItems[item.GetName()] = smeltableItem;
                     smeltableItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
@@ -122,9 +138,7 @@ public class Furnace : MonoBehaviour, InteractableObject
                     smeltableItem.GetComponent<Button>().onClick.AddListener(() => StartCoroutine(StartSmelting(item)));
                     smeltableItem.GetComponent<Button>().enabled = true;
                     smeltableItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
-                } else if (smelting) {
-                    PopupManager.AddPopup("Wait", "Furnace is still smelting!"); 
-                }
+                } 
             } else {
                 smeltableItem = smeltableItems[item.GetName()];
                 smeltableItem.GetComponentInChildren<TextMeshProUGUI>().text =  int.Parse(smeltableItem.GetComponentInChildren<TextMeshProUGUI>().text) + 1 + "";
@@ -151,6 +165,7 @@ public class Furnace : MonoBehaviour, InteractableObject
     }
     
     IEnumerator StartSmelting(Item item) {
+        Debug.Log("im starting to smelt");
         StopInteraction();
         AnimationPlayerController.PutAway();
         Inventory.inventoryList[2].Remove(item);

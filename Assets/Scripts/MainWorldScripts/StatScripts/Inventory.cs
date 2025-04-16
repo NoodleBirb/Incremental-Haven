@@ -49,6 +49,8 @@ public class Inventory : MonoBehaviour
         inventoryList[1].Add(LoadItemFromJson(Resources.Load<TextAsset>("Items/basic_health_potion").text));
         inventoryList[2].Add(LoadItemFromJson(Resources.Load<TextAsset>("Items/copper_ore").text));
         inventoryList[2].Add(LoadItemFromJson(Resources.Load<TextAsset>("Items/oak_log").text));
+        inventoryList[2].Add(LoadItemFromJson(Resources.Load<TextAsset>("Items/copper_ore").text));
+        inventoryList[2].Add(LoadItemFromJson(Resources.Load<TextAsset>("Items/oak_log").text));
     }
     public void OpenInventory() {
         showInventory = true;
@@ -158,21 +160,21 @@ public class Inventory : MonoBehaviour
                     currentInventoryItems[item.GetName()] = equipmentItem;
                     equipmentItem.GetComponentInChildren<TextMeshProUGUI>().text = "1";
                     equipmentItem.GetComponent<MouseOverItem>().SetItem(item);
-                    if (item.GetSpecificFunctions()["weapon_slot"] == true) { // replace with a switch statement eventually
+                    if (item.GetSpecificFunctions().ContainsKey("weapon_slot") == true) { // replace with a switch statement eventually
                         equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Weapon Slot"));
-                    } else if (item.GetSpecificFunctions()["chestplate_slot"] == true) {
+                    } else if (item.GetSpecificFunctions().ContainsKey("chestplate_slot") == true) {
                         equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Chestplate Slot"));
-                    } else if (item.GetSpecificFunctions()["headpiece_slot"] == true) {
+                    } else if (item.GetSpecificFunctions().ContainsKey("headpiece_slot") == true) {
                         equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Head Piece Slot"));
-                    } else if (item.GetSpecificFunctions()["offhand_slot"] == true) {
+                    } else if (item.GetSpecificFunctions().ContainsKey("offhand_slot") == true) {
                         equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Off Hand Slot"));
-                    } else if (item.GetSpecificFunctions()["necklace_slot"] == true) {
+                    } else if (item.GetSpecificFunctions().ContainsKey("necklace_slot") == true) {
                         equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Necklace Slot"));
-                    } else if (item.GetSpecificFunctions()["leggings_slot"] == true) {
+                    } else if (item.GetSpecificFunctions().ContainsKey("leggings_slot") == true) {
                         equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Leggings Slot"));
-                    } else if (item.GetSpecificFunctions()["gloves_slot"] == true) {
+                    } else if (item.GetSpecificFunctions().ContainsKey("gloves_slot") == true) {
                         equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Glove Slot"));
-                    } else if (item.GetSpecificFunctions()["boots_slot"] == true) {
+                    } else if (item.GetSpecificFunctions().ContainsKey("boots_slot") == true) {
                         equipmentItem.GetComponent<Button>().onClick.AddListener(() => EquipItem(item, "Boots Slot"));
                     }
                     equipmentItem.transform.Find("Item Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());

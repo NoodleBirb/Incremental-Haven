@@ -61,4 +61,20 @@ public class EnemyStatistics : MonoBehaviour {
         SceneManager.LoadScene("CombatZone");
 
      }
+
+     public static void ParseEnemyDrops() {
+        foreach (string name in enemyNames) {
+            Debug.Log(name);
+            switch (name) {
+                case "test_enemy":
+                    Inventory.AddItem(Resources.Load<TextAsset>("Items/placeholder").text);
+                    break;
+            }
+        }
+        allEnemyStats = new();
+        enemyNames = new();
+        allEnemyMoves = new();
+        totalCurrentMana = new();
+        totalCurrentHP = new();
+     }
 }

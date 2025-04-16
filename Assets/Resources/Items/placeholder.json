@@ -13,7 +13,7 @@
         "elemental_affinity": -1
     },
     "specific_functions": {
-        
+        "headpiece_slot": true
     },
     "description": "How in the world did you get this?"
 }
