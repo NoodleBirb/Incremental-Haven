@@ -7766,6 +7766,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: FurnaceTile
       objectReference: {fileID: 0}
+    - target: {fileID: 4226283365908171461, guid: f42b992da2c86884dae21e0c3712aa72, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226283365908171461, guid: f42b992da2c86884dae21e0c3712aa72, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226283365908171461, guid: f42b992da2c86884dae21e0c3712aa72, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226283365908171461, guid: f42b992da2c86884dae21e0c3712aa72, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4226283365908171461, guid: f42b992da2c86884dae21e0c3712aa72, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6535541954859150286, guid: f42b992da2c86884dae21e0c3712aa72, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
@@ -24249,8 +24269,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 242861359}
   distance: 5
-  xSpeed: 120
-  ySpeed: 120
+  xSpeed: 240
+  ySpeed: 240
   yMinLimit: 0
   yMaxLimit: 80
   distanceMin: 0.5
@@ -25458,7 +25478,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7777707298335702209, guid: aaae888ecd6d6ee4e8d21357ac65202d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000020204077
+      value: 0.000048999453
       objectReference: {fileID: 0}
     - target: {fileID: 8011828208981879720, guid: aaae888ecd6d6ee4e8d21357ac65202d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -25502,7 +25522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8805278588375217669, guid: aaae888ecd6d6ee4e8d21357ac65202d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000020204077
+      value: 0.000048999453
       objectReference: {fileID: 0}
     - target: {fileID: 8898066870946422032, guid: aaae888ecd6d6ee4e8d21357ac65202d, type: 3}
       propertyPath: m_AnchorMax.x

@@ -42,7 +42,7 @@ public class Inventory : MonoBehaviour
         player = GameObject.Find("player model");
         mainCamera = GameObject.Find("Main Camera");
         intitialPos = mainCamera.transform.position;
-
+        LoadEquippedItems();
         TextAsset stoneAxe = Resources.Load<TextAsset>("Items/stone_axe");
         Item item = LoadItemFromJson(stoneAxe.text);
         inventoryList[0].Add(item);
@@ -278,6 +278,23 @@ public class Inventory : MonoBehaviour
         Debug.Log(item.GetName());
         if (type == "Weapon Slot") {
             GameObject equippedItem = Instantiate(Resources.Load<GameObject>("ItemModels/" + item.GetName()), GameObject.Find("Left Arm").transform);
+        }
+    }
+
+    static void LoadEquippedItems() {
+        foreach (string itemType in Equipment.GetEquippedItems().Keys) {
+            if (Equipment.GetEquippedItems()[itemType] != null) {
+                Item item = Equipment.GetEquippedItems()[itemType];
+                GameObject.Find(itemType).GetComponent<Button>().onClick.RemoveAllListeners();
+                GameObject.Find(itemType).GetComponent<Button>().onClick.AddListener(() => EquipItem(null, itemType));
+                GameObject.Find(itemType).GetComponent<Button>().interactable = true;
+                GameObject.Find(itemType).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Images/" + item.GetName());
+                if (GameObject.Find(item.GetName()) != null) {
+                    GameObject.Find(item.GetName()).GetComponent<MeshRenderer>().enabled = true;
+                }
+                GameObject.Find(itemType).GetComponent<MouseOverItem>().SetItem(item);
+            }
+            
         }
     }
 
