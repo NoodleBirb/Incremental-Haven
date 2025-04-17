@@ -1,1 +1,1 @@
-"# Incremental Haven" is a video game.
+"# Incremental Haven" is a video game. This holds the current webGL build.
