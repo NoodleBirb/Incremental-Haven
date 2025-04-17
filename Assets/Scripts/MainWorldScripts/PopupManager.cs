@@ -1,9 +1,4 @@
-using System.Collections.Generic;
-using System.Data;
 using TMPro;
-using Unity;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
