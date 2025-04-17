@@ -141,6 +141,9 @@ public class Campfire : MonoBehaviour, InteractableObject
         tickTime = 0;
         AnimationPlayerController.StartBurning();
         while (playerBurning) {
+            while (Inventory.fullyOpen) {
+                yield return null;
+            }
             tickTime++;
             if (tickTime == 10) {
                 Skills.skillList["Endurance"].IncreaseEXP(20);
@@ -163,6 +166,9 @@ public class Campfire : MonoBehaviour, InteractableObject
     }
     IEnumerator StartFueling() {
         while (burnTime > 0) {
+            while (Inventory.fullyOpen) {
+                yield return null;
+            }
             burnTime--;
             yield return new WaitForSeconds(1f);
         }

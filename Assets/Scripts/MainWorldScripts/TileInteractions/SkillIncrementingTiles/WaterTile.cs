@@ -51,6 +51,9 @@ public class WaterTile : MonoBehaviour, InteractableObject
         }
         AnimationPlayerController.StartHoldTwoHanded();
         while (interactTime != 30) {
+            while (Inventory.fullyOpen) {
+                yield return null;
+            }
             interactTime += 1;
             yield return new WaitForSeconds(.1f);
         }

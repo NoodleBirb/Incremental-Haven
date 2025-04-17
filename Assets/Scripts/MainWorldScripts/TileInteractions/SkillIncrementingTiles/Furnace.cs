@@ -170,7 +170,6 @@ public class Furnace : MonoBehaviour, InteractableObject
     }
     
     IEnumerator StartSmelting(Item item) {
-        Debug.Log("im starting to smelt");
         StopInteraction();
         AnimationPlayerController.PutAway();
         Inventory.inventoryList[2].Remove(item);
@@ -178,7 +177,7 @@ public class Furnace : MonoBehaviour, InteractableObject
         interactTime = 0;
         itemSmelting = item.GetName();
         while (interactTime < 30) {
-            while (burnTime == 0) {
+            while (burnTime == 0 || Inventory.fullyOpen) {
                 yield return null;
             }
             interactTime++;
@@ -190,6 +189,9 @@ public class Furnace : MonoBehaviour, InteractableObject
 
     IEnumerator StartFueling() {
         while (burnTime > 0) {
+            while (Inventory.fullyOpen) {
+                yield return null;
+            }
             burnTime--;
             yield return new WaitForSeconds(1f);
         }

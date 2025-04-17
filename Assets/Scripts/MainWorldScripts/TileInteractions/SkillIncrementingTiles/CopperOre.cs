@@ -53,6 +53,9 @@ public class CopperOre : MonoBehaviour, InteractableObject
         }
         AnimationPlayerController.StartOneHandedSwingingAnimation();
         while (interactTime != 30) {
+            while (Inventory.fullyOpen) {
+                yield return null;
+            }
             interactTime += 1;
             yield return new WaitForSeconds(.1f);
         }
