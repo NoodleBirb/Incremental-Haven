@@ -5,13 +5,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CopperOre : MonoBehaviour, InteractableObject
+public class Ore : MonoBehaviour, InteractableObject
 {
     private readonly int personalGUIHeight = 50;
     private int interactTime;
     public bool isInteracted;
     Coroutine cor;
     GameObject Player;
+    Renderer oreRenderer;
+    public string typeOre = null;
     
     void Start() {
         isInteracted = false;
@@ -19,6 +21,14 @@ public class CopperOre : MonoBehaviour, InteractableObject
         interactTime = 0;
         PlayerMovement.ResetActions += StopInteraction;
         Player = GameObject.Find("Player");
+        oreRenderer = transform.Find("Ore").gameObject.GetComponent<Renderer>();
+        Material[] mats = oreRenderer.materials;
+        if (typeOre != null) {
+            for (int i = 0; i < mats.Length; i++) {
+                mats[i] = Resources.Load<Material>("Materials/Materials/" + typeOre);
+            }
+            oreRenderer.materials = mats;
+        }
     }
 
     public void CreateOptions(float previousHeight) {
@@ -65,6 +75,13 @@ public class CopperOre : MonoBehaviour, InteractableObject
         EXPGainPopup.CreateEXPGain("Mining", 20, Skills.skillList["Mining"].GetEXP(), Skills.skillList["Mining"].GetThreshold());
         interactTime = 0;
         isInteracted = true;
+        Material[] mats = oreRenderer.materials;
+        if (typeOre != null) {
+            for (int i = 0; i < mats.Length; i++) {
+                mats[i] = Resources.Load<Material>("Materials/Materials/stone");
+            }
+            oreRenderer.materials = mats;
+        }
     }
 
     public void InteractWith() {
