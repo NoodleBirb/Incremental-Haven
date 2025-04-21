@@ -5,7 +5,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Linq;
- 
+using System;
+
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class MouseOrbitImproved : MonoBehaviour {
  
@@ -63,7 +64,7 @@ public class MouseOrbitImproved : MonoBehaviour {
             RaycastHit[] hitBuffer = new RaycastHit[10];
 
             if (TryGetFurthestObstruction(tempPosition, target.position, out RaycastHit tempHit, hitBuffer)) {
-                distance = savedDistance - tempHit.distance;
+                distance = savedDistance - tempHit.distance - (float)(Math.Sin((double)transform.rotation.x));
             } else {
                 distance = savedDistance;
             }

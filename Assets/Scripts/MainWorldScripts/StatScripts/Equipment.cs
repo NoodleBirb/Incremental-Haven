@@ -12,7 +12,7 @@ public class Equipment : MonoBehaviour{
 
     private static Dictionary<string, Item> equippedItems;
     private static (GameObject, GameObject)[] slotContainersAndBodyParts;
-    void Start() {
+    void Awake() {
         equippedItems ??= new() {
             ["Weapon Slot"] = null,
             ["Off Hand Slot"] = null,
