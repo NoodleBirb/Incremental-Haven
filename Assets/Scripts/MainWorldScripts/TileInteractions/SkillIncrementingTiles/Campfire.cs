@@ -21,6 +21,7 @@ public class Campfire : MonoBehaviour, InteractableObject
     Coroutine notBurningPopupCor;
     bool playerBurning;
     static Dictionary<string, GameObject> smeltableItems;
+    ParticleSystem burningEffect;
     
     void Start() {
         burnTime = 0;
@@ -37,6 +38,7 @@ public class Campfire : MonoBehaviour, InteractableObject
         actuallyFueling = false;
         baseTile.GetComponent<TileSettings>().walkable = false;
         smeltableItems = new();
+        burningEffect = transform.Find("burning effect").GetComponent<ParticleSystem>();
     }
 
     void Update() {
@@ -165,6 +167,7 @@ public class Campfire : MonoBehaviour, InteractableObject
         notBurningPopupCor = null;
     }
     IEnumerator StartFueling() {
+        StartParticles();
         while (burnTime > 0) {
             while (Inventory.fullyOpen) {
                 yield return null;
@@ -172,6 +175,7 @@ public class Campfire : MonoBehaviour, InteractableObject
             burnTime--;
             yield return new WaitForSeconds(1f);
         }
+        EndParticles();
         fuelingCor = null;
     }
 
@@ -185,5 +189,12 @@ public class Campfire : MonoBehaviour, InteractableObject
             burnTime += 30;
         }
         StopInteraction();
+    }
+
+    void StartParticles() {
+        burningEffect.Play();
+    }
+    void EndParticles() {
+        burningEffect.Stop();
     }
 }
